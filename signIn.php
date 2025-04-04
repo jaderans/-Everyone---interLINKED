@@ -12,6 +12,7 @@
 <body>
 <div>
     <div class="rectangle2"></div>
+    <img class="iconBg" alt="icon" src="imgs/inlIconWhite.png">
 </div>
 
 <div class="container2">
