@@ -10,8 +10,7 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
 </head>
 <body>
-<?php
-?>
+
 <div >
     <div class="rectangle"></div>
     <div class="bgimage"></div>
@@ -23,17 +22,17 @@
 
 <div class="container">
     <div class="content">
-        <h1>Ready to be linked?</h1>
+        <h1>Welcome back</h1>
         <p class="credentials">please enter your credentials</p>
         <form class="form"  method="POST">
             <label for="userName"> Username*</label><br>
-            <input type="text" id="userName" name="user" required placeholder="Username"><br>
+            <input type="text" id="userName" name="user" placeholder="Username"><br>
 
             <label for="userEmail"> Email*</label><br>
-            <input type="text" id="userEmail" name="email" required placeholder="Email"><br>
+            <input type="text" id="userEmail" name="email" placeholder="Email"><br>
 
             <label for="userPass"> Password*</label><br>
-            <input type="password" id="userPass" name="pass" required placeholder="Password"><br>
+            <input type="password" id="userPass" name="pass" placeholder="Password"><br>
 
             <label for="clientType"> Are you a...</label><br>
             <select name="type" id="clientType">
@@ -51,7 +50,34 @@
     <img class="imageHeader" alt="headerTitle" src="imgs/inl2Logo.png">
 </div>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == "login") {
+            // Ensure all required fields are filled
+            if (!empty($_POST['user']) && !empty($_POST['email']) && !empty($_POST['pass']) && !empty($_POST['type'])) {
+                $userType = $_POST['type']; // Get selected user type
 
+                // Redirect based on user type
+                if ($userType == "Client") {
+                    header("Location: clientHome.php");
+                } elseif ($userType == "Freelancer") {
+                    header("Location: lanceHome.php");
+                } elseif ($userType == "Admin") {
+                    header("Location: AdminDash.php");
+                }
+                exit();
+            } else {
+                echo "<p style='color:red;'>Please fill in all required fields.</p>";
+            }
+        } elseif ($_POST['action'] == "signin") {
+            // Redirect to sign-in page without validation
+            header("Location: signIn.php");
+            exit();
+        }
+    }
+}
+?>
 
 </body>
 </html>
