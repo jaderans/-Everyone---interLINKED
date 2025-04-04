@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Sign Up</title>
     <link rel="icon" type="image/x-icon" href="imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -52,11 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $userType = $_POST['type'];
 
                 if ($userType == "Client") {
-                    header("Location: clientSignUp.php");
+                    header("Location: FormSignClient.php");
                 } elseif ($userType == "Freelancer") {
-                    header("Location: frlanceSignUp.php");
+                    header("Location: FormSignFreelancer.php");
                 } elseif ($userType == "Admin") {
-                    header("Location: AdminSignUp.php");
+                    header("Location: FormSignAdmin.php");
                 }
                 exit();
             }

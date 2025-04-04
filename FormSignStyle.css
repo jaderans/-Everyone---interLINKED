@@ -8,7 +8,6 @@ html, body {
     height: 80vh;
     display: flex;
     align-items: center;
-    background: url("imgs/natbg.png") no-repeat top  right fixed;
     z-index: -2;
 }
 
@@ -19,48 +18,43 @@ html, body {
 }
 
 
-.container{
-    padding: 10px;
-    position: relative;
-    box-sizing: border-box;
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+}
+.form-group {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 65vh;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1;
+}
+.form-group input {
     width: 100%;
-
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
-
-
-.content{
-    box-shadow: 0px 0px 30px rgba(32, 32, 32, 0.51);
-    display: inline-block;
-    padding: 30px 50px 30px 50px;
-    border-radius: 20px;
-    background-color: #ffffff;
+.form-group div {
+    width: 40%;
 }
-
-.container2 {
-    padding: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.submit-btn {
     width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
-
-.content2 {
-    box-shadow: 0px 0px 30px rgba(32, 32, 32, 0.37);
-    display: flex;
-    flex-direction: column;
-    padding: 30px 40px;
-    border-radius: 20px;
-    background-color: #ffffff;
+.submit-btn:hover {
+    background-color: #0056b3;
 }
 
 
@@ -88,7 +82,7 @@ button[value="signIn"]{
     background: #1f4c4b;
 }
 
-button[value="login"]{
+button[value="reg"]{
     width: 100%;
     height: 50%;
     border: none;
@@ -160,32 +154,37 @@ button[value="goBack"]{
     left: 0;
     width: 100%;
     height: 100%;
+    background: white;
+    z-index: -1;
+}
+
+.rectangle3 {
+    position: absolute;
+    top: 0;
+    left: 800px;
+    width: 565px;
+    height: 100vh;
     background: linear-gradient(to top, #1f4c4b,#4a8c8a);
     z-index: -1;
 }
 
-.logInTitle {
-    position: absolute;
-    top: 40%;
-    right: 5%;
-    text-align: right;
-    color: #1f4c4b;
-    font-size: 20px;
-    font-weight: bold;
-    line-height:0;
+.topvar{
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    z-index: 2;
+}
+.logo {
+    margin-left: 50px;
+    margin-bottom: 2px;
 }
 
-.logInTitle h1 {
-    font-size: 50px;
-    color: #4a8c8a;
-    line-height: 0;
-}
-
-.iconBg{
-    width: 100%;
-    height: 100vh;
-    display: block;
-    opacity: 10%;
-    z-index: -2;
-
+.logo img{
+    width: auto;
+    height: 25px;
 }
