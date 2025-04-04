@@ -11,6 +11,7 @@ html, body {
     font-family: 'Poppins', sans-serif;
     background: url("imgs/natbg.png") no-repeat top right fixed;
     background-size: cover;
+    z-index: -1;
 }
 
 .container h1,p {
@@ -18,7 +19,6 @@ html, body {
     line-height:.01;
 
 }
-
 
 .container{
     padding: 10px;
@@ -140,8 +140,8 @@ button[value="goBack"]{
 }
 .imageHeader {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 40px;
+    right: 70px;
     max-width: 20%;
     height: auto;
 
