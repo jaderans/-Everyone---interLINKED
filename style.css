@@ -139,14 +139,14 @@ button[value="goBack"]{
     height: 500px;
     width: 100px;
 }
-
 .imageHeader {
-    max-width: 30%;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 20%;
     height: auto;
-    display: block;
-    margin: 0 auto 5vh auto; /* centers and adds bottom spacing */
+    z-index: 10;
 }
-
 
 .rectangle {
     position: fixed;
