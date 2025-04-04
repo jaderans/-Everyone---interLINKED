@@ -159,12 +159,14 @@ button[value="goBack"]{
 }
 
 .rectangle3 {
-    position: absolute;
+    position: fixed;
     top: 0;
-    left: 800px;
-    width: 565px;
+    right: 0;
+    width: 35%;
+    min-width: 300px;
+    max-width: 565px;
     height: 100vh;
-    background: linear-gradient(to top, #1f4c4b,#4a8c8a);
+    background: linear-gradient(to top, #1f4c4b, #4a8c8a);
     z-index: -1;
 }
 
