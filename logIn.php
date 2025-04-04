@@ -14,7 +14,7 @@
 
 <h1> Welcome to interLINKED!</h1>
 <p>testing ba!</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim exercitationem harum illo illum, maxime quisquam veniam voluptates! Assumenda consectetur, eius exercitationem iste nam quasi similique! Autem commodi nihil numquam praesentium?</p>
+<p style = "color: #1f4c4b; font-weight: lighter">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim exercitationem harum illo illum, maxime quisquam veniam voluptates! Assumenda consectetur, eius exercitationem iste nam quasi similique! Autem commodi nihil numquam praesentium?</p>
 
 </body>
 </html>
