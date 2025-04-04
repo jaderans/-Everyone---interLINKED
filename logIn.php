@@ -48,7 +48,7 @@
     </div>
 </div>
 <div>
-    <img class="imageHeader" src="imgs/inl2Logo.png">
+    <img class="imageHeader" alt="headerTitle" src="imgs/inl2Logo.png">
 </div>
 
 
