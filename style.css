@@ -2,14 +2,17 @@ html, body {
     color: #333;
     background: white;
     line-height: 1.6;
-    padding: 50px;
+    padding: 5vw; /* responsive padding */
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    height: 80vh;
+    height: 100vh;
     display: flex;
     align-items: center;
-    background: url("imgs/natbg.png") no-repeat top  right fixed;
+    justify-content: center;
+    background: url("imgs/natbg.png") no-repeat top right fixed;
+    background-size: cover; /* make the background scale */
     z-index: -2;
+    flex-direction: column;
 }
 
 .container h1,p {
@@ -136,14 +139,15 @@ button[value="goBack"]{
     height: 500px;
     width: 100px;
 }
-.imageHeader{
+
+.imageHeader {
     max-width: 30%;
     height: auto;
     display: block;
-    margin-left: 550px;
-    margin-bottom: 500px;
-
+    margin: 0 auto 5vh auto; /* centers and adds bottom spacing */
 }
+
+
 .rectangle {
     position: fixed;
     top: 0;
