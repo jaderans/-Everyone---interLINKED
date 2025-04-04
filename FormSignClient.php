@@ -1,16 +1,9 @@
 <?php
-session_start();
+session_start(); // Always start session first
 
-if (isset($_POST["email"])) {
-    $_SESSION["email"] = $_POST["email"];
-}
-if (isset($_POST["type"])) {
-    $_SESSION["type"] = $_POST["type"];
-}
-
-$email = isset($_SESSION["email"]) ? $_SESSION["email"] : "";
-$type = isset($_SESSION["type"]) ? $_SESSION["type"] : "";
-
+// Get session values
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+$type = isset($_SESSION['type']) ? $_SESSION['type'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +51,7 @@ $type = isset($_SESSION["type"]) ? $_SESSION["type"] : "";
                         <div class="form-group">
                             <div>
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" readonly>
+                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email) ?>" readonly>
                             </div>
                             <div>
                                 <label for="birthday">Birthday</label>
@@ -73,11 +66,10 @@ $type = isset($_SESSION["type"]) ? $_SESSION["type"] : "";
                             </div>
                             <div>
                                 <label for="type">Type</label>
-                                <input type="text" id="type" name="type" value="<?= htmlspecialchars($type) ?>" readonly>
+                                <input type="text" id="type" name="type" value="<?php echo htmlspecialchars($type) ?>" readonly>
                             </div>
                         </div>
-
-                <button type="submit" name="action" value="reg">Register</button>
+                <button type="submit" name="action" value="next">Next ►</button>
                 <button type="button" value="goBack" onclick="window.location.href='signIn.php';">◄ Go Back</button>
             </form>
          <div>

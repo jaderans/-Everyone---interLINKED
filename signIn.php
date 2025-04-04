@@ -1,3 +1,38 @@
+<?php
+session_start(); // Always start session first
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == "goBack") {
+            header("Location: logIn.php");
+            exit();
+        }
+
+        if ($_POST['action'] == "signIn") {
+            if (!empty($_POST['email']) && !empty($_POST['type'])) {
+                // Save to session
+                $_SESSION["email"] = $_POST['email'];
+                $_SESSION["type"] = $_POST['type'];
+
+                // Redirect based on type
+                if ($_POST['type'] == "Client") {
+                    header("Location: FormSignClient.php");
+                    exit();
+                } elseif ($_POST['type'] == "Freelancer") {
+                    header("Location: FormSignFreelancer.php");
+                    exit();
+                } elseif ($_POST['type'] == "Admin") {
+                    header("Location: FormSignAdmin.php");
+                    exit();
+                }
+            } else {
+                echo "<p style='color:red;'>Email and Type are required.</p>";
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +54,7 @@
     <div class="content2">
         <h1>Ready to be linked? <br> SIGN IN WITH US!</h1>
         <p class="credentials">Please enter your credentials</p>
-        <form class="form" method="POST">
+        <form class="form" METHOD="POST">
             <label for="userEmail"> Email*</label><br>
             <input type="text" id="userEmail" name="email" placeholder="Email"><br>
 
@@ -35,35 +70,6 @@
         </form>
     </div>
 </div>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['action'])) {
-
-        // Go back should not depend on filled input
-        if ($_POST['action'] == "goBack") {
-            header("Location: logIn.php");
-            exit();
-        }
-
-        // Only validate inputs if the user is signing in
-        if ($_POST['action'] == "signIn") {
-            if (!empty($_POST['email']) && !empty($_POST['type'])) {
-                $userType = $_POST['type'];
-
-                if ($userType == "Client") {
-                    header("Location: FormSignClient.php");
-                } elseif ($userType == "Freelancer") {
-                    header("Location: FormSignFreelancer.php");
-                } elseif ($userType == "Admin") {
-                    header("Location: FormSignAdmin.php");
-                }
-                exit();
-            }
-        }
-    }
-}
-?>
 
 </body>
 </html>
