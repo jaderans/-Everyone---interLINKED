@@ -13,11 +13,14 @@
 <?php
 ?>
 <div >
-<div class="rectangle"></div>
+    <div class="rectangle"></div>
+    <div class="bgimage"></div>
+    <div class="logInTitle">
+        <p>WHERE CLIENTS MEET TALENT,</p>
+        <H1>EFFORTLESSLY!</H1>
+    </div>
 </div>
-<div>
 
-</div>
 <div class="container">
     <div class="content">
         <h1>Ready to be linked?</h1>
