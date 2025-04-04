@@ -17,6 +17,10 @@ html, body {
 
 }
 
+.container2{
+    margin-top: 80px;
+}
+
 
 .form-container {
     background: white;
@@ -165,7 +169,7 @@ button[value="goBack"]{
     position: fixed;
     top: 0;
     right: 0;
-    width: 35%;
+    width: 40%;
     min-width: 300px;
     max-width: 565px;
     height: 100vh;
