@@ -41,8 +41,8 @@
                 <option value="Admin">Admin</option>
             </select> <br><br>
 
-            <input type="submit" value="Log In"><br>
-            <input type="submit" value="Sign In">
+            <button type="submit" name="action" value="login">Log In</button>
+            <button type="submit" name="action" value="signIn">Sign In</button>
         </form>
     </div>
 </div>
@@ -62,16 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($userType == "Client") {
                     header("Location: clientHome.php");
                 } elseif ($userType == "Freelancer") {
-                    header("Location: lanceHome.php");
+                    header("Location: frlanceHome.php");
                 } elseif ($userType == "Admin") {
                     header("Location: AdminDash.php");
                 }
                 exit();
-            } else {
-                echo "<p style='color:red;'>Please fill in all required fields.</p>";
             }
-        } elseif ($_POST['action'] == "signin") {
-            // Redirect to sign-in page without validation
+        } elseif ($_POST['action'] == "signIn") {
             header("Location: signIn.php");
             exit();
         }

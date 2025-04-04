@@ -17,10 +17,10 @@
 <div class="container2">
     <div class="content2">
         <h1>Ready to be linked? <br> SIGN IN WITH US!</h1>
-        <p class="credentials">please enter your credentials</p>
-        <form2 class="form"  method="POST">
+        <p class="credentials">Please enter your credentials</p>
+        <form class="form" method="POST">
             <label for="userEmail"> Email*</label><br>
-            <input type="text" id="userEmail" name="email" required placeholder="Email"><br>
+            <input type="text" id="userEmail" name="email" placeholder="Email"><br>
 
             <label for="clientType"> Are you a...</label><br>
             <select name="type" id="clientType">
@@ -29,17 +29,40 @@
                 <option value="Admin">Admin</option>
             </select> <br><br>
 
-            <input type="submit" value="Sign In">
-            <input type="submit" value="◄ Go Back"><br>
-        </form2>
+            <button type="submit" name="action" value="signIn">Sign In</button>
+            <button type="submit" name="action" value="goBack">◄ Go Back</button>
+        </form>
     </div>
 </div>
 
 <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['action'])) {
 
+        // Go back should not depend on filled input
+        if ($_POST['action'] == "goBack") {
+            header("Location: logIn.php");
+            exit();
+        }
+
+        // Only validate inputs if the user is signing in
+        if ($_POST['action'] == "signIn") {
+            if (!empty($_POST['email']) && !empty($_POST['type'])) {
+                $userType = $_POST['type'];
+
+                if ($userType == "Client") {
+                    header("Location: clientSignUp.php");
+                } elseif ($userType == "Freelancer") {
+                    header("Location: frlanceSignUp.php");
+                } elseif ($userType == "Admin") {
+                    header("Location: AdminSignUp.php");
+                }
+                exit();
+            }
+        }
+    }
+}
 ?>
 
 </body>
 </html>
-
-

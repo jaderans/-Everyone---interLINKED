@@ -74,7 +74,7 @@ html, body {
     color: #c1c1c1;
 }
 
-.form input[value="Sign In"]{
+button[value="signIn"]{
     width: 100%;
     height: 50%;
     border: none;
@@ -88,7 +88,7 @@ html, body {
     background: #1f4c4b;
 }
 
-.form input[value="Log In"]{
+button[value="login"]{
     width: 100%;
     height: 50%;
     border: none;
@@ -102,7 +102,7 @@ html, body {
     background: #4a8c8a;
 }
 
-.form input[value="◄ Go Back"]{
+button[value="goBack"]{
     width: 100%;
     height: 50%;
     border: none;
