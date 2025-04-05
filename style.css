@@ -16,7 +16,21 @@ html, body {
 
 html, body.indexClass {
     color: #333;
-    background: white;
+    background: rgb(255, 255, 255);
+    line-height: 1.6;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    z-index: -1;
+}
+
+html, body.headerClass {
+    color: #333;
+    background: rgb(255, 255, 255);
     line-height: 1.6;
     margin: 0;
     height: 100vh;
@@ -183,6 +197,17 @@ button[value="goBack"]{
     z-index: -1;
 }
 
+.rectangle3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10%;
+    height: 100%;
+    background: linear-gradient(to top, #1f4c4b,#4a8c8a);
+    z-index: -1;
+}
+
+
 .logInTitle {
     position: absolute;
     top: 40%;
@@ -280,6 +305,49 @@ button[value="goBack"]{
 .logo img{
     width: auto;
     height: 25px;
+}
+
+.right-btn {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.top-right {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 20px;
+    right: 100px;
+}
+
+
+.right-btn button {
+    width: auto;
+    min-width: 80px;
+    height: auto;
+    padding: 8px 16px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #1f4c4b;
+    background: #ffffff;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.right-btn button:hover {
+    background: #f0f0f0;
+    border-color: #1f4c4b;
+}
+
+.headerIcon {
+    position: fixed;
+    top: 20px;
+    left: 25px;
+    height: 30px;
+    width: auto;
 }
 
 /* Responsive adjustments */

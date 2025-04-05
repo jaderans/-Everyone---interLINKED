@@ -17,23 +17,6 @@
         <h1>Dashboard</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
-
     </div>
 
 </div>

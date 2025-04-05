@@ -10,16 +10,13 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
 </head>
 <body class="indexClass">
-<?php
-
-?>
-
-<div class="topvar">
-    <div class="logo">
-        <img src="imgs/inl2Logo.png" alt="">
+<?php include 'vertical-navtemp.php'?>
+    <div class="top-right">
+        <div class="right-btn">
+            <button type="submit" name="action" value="signIn">Sign Up</button>
+            <button type="submit" name="action" value="login">Log In</button>
+        </div>
     </div>
-</div>
-
 <div class="portfolio-container">
     <div class="portfolio-gallery">
         <!-- Portfolio Item -->
