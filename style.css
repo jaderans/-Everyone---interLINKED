@@ -360,6 +360,10 @@ button[value="goBack"]{
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .headerIcon img {
+        height: 24px;
+    }
+
     .rectangle {
         width: 30vw; /* Adjust sidebar width for smaller screens */
     }
