@@ -28,12 +28,44 @@
     height: 25px;
 }
 
+.btn-top {
+    display: flex;
+    width: 100%;
+    background-color: #105D63;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-top a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: left;
+}
+
+.btn-top:hover {
+    background-color: #1a858d;
+}
+
 .top-right {
     display: flex;
     flex-direction: row;
     position: absolute;
     top: 20px;
     right: 100px;
+}
+
+.right-btn{
+    display: flex;
+    flex-direction: row;
+}
+
+.right-btn button{
+    margin-left: 10px;
+    width: 90px;
 }
 .name{
     color: #292524;
