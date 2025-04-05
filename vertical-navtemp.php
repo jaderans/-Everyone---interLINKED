@@ -13,7 +13,7 @@
 <body class="headerClass">
 
 <div class="headerIcon">
-<img class="" src="imgs/inlIconWhite.png" alt="icon" style="height: 150%">
+<img class="" src="imgs/inlIconWhite.png" alt="icon">
 </div>
 
 <div class="rectangle3"></div>
