@@ -343,12 +343,12 @@ button[value="goBack"]{
 }
 
 .headerIcon {
-    position: fixed;
+    position: absolute;
     top: 20px;
     left: 35px;
     height: auto;
     width: auto;
-    z-index: 1000;
+    z-index: 10;
 }
 
 .headerIcon img {
