@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<form action="freelancer-page.php" method="get">
+<form action="freelancer-navbar-template.php" method="get">
     <button type="submit" name="action" value="dashboard">Dashboard</button>
 </form>
 

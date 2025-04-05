@@ -1,0 +1,163 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Inter",sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+/*------------------------------------------top navigation bar*/
+.topvar{
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    z-index: 2;
+}
+.logo {
+    margin-left: 50px;
+    margin-bottom: 2px;
+}
+
+.logo img{
+    width: auto;
+    height: 25px;
+}
+
+.top-right {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 20px;
+    right: 100px;
+}
+.name{
+    color: #292524;
+    text-align: left;
+}
+
+.name a{
+    color: #292524;
+}
+
+.profile img{
+    width: auto;
+    height: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+
+/*-----------------------------------------------side nav*/
+.navbar {
+    height: 100vh;
+    width: 250px;
+    background-color: #ffffff;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    z-index:  1;
+}
+
+.sidebar-frame {
+    display: flex;
+    margin-left: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 30%;
+}
+
+.side-content {
+    list-style-type: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+/*space of icon and text*/
+.side-content li a i {
+    margin-right: 10px;
+}
+
+.lower-content {
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #444;
+}
+
+.lower-content .btn a i {
+    margin-right: 20px;
+}
+
+.side-content li {
+    margin: 15px 0;
+}
+
+.side-content li a {
+    text-decoration: none;
+    color: #595959;
+    font-weight: 700;
+    padding: 15px;
+    display: block;
+    border-radius: 10px;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.side-content li a:hover {
+    background-color: #3D9997;
+    color: white;
+}
+
+
+.btn {
+    display: flex;
+    width: 100%;
+    background-color: #105D63;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: left;
+}
+
+.btn:hover {
+    background-color: #1a858d;
+}
+
+
+.sidebar-frame h4 {
+    margin-top: 40px;
+    font-size: 16px;
+}
+
+.sidebar-frame h4 a {
+    text-decoration: none;
+    color: #ccc;
+    font-weight: 400;
+    transition: color 0.3s;
+}
+
+.sidebar-frame h4 a:hover {
+    color: #334e5b;
+}
+
+
+
+
+
+
