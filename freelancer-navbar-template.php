@@ -20,7 +20,7 @@
     </div>
     <div class="top-right">
         <div class="right-btn">
-<!--            <button class="btn-top"><a href="frlanceHome.php">Browse</a></button>-->
+            <button class="btn-top"><a href="frlanceHome.php"><i class="fa-solid fa-magnifying-glass"></i> Browse</a></button>
             <button class="btn-top"><a href="logIn.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
         </div>
         <div class="profile">
@@ -46,7 +46,7 @@
             </ul>
 
             <div class="lower-content">
-                <button class="btn"><a href="freelancer-showcase-post-page.php"><i class="fa-regular fa-paper-plane"></i> Showcase work</a></button>
+                <button class="btn"><a href="freelancer-showcase-post-page.php"><i class="fa-regular fa-paper-plane"></i> Post work</a></button>
 
             </div>
             <div class="help">
