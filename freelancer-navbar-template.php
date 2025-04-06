@@ -25,7 +25,6 @@
         </div>
         <div class="profile">
             <a href="freelancer-profile-page.php"><img src="imgs/profile.png" alt=""></a>
-
         </div>
         <div class="name">
             <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Furina</h4></a>

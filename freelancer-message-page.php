@@ -14,8 +14,34 @@
 
 <div class="container">
     <div class="content">
-        <h1>Message</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
+        <div class="parent">
+
+            <div class="contact">
+                <h1>Message</h1>
+            </div>
+
+            <div class="receiver-details">
+                <div class="profile">
+                    <a href="freelancer-profile-page.php"><img src="imgs/profile.png" alt=""></a>
+                </div>
+                <div class="name">
+                    <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Client</h4></a>
+                    <p style="font-size: 12px">Client</p>
+                </div>
+            </div>
+
+            <div class="message">
+                <form action="#" method="post" class="message-form">
+                    <label for="">Subject: </label>
+                    <input type="text" name="name" placeholder="Add Subject" required><br>
+                    <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
+<!--                    <input type="submit" value="Send">-->
+                    <button class="btn-1" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
+                </form>
+
+            </div>
+        </div>
+
     </div>
 
 </div>
