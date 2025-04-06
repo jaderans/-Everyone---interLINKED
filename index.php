@@ -13,8 +13,8 @@
 <?php include 'vertical-navtemp.php'?>
     <div class="top-right">
         <div class="right-btn">
-            <button type="submit" name="action" value="signIn">Sign Up</button>
-            <button type="submit" name="action" value="login">Log In</button>
+            <button type="submit" name="action" value="signIn"><a href="signIn.php">Sign Up</a></button>
+            <button type="submit" name="action" value="login"><a href="logIn.php">Log In</a></button>
         </div>
     </div>
 <div class="portfolio-container">

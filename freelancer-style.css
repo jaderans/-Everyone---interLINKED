@@ -25,7 +25,7 @@ html, body{
     font-weight: 900;
 }
 
-/*------------------------------------------------freelancer message page*/
+/*------------------------------------------------freelancer right page*/
 
 .parent {
     display: grid;
@@ -54,7 +54,7 @@ html, body{
 }
 
 .message {
-    padding: 20px;
+    padding: 5px 10px 10px 20px;
     background-color: #f4f4f4;
     grid-column: span 3 / span 3;
     grid-row: span 8 / span 8;
@@ -75,7 +75,7 @@ form {
 
 textarea {
     width: 100%;
-    min-height: 300px;
+    min-height: 200px;
     padding: 1rem;
     font-size: 1rem;
     resize: none;
@@ -85,9 +85,10 @@ textarea {
 .message-form label{
     font-weight: bold;
     font-size: 15px;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     color: #676767;
-    margin: 20px 0 20px 0;
+    margin: 10px 0 5px 0;
 }
 
 .message-form textarea {
@@ -99,15 +100,19 @@ textarea {
 
 
 .message-form input[type=text] {
-    width: 30%;
+    width: 40%;
+    padding-left: 20px;
     height: 30px;
     border-radius: 10px;
     border: 2px solid #4a8c8a;
+    margin-bottom: 10px;
 }
 
-.btn-1{
+.attach{
     display: flex;
     width: 30%;
+    margin: 10px 0 0 35%;
+    z-index: 2;
     background-color: #105D63;
     border: none;
     padding: 20px;
@@ -115,6 +120,20 @@ textarea {
     cursor: pointer;
     transition: background-color 0.3s;
     color: #cfcfcf;
+}
+
+.btn-1{
+    margin-top: -100px;
+    display: flex;
+    width: 30%;
+    background-color: #105D63;
+    border: none;
+    padding: 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #cfcfcf;
+    z-index: 1;
 }
 
 .btn-1 a {
@@ -130,4 +149,38 @@ textarea {
 
 .btn-1:hover {
     background-color: #1a858d;
+}
+
+/*------------------------------------------------freelancer left side*/
+.selection{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin: 10px 10px 0 20px ;
+}
+
+.sel button{
+    width: 100px;
+    margin: 20px 10px 0 10px;
+}
+.sel button:hover{
+    background-color: #1a858d;
+}
+.btn-left{
+    display: flex;
+    width: 30%;
+    background-color: #105D63;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #cfcfcf;
+}
+
+.btn-left a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: left;
 }

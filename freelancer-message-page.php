@@ -15,9 +15,20 @@
 <div class="container">
     <div class="content">
         <div class="parent">
-
             <div class="contact">
                 <h1>Message</h1>
+                <div class="selection">
+                    <div class="sel">
+                        <button class="btn-left"><a href="">Compose</a></button>
+                    </div>
+                    <div class="sel">
+                        <button class="btn-left"><a href="">Inbox</a></button>
+                    </div>
+                    <div class="sel">
+                        <button class="btn-left"><a href="">Sent</a></button>
+                    </div>
+                </div>
+
             </div>
 
             <div class="receiver-details">
@@ -32,10 +43,13 @@
 
             <div class="message">
                 <form action="#" method="post" class="message-form">
+                    <label for="">To: </label>
+                    <input type="text" name="name" placeholder="@Admin eg." required><br>
                     <label for="">Subject: </label>
                     <input type="text" name="name" placeholder="Add Subject" required><br>
+                    <label for="">Message: </label>
                     <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
-<!--                    <input type="submit" value="Send">-->
+                    <input class="attach" type="file" id="" name="myfile" multiple><br><br>
                     <button class="btn-1" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
                 </form>
 
