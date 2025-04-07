@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,6 +20,7 @@
         <div class="parent">
             <div class="contact">
                 <h1>Message</h1>
+
                 <div class="selection">
                     <div class="sel">
                         <button class="btn-left"><a href="">Compose</a></button>
@@ -44,9 +48,9 @@
             <div class="message">
                 <form action="#" method="post" class="message-form">
                     <label for="">To: </label>
-                    <input type="text" name="name" placeholder="@Admin eg." required><br>
+                    <input type="text" name="admin" placeholder="@Admin eg." required><br>
                     <label for="">Subject: </label>
-                    <input type="text" name="name" placeholder="Add Subject" required><br>
+                    <input type="text" name="subject" placeholder="Add Subject" required><br>
                     <label for="">Message: </label>
                     <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
                     <input class="attach" type="file" id="" name="myfile" multiple><br><br>
