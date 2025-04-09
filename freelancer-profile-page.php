@@ -12,10 +12,41 @@
 <body>
 <?php include 'freelancer-navbar-template.php' ?>
 
+<div class="header">
+    <h1>Plaveholder</h1>
+    <img src="" alt="">
+</div>
+
 <div class="container">
     <div class="content">
-        <h1>Profile</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
+        <div class="profile">
+            <div class="img">
+                <img src="imgs/profile.pn" alt="">
+
+            </div>
+
+            <div class="profile-name">
+                <h1>Furina</h1>
+                <h2>Freelancer</h2>
+
+                <div class="edit">
+                    <button class="btn"><a href="">Edit</a></button>
+                </div>
+            </div>
+
+        </div>
+        <div class="profile-details">
+            <div class="details-left">
+                <h1>Details</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
+            </div>
+
+            <div class="details-right">
+                <h1>Links</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
+            </div>
+        </div>
+
     </div>
 
 </div>
