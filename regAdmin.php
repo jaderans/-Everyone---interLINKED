@@ -1,27 +1,15 @@
-<?php
-session_start(); // Always start session first
-
-// Get session values
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
-$type = isset($_SESSION['type']) ? $_SESSION['type'] : '';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Client</title>
+    <title>Sign Up | Admin</title>
     <link rel="icon" type="image/x-icon" href="imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="FormSignStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
 </head>
 <body>
-<div>
-    <div class="rectangle2"></div>
-    <div class="rectangle3"></div>
-</div>
 
 <div class="topvar">
     <div class="logo">
@@ -51,7 +39,7 @@ $type = isset($_SESSION['type']) ? $_SESSION['type'] : '';
                         <div class="form-group">
                             <div>
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email) ?>" readonly>
+                                <input type="email" id="email" name="email" value="" placeholder="Email">
                             </div>
                             <div>
                                 <label for="birthday">Birthday</label>
@@ -66,12 +54,13 @@ $type = isset($_SESSION['type']) ? $_SESSION['type'] : '';
                             </div>
                             <div>
                                 <label for="type">Type</label>
-                                <input type="text" id="type" name="type" value="<?php echo htmlspecialchars($type) ?>" readonly>
+                                <input type="text" id="type" name="type" value="" placeholder="Type">
                             </div>
                         </div>
-                <button type="submit" name="action" value="next">Next ►</button>
-                <button type="button" value="goBack" onclick="window.location.href='signIn.php';">◄ Go Back</button>
-            </form>
-         <div>
+                        <button type="submit" name="action" value="next">Next ►</button>
+                        <button type="button" value="goBack" onclick="window.location.href='signIn.php';">◄ Go Back</button>
+                    </form>
+                    <div>
+
 </body>
 </html>
