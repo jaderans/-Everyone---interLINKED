@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require('interlinkedDB.php');
+
 $nameMsg = $emailMsg = $passMsg = "";
 $userName = $email = $pass = $userType = "";
 
@@ -14,15 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = isset($_POST['email']) ? clean_text($_POST['email']) : '';
         $userType = isset($_POST['type']) ? clean_text($_POST['type']) : '';
 
+        // Ensure session values are being set correctly
         $_SESSION["email"] = $email;
         $_SESSION["type"] = $userType;
 
-        if ($_POST['action'] == "goBack") {
-            header("Location: logIn.php");
-            exit();
-        }
-
-        if ($_POST['action'] == "Sign In") {
+        if ($_POST['action'] == "Next ►") {
             // Validate email
             if (empty($email)) {
                 $emailMsg = "Email is required <br>";
@@ -31,13 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if (empty($emailMsg)) {
+                // Ensure session values are set before redirecting
                 header("Location: FormSignUser.php");
                 exit();
             }
         }
     }
-
 }
+
 ?>
 
 
@@ -74,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="Admin" <?= ($userType == "Admin") ? "selected" : "" ?>>Admin</option>
             </select> <br><br>
 
-            <input type="submit" name="action" value="Sign In">
+            <input type="submit" name="action" value="Next ►">
         </form>
         <button type="submit" name="action" value="goBack" onclick="window.location.href='logIn.php';">◄ Go Back</button>
     </div>
