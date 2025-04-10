@@ -8,7 +8,7 @@ session_start();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="imgs/inlFavicon@4x.png">
+    <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="freelancer-style.css">
     <title>Message</title>
 </head>
@@ -37,7 +37,7 @@ session_start();
 
             <div class="receiver-details">
                 <div class="profile">
-                    <a href="freelancer-profile-page.php"><img src="imgs/profile.png" alt=""></a>
+                    <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
                 </div>
                 <div class="name">
                     <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Client</h4></a>
