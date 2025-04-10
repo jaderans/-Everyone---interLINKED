@@ -18,6 +18,13 @@ function clean_text($text) {
     return htmlspecialchars(trim($text));
 }
 
+if (isset($_GET['reset'])) {
+    session_unset();
+    session_destroy();
+    session_start();
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action'])) {
         $email = isset($email) ? clean_text($email) : '';
@@ -142,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
 
                         <button type="submit" name="action" value="next">Next ►</button>
-                        <button type="button" value="goBack" onclick="window.location.href='signIn.php';">◄ Go Back</button>
+                        <button type="button" value="goBack" onclick="window.location.href='signIn.php?reset=true';">◄ Go Back</button>
                     </form>
          <div>
 </body>

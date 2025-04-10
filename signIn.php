@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        if ($_POST['action'] == "signIn") {
+        if ($_POST['action'] == "Sign In") {
             // Validate email
             if (empty($email)) {
                 $emailMsg = "Email is required <br>";
@@ -30,14 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $emailMsg = "Input a valid email address <br>";
             }
 
-            // Redirect if validation passed
-            if (empty($emailMsg) && !empty($userType)) {
+            if (empty($emailMsg)) {
                 header("Location: FormSignUser.php");
                 exit();
             }
         }
-
     }
+
 }
 ?>
 
@@ -63,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="content2">
         <h1>Ready to be linked? <br> SIGN IN WITH US!</h1>
         <p class="credentials">Please enter your credentials</p>
-        <form class="form" method="POST">
+        <form class="form" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
             <label for="userEmail"> Email*</label><br>
             <input type="text" id="userEmail" name="email" placeholder="Email" value="<?= htmlspecialchars($email) ?>"><br>
             <span class="spanWarning"><?= $emailMsg ?></span>
@@ -76,8 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </select> <br><br>
 
             <input type="submit" name="action" value="Sign In">
-            <button type="submit" name="action" value="goBack">◄ Go Back</button>
         </form>
+        <button type="submit" name="action" value="goBack" onclick="window.location.href='logIn.php';">◄ Go Back</button>
     </div>
 </div>
 
