@@ -5,17 +5,17 @@ include('interlinkedDB.php');
 function clean_text($text) {
     return htmlspecialchars(trim($text));
 }
-
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+$userName = isset($_SESSION['userName']) ? $_SESSION['userName'] : '';
 $userType = isset($_SESSION['type']) ? $_SESSION['type'] : '';
 $password = isset($_POST['pass']) ? clean_text($_POST['pass']) : '';
 $confirmPassword = isset($_POST['conPass']) ? clean_text($_POST['conPass']) : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
 $phone = isset($_POST['phone']) ? clean_text($_POST['phone']) : '';
 $firstName = isset($_POST['firstName']) ? clean_text($_POST['firstName']) : '';
 $lastName = isset($_POST['lastName']) ? clean_text($_POST['lastName']) : '';
 $birthday = isset($_POST['bDay']) ? clean_text($_POST['bDay']) : '';
 
-$fstNameMsg = $lstNameMsg = $passMsg = $conpassMsg = $phoneMsg = $userErr = $bdayMsg = "";
+$fstNameMsg = $lstNameMsg = $emailMsg = $passMsg = $conpassMsg = $phoneMsg = $userErr = $bdayMsg = "";
 
 if (isset($_GET['reset'])) {
     session_unset();
@@ -35,6 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         }
         if (empty($lastName)) {
             $lstNameMsg = "Last name is required <br>";
+        }
+
+        if (empty($email)) {
+            $emailMsg = "Email is required <br>";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailMsg = "Input a valid email address <br>";
+        } else {
+            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_EMAIL = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $emailMsg = "A user already exists with this email.";
+            }
         }
 
         if (empty($password)) {
@@ -63,9 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 
             // Generate user ID
             $prefix = [
-                "Admin" => "AD",
-                "Client" => "CL",
-                "Freelancer" => "FR"
+                "Admin" => "AD25-",
+                "Client" => "CL25-",
+                "Freelancer" => "FR25-"
             ];
             $userIdPrefix = $prefix[$userType] ?? "US";
 
@@ -77,36 +92,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                 $stmt->fetch();
                 $stmt->close();
 
-                // Extract the numeric part from USER_ID after the prefix
                 if ($lastUserId) {
-                    $numericPart = (int) filter_var($lastUserId, FILTER_SANITIZE_NUMBER_INT);
+                    // Safely remove prefix before casting to int
+                    $numericPart = (int) str_replace($userIdPrefix, '', $lastUserId);
                     $newUserIdNumber = $numericPart + 1;
                 } else {
-                    $newUserIdNumber = 250000;
+                    $newUserIdNumber = 100000;
                 }
 
                 $userId = $userIdPrefix . $newUserIdNumber;
             } else {
-                $userId = $userIdPrefix . '250000';
+                $userId = $userIdPrefix . '100000';
             }
+
 
             $birthday = date("Y/m/d", strtotime($birthday));
 
-            $sql = "INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             if ($stmt = $conn->prepare($sql)) {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // secure password storage
+//                $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // secure password storage
 
-                $stmt->bind_param("ssssssss", $userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $hashedPassword);
+                $stmt->bind_param("sssssssss", $userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $password, $userName);
 
                 if ($stmt->execute()) {
                     $_SESSION['user_id'] = $userId; // optional: store logged-in user
                     if ($userType === "Client") {
+                        $sql = "INSERT INTO CLIENT(USER_ID) VALUES (?)";
+                        if ($stmt = $conn->prepare($sql)) {
+                            $stmt->bind_param("s", $userId);
+                            $stmt->execute();
+                            $stmt->close();
+                        }
                         header("Location: loginSignup/index.php");
+                        exit();
                     } elseif ($userType === "Admin") {
+                        $sql = "INSERT INTO ADMIN(USER_ID) VALUES (?)";
+                        if ($stmt = $conn->prepare($sql)) {
+                            $stmt->bind_param("s", $userId);
+                            $stmt->execute();
+                            $stmt->close();
+                        }
                         header("Location: loginSignup/index.php");
+                        exit();
                     } elseif ($userType === "Freelancer") {
+                        $sql = "INSERT INTO FREELANCER(USER_ID) VALUES (?)";
+                        if ($stmt = $conn->prepare($sql)) {
+                            $stmt->bind_param("s", $userId);
+                            $stmt->execute();
+                            $stmt->close();
+                        }
                         header("Location: loginSignup/index.php");
+                        exit();
                     } else {
                         header("Location: FormSignUser.php");
                     }
@@ -163,7 +200,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                 <div class="form-group">
                     <div>
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" readonly>
+                        <input type="email" id="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email) ?>">
+                        <span class="spanWarning"><?= $emailMsg ?></span>
                     </div>
                     <div>
                         <label for="birthday">Birthday</label>

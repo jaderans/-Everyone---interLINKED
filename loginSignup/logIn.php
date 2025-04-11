@@ -1,7 +1,7 @@
 <?php
 include('interlinkedDB.php');
 
-$nameMsg = $emailMsg = $passMsg = "";
+$nameMsg = $emailMsg = $passMsg = $userErrorMsg = "";
 $userName = $email = $pass = $userType = "";
 
 function clean_text($text) {
@@ -31,15 +31,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if (empty($nameMsg) && empty($emailMsg) && empty($passMsg) && !empty($userType)) {
-                if ($userType == "Client") {
-                    header("Location: clientHome.php");
-                } elseif ($userType == "Freelancer") {
-                    header("Location: ../freelancer/freelancer-dashboard-page.php");
-                } elseif ($userType == "Admin") {
-                    header("Location: AdminDash.php");
+                // Password should ideally be hashed and verified using password_verify
+                $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ? AND USER_EMAIL = ? AND USER_PASSWORD = ? AND USER_TYPE = ?");
+                $stmt->bind_param("ssss", $userName, $email, $password, $userType);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows == 1) {
+                    // Successful login
+                    if ($userType == "Client") {
+                        header("Location: clientHome.php");
+                    } elseif ($userType == "Freelancer") {
+                        header("Location: ../freelancer/freelancer-dashboard-page.php");
+                    } elseif ($userType == "Admin") {
+                        header("Location: AdminDash.php");
+                    }
+                    exit();
+                } else {
+                    $userErrorMsg = "Invalid credentials or user type. Please try again.<br>";
                 }
-                exit();
             }
+
         } elseif ($_POST['action'] == "Sign In") {
             header("Location: signIn.php");
             exit();
@@ -92,7 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="Client" <?= $userType == "Client" ? 'selected' : '' ?>>Client</option>
                 <option value="Freelancer" <?= $userType == "Freelancer" ? 'selected' : '' ?>>Freelancer</option>
                 <option value="Admin" <?= $userType == "Admin" ? 'selected' : '' ?>>Admin</option>
-            </select><br><br>
+            </select><br>
+            <span class="spanWarning"><?= $userErrorMsg ?></span><br>
 
             <input type="submit" name="action" value="Log In">
             <input type="submit" name="action" value="Sign In">
