@@ -132,7 +132,21 @@ button[value="login"]{
     background: #4a8c8a;
 }
 
-.form input[value="Sign In"]{
+.form input[value="Sign In"] {
+    width: 100%;
+    height: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #1f4c4b;
+}
+
+.form input[value="Next ►"]{
     width: 100%;
     height: 50%;
     border: none;
