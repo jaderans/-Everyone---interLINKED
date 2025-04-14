@@ -53,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         }
 
         if (empty($password)) {
-            $passMsg = "Password is required <br>";}
-////        } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{1,}$/', $password)) {
-//            $passMsg = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character <br>";
-//        }
+            $passMsg = "Password is required.";
+        } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
+            $passMsg = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+        }
 
         if (empty($confirmPassword)) {
             $conpassMsg = "Confirm your password <br>";
@@ -69,10 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         }
 
         if (empty($phone)) {
-            $phoneMsg = "Phone number is required <br>";}
-//        elseif (!preg_match('/^\+?\d{11}$/', $phone)) {
-//            $phoneMsg = "Enter a valid phone number (11 digits, optional +) <br>";
-//        }
+            $phoneMsg = "Phone number is required.";
+        } elseif (preg_match('/[a-zA-Z]/', $phone)) {
+            $phoneMsg = "Phone number must not contain letters.";
+        } elseif (!preg_match('/^09\d{9}$/', $phone)) {
+            $phoneMsg = "Enter a valid phone number starting with 09";
+        }
 
         if (empty($fstNameMsg) && empty($lstNameMsg) && empty($passMsg) && empty($conpassMsg) && empty($phoneMsg) && empty($bdayMsg)) {
 
@@ -118,31 +120,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                 if ($stmt->execute()) {
                     $_SESSION['user_id'] = $userId; // optional: store logged-in user
                     if ($userType === "Client") {
-                        $sql = "INSERT INTO CLIENT(USER_ID) VALUES (?)";
+                        $sql = "INSERT INTO CLIENT(CL_ID) VALUES (?)";
                         if ($stmt = $conn->prepare($sql)) {
                             $stmt->bind_param("s", $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: loginSignup/index.php");
+                        header("Location: client/clientHome.php");
                         exit();
                     } elseif ($userType === "Admin") {
-                        $sql = "INSERT INTO ADMIN(USER_ID) VALUES (?)";
+                        $sql = "INSERT INTO ADMIN(AD_ID) VALUES (?)";
                         if ($stmt = $conn->prepare($sql)) {
                             $stmt->bind_param("s", $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: loginSignup/index.php");
+                        header("Location: admin/admindash.php");
                         exit();
                     } elseif ($userType === "Freelancer") {
-                        $sql = "INSERT INTO FREELANCER(USER_ID) VALUES (?)";
+                        $sql = "INSERT INTO FREELANCER(FR_ID) VALUES (?)";
                         if ($stmt = $conn->prepare($sql)) {
                             $stmt->bind_param("s", $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: loginSignup/index.php");
+                        header("Location: freelancer/frlanceHome.php");
                         exit();
                     } else {
                         header("Location: FormSignUser.php");
