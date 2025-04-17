@@ -78,34 +78,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 
         if (empty($fstNameMsg) && empty($lstNameMsg) && empty($passMsg) && empty($conpassMsg) && empty($phoneMsg) && empty($bdayMsg)) {
 
-            // Generate user ID
-            $prefix = [
-                "Admin" => "AD25-",
-                "Client" => "CL25-",
-                "Freelancer" => "FR25-"
-            ];
-            $userIdPrefix = $prefix[$userType] ?? "US";
+//                $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // secure password storage
 
-            $query = "SELECT USER_ID FROM USER WHERE USER_TYPE = ? ORDER BY USER_ID DESC LIMIT 1";
+            $userIdPrefix = "25-INTL-";
+
+            $query = "SELECT USER_ID FROM USER WHERE USER_ID LIKE ? ORDER BY CAST(SUBSTRING_INDEX(USER_ID, '-', -1) AS UNSIGNED) DESC LIMIT 1";
             if ($stmt = $conn->prepare($query)) {
-                $stmt->bind_param("s", $userType);
+                $likePattern = $userIdPrefix . "%";
+                $stmt->bind_param("s", $likePattern);
                 $stmt->execute();
                 $stmt->bind_result($lastUserId);
                 $stmt->fetch();
                 $stmt->close();
 
                 if ($lastUserId) {
-                    // Safely remove prefix before casting to int
-                    $numericPart = (int) str_replace($userIdPrefix, '', $lastUserId);
+                    $numericPart = (int) substr($lastUserId, strrpos($lastUserId, '-') + 1);
                     $newUserIdNumber = $numericPart + 1;
                 } else {
-                    $newUserIdNumber = 100000;
+                    $newUserIdNumber = 1;
                 }
-
-                $userId = $userIdPrefix . $newUserIdNumber;
             } else {
-                $userId = $userIdPrefix . '100000';
+                $newUserIdNumber = 1;
             }
+
+            do {
+                $formattedNumber = str_pad($newUserIdNumber, 5, '0', STR_PAD_LEFT);
+                $userId = $userIdPrefix . $formattedNumber;
+
+                $checkQuery = "SELECT USER_ID FROM USER WHERE USER_ID = ?";
+                $checkStmt = $conn->prepare($checkQuery);
+                $checkStmt->bind_param("s", $userId);
+                $checkStmt->execute();
+                $checkStmt->store_result();
+
+                $exists = $checkStmt->num_rows > 0;
+                $checkStmt->close();
+
+                if ($exists) {
+                    $newUserIdNumber++;
+                }
+            } while ($exists);
 
 
             $birthday = date("Y/m/d", strtotime($birthday));
@@ -113,34 +125,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
             $sql = "INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             if ($stmt = $conn->prepare($sql)) {
-//                $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // secure password storage
-
                 $stmt->bind_param("sssssssss", $userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $password, $userName);
 
                 if ($stmt->execute()) {
-                    $_SESSION['user_id'] = $userId; // optional: store logged-in user
+                    $_SESSION['user_id'] = $userId;
+
+                    // Generate type-based ID for specific table
+                    $typePrefixes = [
+                        "Client" => "CL25-",
+                        "Admin" => "AD25-",
+                        "Freelancer" => "FR25-"
+                    ];
+                    $typeIdPrefix = $typePrefixes[$userType];
+
+                    $typeTables = [
+                        "Client" => ["table" => "CLIENT", "column" => "CL_ID"],
+                        "Admin" => ["table" => "ADMIN", "column" => "AD_ID"],
+                        "Freelancer" => ["table" => "FREELANCER", "column" => "FR_ID"]
+                    ];
+
+                    $typeTable = $typeTables[$userType]["table"];
+                    $typeColumn = $typeTables[$userType]["column"];
+
+                    $query = "SELECT $typeColumn FROM $typeTable WHERE $typeColumn LIKE ? ORDER BY CAST(SUBSTRING_INDEX($typeColumn, '-', -1) AS UNSIGNED) DESC LIMIT 1";
+                    if ($stmt = $conn->prepare($query)) {
+                        $likePattern = $typeIdPrefix . "%";
+                        $stmt->bind_param("s", $likePattern);
+                        $stmt->execute();
+                        $stmt->bind_result($lastTypeId);
+                        $stmt->fetch();
+                        $stmt->close();
+
+                        if ($lastTypeId) {
+                            $numericPart = (int) substr($lastTypeId, strrpos($lastTypeId, '-') + 1);
+                            $newTypeIdNumber = $numericPart + 1;
+                        } else {
+                            $newTypeIdNumber = 1;
+                        }
+                    } else {
+                        $newTypeIdNumber = 1;
+                    }
+
+                    $formattedNumber = str_pad($newTypeIdNumber, 5, '0', STR_PAD_LEFT);
+                    $typeUserId = $typeIdPrefix . $formattedNumber;
+
+
                     if ($userType === "Client") {
-                        $sql = "INSERT INTO CLIENT(CL_ID) VALUES (?)";
+                        $sql = "INSERT INTO CLIENT(CL_ID, USER_ID) VALUES (?, ?)";
                         if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("s", $userId);
+                            $stmt->bind_param("ss", $typeUserId, $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
                         header("Location: client/clientHome.php");
                         exit();
                     } elseif ($userType === "Admin") {
-                        $sql = "INSERT INTO ADMIN(AD_ID) VALUES (?)";
+                        $sql = "INSERT INTO ADMIN(AD_ID, USER_ID) VALUES (?, ?)";
                         if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("s", $userId);
+                            $stmt->bind_param("ss", $typeUserId, $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
                         header("Location: admin/admindash.php");
                         exit();
                     } elseif ($userType === "Freelancer") {
-                        $sql = "INSERT INTO FREELANCER(FR_ID) VALUES (?)";
+                        $sql = "INSERT INTO FREELANCER(FR_ID, USER_ID) VALUES (?, ?)";
                         if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("s", $userId);
+                            $stmt->bind_param("ss", $typeUserId, $userId);
                             $stmt->execute();
                             $stmt->close();
                         }
@@ -149,7 +200,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                     } else {
                         header("Location: FormSignUser.php");
                     }
-                    exit();
                 } else {
                     $userErr = "Something went wrong while creating your account.";
                 }
