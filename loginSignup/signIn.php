@@ -4,7 +4,7 @@ session_start();
 require('interlinkedDB.php');
 
 $nameMsg = $emailMsg = $passMsg = "";
-$userName = $email = $pass = $userType = "";
+$userName = $email  = $pass = $userType = "";
 
 // Helper function to sanitize input
 function clean_text($text) {
@@ -13,29 +13,36 @@ function clean_text($text) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action'])) {
-        $email = isset($_POST['email']) ? clean_text($_POST['email']) : '';
+        $userName = isset($_POST['userName']) ? clean_text($_POST['userName']) : '';
         $userType = isset($_POST['type']) ? clean_text($_POST['type']) : '';
 
-        // Ensure session values are being set correctly
-        $_SESSION["email"] = $email;
+        // Store in session
+        $_SESSION["userName"] = $userName;
         $_SESSION["type"] = $userType;
 
         if ($_POST['action'] == "Next ►") {
-            // Validate email
-            if (empty($email)) {
-                $emailMsg = "Email is required <br>";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailMsg = "Input a valid email address <br>";
-            }
+            if (empty($userName)) {
+                $nameMsg = "Username is required.";
+            } else {
+                $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ?");
+                $stmt->bind_param("s", $userName);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-            if (empty($emailMsg)) {
-                // Ensure session values are set before redirecting
-                header("Location: FormSignUser.php");
-                exit();
+                if ($result->num_rows > 0) {
+                    $nameMsg = "Username already exists. <br>";
+                } else {
+                    // Username is available, redirect
+                    header("Location: FormSignUser.php");
+                    exit();
+                }
+
+                $stmt->close();
             }
         }
     }
 }
+
 
 ?>
 
@@ -62,9 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1>Ready to be linked? <br> SIGN IN WITH US!</h1>
         <p class="credentials">Please enter your credentials</p>
         <form class="form" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
-            <label for="userEmail"> Email*</label><br>
-            <input type="text" id="userEmail" name="email" placeholder="Email" value="<?= htmlspecialchars($email) ?>"><br>
-            <span class="spanWarning"><?= $emailMsg ?></span>
+            <label for="userName"> Username*</label><br>
+            <input type="text" id="userName" name="userName" placeholder="Username" value="<?= htmlspecialchars($userName) ?>"><br>
+            <span class="spanWarning"><?= $nameMsg ?></span>
 
             <label for="clientType"> Are you a...</label><br>
             <select name="type" id="clientType">
