@@ -20,7 +20,7 @@
     </div>
     <div class="top-right">
         <div class="right-btn">
-            <button class="btn-top"><a href="../loginSignup/index.php"><i class="fa-solid fa-magnifying-glass"></i> Browse</a></button>
+            <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Browse</a></button>
             <button class="btn-top"><a href="../loginSignup/logIn.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
         </div>
         <div class="profile">
