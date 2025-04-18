@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>interLINKED</title>
-    <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="imgs/inlFavicon@4x.png">
+    <link rel="stylesheet" href="loginSignup/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
 </head>
 <body class="indexClass">
-<?php include 'vertical-navtemp.php' ?>
+<?php include 'loginSignup/vertical-navtemp.php' ?>
     <div class="top-right">
         <div class="right-btn">
-            <button type="submit" name="action" value="signIn"><a href="signIn.php">Sign Up</a></button>
-            <button type="submit" name="action" value="login"><a href="logIn.php">Log In</a></button>
+            <button type="submit" name="action" value="signIn"><a href="loginSignup/signIn.php">Sign Up</a></button>
+            <button type="submit" name="action" value="login"><a href="loginSignup/logIn.php">Log In</a></button>
         </div>
     </div>
 <div class="portfolio-container">

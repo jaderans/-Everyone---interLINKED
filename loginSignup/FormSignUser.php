@@ -133,14 +133,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                     // Generate type-based ID for specific table
                     $typePrefixes = [
                         "Client" => "CL25-",
-                        "Admin" => "AD25-",
                         "Freelancer" => "FR25-"
                     ];
                     $typeIdPrefix = $typePrefixes[$userType];
 
                     $typeTables = [
                         "Client" => ["table" => "CLIENT", "column" => "CL_ID"],
-                        "Admin" => ["table" => "ADMIN", "column" => "AD_ID"],
                         "Freelancer" => ["table" => "FREELANCER", "column" => "FR_ID"]
                     ];
 
@@ -177,16 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: client/clientHome.php");
-                        exit();
-                    } elseif ($userType === "Admin") {
-                        $sql = "INSERT INTO ADMIN(AD_ID, USER_ID) VALUES (?, ?)";
-                        if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("ss", $typeUserId, $userId);
-                            $stmt->execute();
-                            $stmt->close();
-                        }
-                        header("Location: admin/admindash.php");
+                        header("Location: ../client/clientHome.php");
                         exit();
                     } elseif ($userType === "Freelancer") {
                         $sql = "INSERT INTO FREELANCER(FR_ID, USER_ID) VALUES (?, ?)";
@@ -195,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: freelancer/frlanceHome.php");
+                        header("Location: ../freelancer/frlanceHome.php");
                         exit();
                     } else {
                         header("Location: FormSignUser.php");
