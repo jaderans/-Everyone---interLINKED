@@ -13,7 +13,7 @@ session_start();
     <title>Message</title>
 </head>
 <body>
-<?php include 'freelancer-navbar-template.php' ?>
+<?php include 'client-navbar-template.php' ?>
 
 <div class="container">
     <div class="content">
@@ -36,11 +36,11 @@ session_start();
             </div>
 
             <div class="receiver-details">
-                <div class="msg-profile">
-                    <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
+                <div class="profile">
+                    <a href="client-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
                 </div>
                 <div class="name">
-                    <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Client</h4></a>
+                    <a href="client-profile-page.php"><h4 style="font-weight: 700">Client</h4></a>
                     <p style="font-size: 12px">Client</p>
                 </div>
             </div>
