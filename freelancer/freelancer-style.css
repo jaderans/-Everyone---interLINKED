@@ -51,6 +51,8 @@ html, body{
     grid-column-start: 3;
     border-radius: 10px;
     padding: 20px;
+    display: flex;
+    flex-direction: row;
 }
 
 .message {
@@ -61,11 +63,14 @@ html, body{
     grid-column-start: 3;
     grid-row-start: 2;
     border-radius: 10px;
+    overflow: auto;
 }
 
-.receiver-details {
-    display: flex;
-    flex-direction: row;
+
+.receiver-details .msg-profile img {
+
+    width: auto;
+    height: 30px;
 }
 
 form {
@@ -185,22 +190,23 @@ textarea {
     text-align: left;
 }
 
-/*------------------------------------------------freelancer Profile side*/
+/*------------------------------------------------freelancer Profile page*/
 
 .header {
     width: 100vw;
     height: 30vh;
     background-color: #357b80;
+    z-index: -6;
 }
 .profile {
     display: flex;
     flex-direction: row;
     height: 40px;
+    z-index: 1;
 }
 
 .profile .img{
     margin: -200px 0 0 20px;
-    z-index: 2;
     background-color: #5d5d5d;
     width: 270px;
     border-radius: 200px;
@@ -214,14 +220,12 @@ textarea {
 .profile-name {
     color: white;
     text-shadow: 0 0 20px #1f4c4b;
-    z-index: 3;
     width: 90%;
     margin: -150px 0 0 10px;
 }
 
 .edit .btn {
     width: 70px;
-    z-index: 3;
     margin: 40px 0 10px 0;
 
 }
@@ -240,6 +244,7 @@ textarea {
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 0  20px #436a6d;
+    overflow: auto;
 
 }
 
@@ -250,4 +255,5 @@ textarea {
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 0  20px #436a6d;
+    overflow: auto;
 }

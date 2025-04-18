@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="freelancer-nav-style.css">
+    <link rel="stylesheet" href="freelancer-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/font-awesome.min.css">
 
@@ -45,14 +46,66 @@
             </ul>
 
             <div class="lower-content">
-                <button class="btn"><a href="freelancer-showcase-post-page.php"><i class="fa-regular fa-paper-plane"></i> Post work</a></button>
+                <button id="myBtn"><i class="fa-regular fa-paper-plane"></i> Post work</a></button>
+            </div>
+
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h1>POST WORK</h1>
+                    <p>Some text in the Modal</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere id impedit in mollitia nesciunt quibusdam quis, quisquam quos veniam voluptates? A ab debitis earum magni nulla rerum, sequi? Numquam, sit!</p>
+
+
+                    <form action="#" method="post" class="message-form">
+                        <label for="">To: </label>
+                        <input type="text" name="admin" placeholder="@Admin eg." required><br>
+                        <label for="">Subject: </label>
+                        <input type="text" name="subject" placeholder="Add Subject" required><br>
+                        <label for="">Message: </label>
+                        <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
+                        <input class="attach" type="file" id="" name="myfile" multiple><br><br>
+                        <button class="btn-1" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
+                    </form>
+                </div>
 
             </div>
+
             <div class="help">
                 <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
             </div>
 
         </div>
     </div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>

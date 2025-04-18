@@ -36,7 +36,7 @@ session_start();
             </div>
 
             <div class="receiver-details">
-                <div class="profile">
+                <div class="msg-profile">
                     <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
                 </div>
                 <div class="name">

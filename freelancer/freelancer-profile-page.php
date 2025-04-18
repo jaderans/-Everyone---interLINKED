@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="freelancer-style.css">
+    <link rel="stylesheet" href="freelancer-nav-style.css">
     <title>Profile</title>
 </head>
 <body>
@@ -43,6 +44,10 @@
 
             <div class="details-right">
                 <h1>Links</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam dolore, dolores earum eveniet facere magnam nesciunt omnis possimus qui. Corporis dolorum enim eveniet explicabo impedit neque, praesentium quaerat ut vel?</p>
             </div>
         </div>
