@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($userType == "Client") {
                         header("Location: clientHome.php");
                     } elseif ($userType == "Freelancer") {
-                        header("Location: ../freelancer/freelancer-dashboard-page.php");
+                        header("Location: ../freelancer/client-dashboard-page.php");
                     } elseif ($userType == "Admin") {
                         header("Location: AdminDash.php");
                     }
