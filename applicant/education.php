@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up | INTERLINKED</title>
+    <title>Application | Education</title>
     <link rel="icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="authenticate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -15,6 +15,26 @@
     <div class="logo">
         <img src="../imgs/inl2Logo.png" alt="INTERLINKED Logo">
     </div>
+</div>
+<div class="container">
+    <p class="subtext">4/8</p>
+    <h1>Tell us about your education.</h1>
+    <p class="subtext">List your degrees, schools, and any certifications.</p>
+    <div class="category-specialty-container">
+        <div class="wrkExp">
+            <h3 style="color: #676767; line-height: 0">Education</h3>
+            <p class="subtext">add your degree</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="botvar">
+    <div class="botconrow">
+        <input type="submit" name="action" value="Back">
+        <input type="submit" name="action" value="Next">
+    </div>
+
 </div>
 
 </body>
