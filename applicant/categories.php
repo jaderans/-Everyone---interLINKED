@@ -41,7 +41,7 @@
 
 <div class="botvar">
     <div class="botconright">
-        <input type="submit" name="action" value="Next">
+        <input type="submit" name="action" action="tile.php" value="Next">
     </div>
 </div>
 
