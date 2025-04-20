@@ -6,21 +6,19 @@
     <title>Admin | interLINKED</title>
     <link rel="icon" type="image/x-icon" href="../imgs/inlFaviconwhite.png">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <?php
 ?>
 <div class="navbar">
     <div class="topvar">
-        <!-- Left: Title -->
         <div class="navtitle">
             <h1>Admin | <br></h1>
             <p style="padding-left: 8px">Dashboard</p>
         </div>
 
-        <!-- Right: Profile -->
         <div class="navprofile">
             <div class="name">
                 <h4 style="font-weight: 700">Furina</h4>
@@ -38,6 +36,16 @@
         <div class="logo">
             <img src="../imgs/inl2LogoWhite.png" alt="INTERLINKED Logo">
         </div>
+    </div>
+    <div class="navbuttons">
+    <ul class="side-content">
+        <li><a href="#"><i class="fas fa-database"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fas fa-project-diagram"></i> Projects</a></li>
+        <li><a href="#"><i class="fas fa-dollar-sign"></i> Salary</a></li>
+        <li><a href="#"><i class="fas fa-bell"></i> Users</a></li>
+        <li><a href="#"><i class="fas fa-envelope"></i> Message</a></li>
+        <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+    </ul>
     </div>
 </div>
 </body>
