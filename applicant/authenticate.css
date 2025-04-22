@@ -1,0 +1,369 @@
+html, body {
+    color: #333;
+    background: white;
+    line-height: 1.6;
+    padding: 50px;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    z-index: -2;
+}
+
+.container h1 {
+    font-size: 25px;
+    line-height:40px;
+
+}
+
+.container{
+    margin-top: 100px;
+    margin-left: 300px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+}
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1;
+}
+.form-group input {
+    width: 120%;
+    margin-bottom: 5px;
+    padding: 9px;
+    border: 2px solid #4a8c8a;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+.form-group div {
+    width: 40%;
+}
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.form label{
+    font-size: 10px;
+}
+
+.form p{
+    font-size: 7px;
+    font-weight: lighter;
+    color: #c1c1c1;
+}
+
+input[value="Submit"]{
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #4a8c8a;
+}
+
+input[value="Next"] {
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #4a8c8a;
+}
+
+input[value="Review"] {
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #4a8c8a;
+}
+
+input[value="Back"]{
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #1f4c4b;
+    background: #ffffff;
+    border-color: #1f4c4b;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.botconrow{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 50px;
+}
+
+.botconright{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+}
+
+.rectangle{
+    background: #1f4c4b;
+    height: 500px;
+    width: 100px;
+}
+.imageHeader{
+    max-width: 30%;
+    height: auto;
+    display: block;
+    margin-left: 550px;
+    margin-bottom: 500px;
+
+}
+.rectangle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    min-width: 300px;
+    max-width: 565px;
+    height: 100vh;
+    background: linear-gradient(to top, #1f4c4b,#4a8c8a);
+    z-index: -1;
+}
+
+.rectangle2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 100%;
+    background: white;
+    z-index: -1;
+}
+
+.rectangle3 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 40%;
+    min-width: 300px;
+    max-width: 565px;
+    height: 100vh;
+    background: linear-gradient(to top, #1f4c4b, #4a8c8a);
+    z-index: -1;
+}
+
+.topvar{
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    z-index: 2;
+}
+
+.botvar{
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding: 25px;
+    z-index: 3;
+}
+.logo {
+    margin-left: 50px;
+    margin-bottom: 2px;
+}
+
+.logo img{
+    width: auto;
+    height: 25px;
+}
+.spanWarning{
+    color:red;
+    font-size: 10px;
+    line-height:0;
+}
+
+.category-specialty-container {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e4e4e4;
+    width: 100%;
+    max-width: 1100px;
+    min-height: 430px;
+}
+
+.category-col {
+    width: 270px;
+    min-width: 220px;
+    padding-right: 40px;
+    border-right: 1px solid #e4e4e4;
+}
+
+.category-header {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    font-size: 16px;
+    color: #333;
+    padding: 6px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.category-list li.selected {
+    color: #1ab394;
+    font-weight: 600;
+}
+
+.specialty-col {
+    flex: 1;
+    padding-left: 40px;
+}
+
+.specialty-header {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.specialty-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.specialty-list li {
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.specialty-list li label {
+    display: flex;
+    align-items: center;
+}
+
+.specialty-list input[type="checkbox"] {
+    accent-color: #1ab394;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.clear-selections {
+    color: #1ab394;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    transition: text-decoration 0.2s;
+}
+
+.clear-selections:hover {
+    text-decoration: underline;
+}
+.subtext{
+    color: #aaaaaa;
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: 0;
+}
+
+.jobTitle {
+    width: 500px;
+    margin-bottom: 5px;
+    padding: 9px;
+    border: 2px solid #4a8c8a;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.wrkExp{
+    width: 300px;
+    height: 200px;
+    margin-bottom: 5px;
+    padding: 9px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    border: 3px dotted #4a8c8a;
+    background: #ededed;
+    align-content: center;
+
+}
+
+.bio-field {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.bio-field label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
