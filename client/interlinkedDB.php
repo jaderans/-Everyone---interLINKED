@@ -1,6 +1,11 @@
 <?php
-    $db_server = "localhost";
-    $db_user = "root";
-    $db_password = "";
-    $db_name = "interlinkdb";
-    $conn = mysqli_connect($db_server, $db_user, $db_password, $db_name);
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "interlinkdb";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+}

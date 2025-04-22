@@ -184,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                             $stmt->execute();
                             $stmt->close();
                         }
-                        header("Location: ../freelancer/frlanceHome.php");
+                        header("Location: ../freelancer/freelancer-dashboard-page.php");
                         exit();
                     } else {
                         header("Location: FormSignUser.php");
