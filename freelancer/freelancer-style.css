@@ -8,6 +8,8 @@
 
 html, body{
     background-color: #dadada;
+    overflow-x: hidden;
+    height: 100vh;
 }
 
 /*------------------------------------------------content*/
@@ -25,169 +27,41 @@ html, body{
     font-weight: 900;
 }
 
-/*------------------------------------------------freelancer  message right page*/
-
-.parent {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(9, 1fr);
-    gap: 9px;
-    height: 80vh;
-    margin-top: 100px;
-    margin-right: 20px;
-}
-
-.contact {
-    padding: 20px;
-    background-color: #f4f4f4;
-    grid-column: span 2 / span 2;
-    grid-row: span 9 / span 9;
-    border-radius: 20px;
-}
-
-.receiver-details {
-    background-color: #f4f4f4;
-    grid-column: span 3 / span 3;
-    grid-column-start: 3;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-}
-
-.message {
-    padding: 5px 10px 10px 20px;
-    background-color: #f4f4f4;
-    grid-column: span 3 / span 3;
-    grid-row: span 8 / span 8;
-    grid-column-start: 3;
-    grid-row-start: 2;
-    border-radius: 10px;
-    overflow: auto;
-}
 
 
-.receiver-details .msg-profile img {
+/*!*------------------------------------------------freelancer  message left side*!*/
+/*.selection{*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    padding: 10px;*/
+/*    margin: 10px 10px 0 20px ;*/
+/*}*/
 
-    width: auto;
-    height: 30px;
-}
-
-form {
-    max-width: 600px;
-    padding: 1rem;
-}
-
-textarea {
-    width: 100%;
-    min-height: 200px;
-    padding: 1rem;
-    font-size: 1rem;
-    resize: none;
-    box-sizing: border-box;
-}
-
-.message-form label{
-    font-weight: bold;
-    font-size: 15px;
-    display: flex;
-    flex-direction: column;
-    color: #676767;
-    margin: 10px 0 5px 0;
-}
-
-.message-form textarea {
-    margin: 0 0 20px 0;
-    border-radius: 20px;
-    padding: 20px;
-    border: 2px solid #4a8c8a;
-}
-
-
-.message-form input[type=text] {
-    width: 40%;
-    padding-left: 20px;
-    height: 30px;
-    border-radius: 10px;
-    border: 2px solid #4a8c8a;
-    margin-bottom: 10px;
-}
-
-.attach{
-    display: flex;
-    width: 30%;
-    margin: 10px 0 0 35%;
-    z-index: 2;
-    background-color: #105D63;
-    border: none;
-    padding: 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #cfcfcf;
-}
-
-/*.btn{*/
-/*    margin-top: 1000px;*/
-/*    width: 1000%;*/
+/*.sel button{*/
+/*    width: 100px;*/
+/*    margin: 20px 10px 0 10px;*/
+/*}*/
+/*.sel button:hover{*/
+/*    background-color: #1a858d;*/
+/*}*/
+/*.btn-left{*/
+/*    display: flex;*/
+/*    width: 30%;*/
 /*    background-color: #105D63;*/
 /*    border: none;*/
-/*    padding: 22px;*/
+/*    padding: 10px;*/
 /*    border-radius: 8px;*/
 /*    cursor: pointer;*/
 /*    transition: background-color 0.3s;*/
 /*    color: #cfcfcf;*/
-/*    z-index: 1;*/
 /*}*/
 
-.btn a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: left;
-}
-
-.btn i {
-    margin-right: 10px;
-}
-
-.btn:hover {
-    background-color: #1a858d;
-}
-
-/*------------------------------------------------freelancer  message left side*/
-.selection{
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    margin: 10px 10px 0 20px ;
-}
-
-.sel button{
-    width: 100px;
-    margin: 20px 10px 0 10px;
-}
-.sel button:hover{
-    background-color: #1a858d;
-}
-.btn-left{
-    display: flex;
-    width: 30%;
-    background-color: #105D63;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #cfcfcf;
-}
-
-.btn-left a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: left;
-}
+/*.btn-left a {*/
+/*    color: white;*/
+/*    text-decoration: none;*/
+/*    font-weight: bold;*/
+/*    text-align: left;*/
+/*}*/
 
 /*------------------------------------------------freelancer Profile page*/
 
@@ -250,6 +124,7 @@ textarea {
 /*--------------------------------------------------------table design*/
 .table {
     outline: #1f4c4b;
+    border-spacing: 0;
 
 }
 
@@ -260,3 +135,161 @@ th, td {
 }
 
 tr:nth-child(even) {background-color: rgba(195, 196, 196, 0.73);}
+tr:hover {background-color: #a4b4b4;}
+
+
+/*----------------------------------------------------------------------------------------------dashboard*/
+.card {
+    background-color: #ffffff;
+    color: #424141;
+    padding: 16px;
+    border-radius: 20px;
+    margin-top: 20px;
+    transition: 0.3s;
+    width: 20%;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.card:hover {
+    background-color: #cbcbcb;
+}
+
+.card h1 {
+    color: #1f4c4b;
+    font-size: 30px;
+    font-weight: 900;
+}
+.card i {
+    margin-right: 20px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: 100px;
+    z-index: 10;
+}
+
+.card-content .num {
+    font-size: 80px;
+}
+
+.card-content .label {
+    margin-top: 50px;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+
+/* Base styles remain the same — as you shared above */
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container {
+        margin-left: 20px;
+        margin-top: 60px;
+        margin-right: 20px;
+    }
+
+    .parent {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        margin: 50px 10px 0 80px;
+    }
+
+    .contact,
+    .receiver-details,
+    .message {
+        grid-column: span 1;
+        grid-row: auto;
+    }
+
+    .receiver-details {
+        flex-direction: column;
+    }
+
+    .attach {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+
+    .btn-left {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile .img {
+        margin: 20px 0;
+        width: 150px;
+    }
+
+    .profile .img img {
+        height: 150px;
+    }
+
+    .profile-name {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .profile-details {
+        margin: 10px;
+    }
+
+    .details {
+        margin: 10px 0;
+        padding: 15px;
+    }
+
+    .message-form input[type=text] {
+        width: 100%;
+    }
+
+    .attach, .btn-left {
+        width: 100%;
+    }
+
+    .selection {
+        flex-direction: column;
+        margin: 0;
+    }
+
+    .sel button {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 20vh;
+    }
+
+    textarea {
+        min-height: 150px;
+    }
+
+    .message-form label {
+        font-size: 14px;
+    }
+
+    .content h1 {
+        font-size: 1.5rem;
+    }
+}
+

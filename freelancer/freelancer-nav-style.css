@@ -215,11 +215,6 @@
     width: 100px;
 }
 
-.message-form button {
-    width: 20%;
-    margin-top: -30px;
-}
-
 .message-form .btn a i {
     margin-right: 10px;
 }
@@ -238,17 +233,81 @@
 
 }
 
+
+.modal-msg {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100vh; /* Full height */
+    /*overflow: auto; !* Enable scroll if needed *!*/
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+.modal-msg-content {
+    color: #1f4c4b;
+    background-color: #ffffff;
+    margin-top: 10%;
+    margin-left: 45%;
+    padding: 50px;
+    border: 1px solid #1f4c4b;
+    width: 45%;
+    height: 60%;
+    border-radius: 20px;
+    overflow: auto;
+}
+
 /* Modal Content/Box */
 .modal-content {
     color: #1f4c4b;
     background-color: #fefefe;
-    margin: 8% auto; /* 15% from the top and centered */
-    padding: 50px;
+    margin:100px auto; /* 15% from the top and centered */
+    padding: 15px;
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
-    height: 60%;
+    width: 30%; /* Could be more or less, depending on screen size */
+    height: 80%;
     border-radius: 20px;
     overflow: auto;
+}
+
+.message-form .send {
+    color: white;
+    height: 50px;
+    background-color: #1f4c4b;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.message-form .attach {
+    width: 30%;
+    height: 30px;
+    background-color: #1f4c4b;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.send a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: left;
+}
+
+.send i {
+    margin-right: 10px;
+}
+
+.send:hover {
+    background-color: #1a858d;
 }
 
 /* The Close Button */
@@ -266,6 +325,104 @@
     cursor: pointer;
 }
 
+/*------------------------------------------------freelancer  modal content*/
+
+.message {
+    padding: 5px 10px 10px 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+
+.receiver-details .msg-profile img {
+    width: auto;
+    height: 30px;
+}
+
+form {
+    max-width: 600px;
+    padding: 1rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    font-size: 1rem;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.message-form label{
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    color: #676767;
+    margin: 10px 0 5px 0;
+}
+
+.message-form textarea {
+    margin: 0 0 20px 0;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid #4a8c8a;
+}
+
+
+.message-form input[type=text] {
+    width: 40%;
+    padding-left: 20px;
+    height: 30px;
+    border-radius: 10px;
+    border: 2px solid #4a8c8a;
+    margin-bottom: 10px;
+}
+
+.info .send {
+    color: white;
+    height: 50px;
+    background-color: #1f4c4b;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.info .attach {
+    width: 30%;
+    height: 30px;
+    background-color: #1f4c4b;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.send a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: left;
+}
+
+.send i {
+    margin-right: 10px;
+}
+
+.send:hover {
+    background-color: #1a858d;
+}
+
 
 /*-------------------------------------------------------------floating message window*/
 .float-message {
@@ -275,7 +432,7 @@
     transform: translate(-50%, -50%);
     width: 50px;
     height: 50px;
-    background-color: #115156;
+    background-color: #f8f8f8;
     border-radius: 50%;
     z-index: 9999;
     cursor: pointer;
@@ -283,14 +440,50 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgb(0, 0, 0);
     transition: transform 0.2s ease;
+    border-color: black;
+    color: #444444;
 }
 
 .float-message:hover {
     transform: translate(-50%, -50%) scale(1.50);
+    color: white;
+    background-color: #1f4c4b;
 }
+
+
+
+@media (max-width: 768px) {
+    .navbar {
+        width: 70px;
+        padding: 20px 10px;
+    }
+
+    .side-content li a {
+        font-size: 0;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .side-content li a i {
+        margin-right: 0;
+        font-size: 18px;
+    }
+
+    .sidebar-frame h4,
+    .sidebar-frame h4 a {
+        display: none;
+    }
+
+    .lower-content {
+        display: none;
+    }
+}
+
 
 
 

@@ -18,8 +18,8 @@ $user = $_SESSION['userName'];
     <title>Navigation Template</title>
 </head>
 <body>
-<div class="float-message">
-    <h3>Chat</h3>
+<div class="float-message" id="float-message">
+    <h3><i class="fa-solid fa-message"></i></h3>
 </div>
 
 
@@ -50,7 +50,7 @@ $user = $_SESSION['userName'];
                 <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
                 <li><a href="freelancer-salary-page.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
                 <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
+<!--                <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>-->
                 <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
             </ul>
 
@@ -60,17 +60,49 @@ $user = $_SESSION['userName'];
 
             <div id="myModal" class="modal">
 
-                <!-- Modal content -->
+                <!-- Modal Post content -->
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h1 style="font-weight: bold">CREATE POST</h1>
 
                     <form action="#" method="post" class="message-form">
-                        <label for="">Whats in your mind?: </label>
+                        <label for="">Title: </label>
+                        <input type="text" id="title" name="title" required>
+                        <label for="">Description: </label>
                         <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
-                        <input class="btn" type="file" id="" name="myfile" accept="image/*"><br><br>
-                        <button class="btn" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Post</a></button>
+                        <input class="attach" type="file" id="" name="myfile" accept="image/*"><br><br>
+                        <button class="send" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Post</a></button>
                     </form>
+                </div>
+
+            </div>
+
+            <div id="message" class="modal-msg">
+
+                <!-- Modal Message content -->
+                <div class="modal-msg-content">
+                    <span class="close">&times;</span>
+                    <h1 style="font-weight: bold">MESSAGE</h1>
+
+                    <div class="message">
+                        <form action="#" method="post" class="message-form">
+                            <div class="info">
+                                <label for="">To </label>
+                                <input type="text" name="admin" placeholder="@Admin eg." required><br>
+                                <label for="">Subject </label>
+                                <input type="text" name="subject" placeholder="Add Subject" required><br>
+                            </div>
+
+                            <label for="">Message</label>
+                            <textarea name="message" required placeholder="Type here..."></textarea><br>
+
+                            <div class="info">
+                                <input class="attach" type="file" id="" name="myFile" multiple><br><br>
+                                <button class="send" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
 
             </div>
@@ -85,21 +117,32 @@ $user = $_SESSION['userName'];
 <script>
     // Get the modal
     var modal = document.getElementById("myModal");
+    var modalMessage = document.getElementById("message");
 
     // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
+    var btnMessage = document.getElementById("float-message");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var span = document.querySelector("#myModal .close");
+    var spanmsg = document.querySelector("#message .close");
+
 
     // When the user clicks on the button, open the modal
     btn.onclick = function() {
         modal.style.display = "block";
     }
 
+    btnMessage.onclick = function() {
+        modalMessage.style.display = "block";
+    }
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
+    }
+    spanmsg.onclick = function() {
+        modalMessage.style.display = "none";
     }
 
     // When the user clicks anywhere outside of the modal, close it
@@ -107,7 +150,11 @@ $user = $_SESSION['userName'];
         if (event.target == modal) {
             modal.style.display = "none";
         }
+        if (event.target == modalMessage) {
+            modalMessage.style.display = "none";
+        }
     }
+
 </script>
 </body>
 </html>

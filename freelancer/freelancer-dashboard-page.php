@@ -20,10 +20,44 @@ include_once 'interlinkedDB.php';
 
 <div class="container">
     <div class="content">
-        <h1>Dashboard</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
+        <h1>Dashboard</h1><br><br>
+        <h1>My Commissions</h1>
+        <p>Date</p><br>
+
+        <h1>Statics</h1>
 
     </div>
+
+    <div class="card-container">
+        <div class="card">
+            <h1><i class="fa-solid fa-database"></i>ONGOING</h1>
+            <div class="card-content">
+                <h1 class="num">4</h1>
+                <h1 class="label">Tasks</h1>
+            </div>
+        </div>
+        <div class="card">
+            <h1><i class="fa-solid fa-database"></i>PENDING</h1>
+            <div class="card-content">
+                <h1 class="num">9</h1>
+                <h1 class="label">Tasks</h1>
+            </div>
+        </div>
+        <div class="card">
+            <h1><i class="fa-solid fa-database"></i>COMPLETED</h1>
+            <div class="card-content">
+                <h1 class="num">20</h1>
+                <h1 class="label">Tasks</h1>
+            </div>
+        </div>
+        <div class="card">
+            <h1><i class="fa-solid fa-database"></i>Summary</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci beatae cupiditate dolore dolores harum incidunt itaque iusto molestiae, nesciunt pariatur quia, quos repellat totam veniam, voluptates? Maiores omnis quibusdam rerum!</p>
+            <a href="freelancer-project-page.php">Check</a>
+        </div>
+
+    </div>
+
 
 </div>
 </body>
