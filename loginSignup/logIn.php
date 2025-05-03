@@ -1,8 +1,10 @@
 <?php
+session_start();
 include('interlinkedDB.php');
 
 $nameMsg = $emailMsg = $passMsg = $userErrorMsg = "";
 $userName = $email = $pass = $userType = "";
+
 
 function clean_text($text) {
     return htmlspecialchars(trim($text));
@@ -13,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = clean_text($_POST['email']);
     $userType = clean_text($_POST['type']);
     $password = clean_text($_POST['pass']);
+
 
     if (isset($_POST['action'])) {
         if ($_POST['action'] == "Log In") {
@@ -39,10 +42,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($result->num_rows == 1) {
                     // Successful login
+
                     if ($userType == "Client") {
                         header("Location: clientHome.php");
                     } elseif ($userType == "Freelancer") {
-                        header("Location: ../freelancer/client-dashboard-page.php");
+                        if ($result->num_rows == 1) {
+                            $user = $result->fetch_assoc();
+                            $_SESSION['userName'] = $user['USER_NAME'];
+                            $_SESSION['email'] = $user['USER_EMAIL'];
+                            $_SESSION['userType'] = $user['USER_TYPE'];
+
+                            if ($userType == "Client") {
+                                header("Location: clientHome.php");
+                            } elseif ($userType == "Freelancer") {
+                                header("Location: ../freelancer/freelancer-dashboard-page.php");
+                            } elseif ($userType == "Admin") {
+                                header("Location: AdminDash.php");
+                            }
+                            exit();
+                        }
+                        header("Location: ../freelancer/freelancer-dashboard-page.php");
                     } elseif ($userType == "Admin") {
                         header("Location: AdminDash.php");
                     }
@@ -58,6 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+
+
 ?>
 
 <!DOCTYPE html>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'freelancer-navbar-template.php'
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,7 +13,7 @@ session_start();
     <title>Message</title>
 </head>
 <body>
-<?php include 'freelancer-navbar-template.php' ?>
+
 
 <div class="container">
     <div class="content">
@@ -54,7 +54,7 @@ session_start();
                     <label for="">Message: </label>
                     <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
                     <input class="attach" type="file" id="" name="myfile" multiple><br><br>
-                    <button class="btn-1" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
+                    <button class="btn" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
                 </form>
 
             </div>

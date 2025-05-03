@@ -12,7 +12,7 @@ html, body {
     background: url("imgs/natbg.png") no-repeat top right fixed;
     background-size: cover;
     z-index: -1;
-}a
+}
 
 html, body.indexClass {
     color: #333;

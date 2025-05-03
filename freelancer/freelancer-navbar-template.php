@@ -1,3 +1,7 @@
+<?php
+session_start();
+$user = $_SESSION['userName'];
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,7 +11,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="freelancer-nav-style.css">
-    <link rel="stylesheet" href="freelancer-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/font-awesome.min.css">
 
@@ -15,25 +18,31 @@
     <title>Navigation Template</title>
 </head>
 <body>
+<div class="float-message">
+    <h3>Chat</h3>
+</div>
+
+
 <div class="topvar">
     <div class="logo">
         <img src="../imgs/inl2Logo.png" alt="">
     </div>
     <div class="top-right">
         <div class="right-btn">
-            <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Browse</a></button>
-            <button class="btn-top"><a href="../loginSignup/logIn.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
+            <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Home</a></button>
+            <button class="btn-top" ><a href="../loginSignup/logIn.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
         </div>
         <div class="profile">
             <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
         </div>
         <div class="name">
-            <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Furina</h4></a>
+            <a href="freelancer-profile-page.php"><h4 style="font-weight: 700"><?= $user?></h4></a>
             <p style="font-size: 12px">Freelancer</p>
         </div>
     </div>
 
 </div>
+
     <div class="navbar">
         <div class="sidebar-frame">
             <ul class="side-content">
@@ -54,20 +63,13 @@
                 <!-- Modal content -->
                 <div class="modal-content">
                     <span class="close">&times;</span>
-                    <h1>POST WORK</h1>
-                    <p>Some text in the Modal</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere id impedit in mollitia nesciunt quibusdam quis, quisquam quos veniam voluptates? A ab debitis earum magni nulla rerum, sequi? Numquam, sit!</p>
-
+                    <h1 style="font-weight: bold">CREATE POST</h1>
 
                     <form action="#" method="post" class="message-form">
-                        <label for="">To: </label>
-                        <input type="text" name="admin" placeholder="@Admin eg." required><br>
-                        <label for="">Subject: </label>
-                        <input type="text" name="subject" placeholder="Add Subject" required><br>
-                        <label for="">Message: </label>
+                        <label for="">Whats in your mind?: </label>
                         <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
-                        <input class="attach" type="file" id="" name="myfile" multiple><br><br>
-                        <button class="btn-1" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
+                        <input class="btn" type="file" id="" name="myfile" accept="image/*"><br><br>
+                        <button class="btn" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Post</a></button>
                     </form>
                 </div>
 

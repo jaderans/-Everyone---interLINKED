@@ -1,3 +1,8 @@
+<?php
+include 'freelancer-navbar-template.php' ;
+include_once 'interlinkedDB.php';
+
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,7 +15,8 @@
     <title>Dashboard</title>
 </head>
 <body>
-<?php include 'freelancer-navbar-template.php' ?>
+
+
 
 <div class="container">
     <div class="content">
