@@ -3,5 +3,5 @@
     $db_user = "root";
     $db_password = "";
     $db_name = "interlinkdb";
-    $conn = mysqli_connect($db_server, $db_user, $db_password, $db_name, 3308);
+    $conn = mysqli_connect($db_server, $db_user, $db_password, $db_name, 3306);
 ?>

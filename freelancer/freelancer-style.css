@@ -17,6 +17,8 @@ html, body{
     margin-left: 320px;
     margin-top: 100px;
     margin-right: 10px;
+    padding: 20px;
+
 }
 
 .content {
@@ -140,16 +142,99 @@ tr:hover {background-color: #a4b4b4;}
 
 /*----------------------------------------------------------------------------------------------dashboard*/
 .card {
-    background-color: #ffffff;
-    color: #424141;
-    padding: 16px;
+    flex: 1; /* Each card will stretch equally */
     border-radius: 20px;
-    margin-top: 20px;
-    transition: 0.3s;
-    width: 20%;
-    position: relative;
-    overflow: hidden;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    background-size: cover;
+    background-position: center;
+    color: #0d3b3f;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
+.container-dashboard {
+    margin-left: 320px;
+    margin-top: 50px;
+    margin-right: 10px;
+    padding: 20px;
+
+}
+
+.inner {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+
+}
+
+.content-card {
+    position: relative;
+    color: #1f4c4b;
+    background-image: url("../imgs/natbg.png");
+    background-size: 130%;
+    background-position: 100% center;
+    padding: 40px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: right;
+    line-height: 100%;
+    border-radius: 15px;
+}
+.content-card {
+    padding: 20px;
+    position: relative;
+}
+
+.header-section {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    text-align: right;
+}
+
+.header-section h1 {
+    font-size: 60px;
+    font-weight: bolder;
+    margin: 0;
+}
+
+.header-section h2 {
+    font-weight: bold;
+    margin: 20px 0 0 0;
+    font-size: 20px;
+}
+
+.header-section p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+
+.check{
+    position: absolute;
+    bottom: 20px; /* distance from the bottom of .content-card */
+    right: 20px;
+    background-color: #1f4c4b;
+    border-radius: 90px;
+
+}
+
+.check a {
+    display: inline-block;
+    color: white;
+
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.check:hover {
+    background-color: #589494; /* darker shade when hovered */
 }
 
 .card:hover {
@@ -170,7 +255,7 @@ tr:hover {background-color: #a4b4b4;}
     flex-direction: row;
     position: relative;
     margin-top: 100px;
-    z-index: 10;
+    /*z-index: 10;*/
 }
 
 .card-content .num {
@@ -183,9 +268,84 @@ tr:hover {background-color: #a4b4b4;}
 
 .card-container {
     display: flex;
-    flex-direction: row;
-    gap: 10px;
+    gap: 20px; /* Space between cards */
+    padding: 20px;
 }
+
+.project-card-dashboard {
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+    height: 50vh;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.project-card-content-dashboard {
+    margin: 20px;
+    width: 100%;
+    overflow: auto;
+}
+
+.project-card-content-dashboard th {
+    font-weight: bolder;
+    background-color: #3D9997;
+    color: #dcdcdc;
+}
+
+.project-card-content-dashboard h1 {
+    color: #1f4c4b;
+    font-size: 30px;
+    font-weight: 900;
+}
+/* ----------------------------------------------------------------------------------edit form*/
+.edit-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-edit {
+    background-color: #357e7e;
+    width: 20%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+}
+.btn-edit:hover {
+    background-color: #4d9d9d;
+    color: #000000;
+}
+
+/*-------------------------------------------------------------------------------PROJECT STYLE*/
+
+.project-card {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    height: 80vh;
+    border-radius: 10px;
+}
+
+
+
+.project-card-content {
+    margin: 20px;
+    width: 100%;
+    overflow: auto;
+}
+
+.project-card-content th {
+    font-weight: bolder;
+    background-color: #3D9997;
+    color: #e5e5e5;
+}
+
+
+
+
+
+
+
 
 
 

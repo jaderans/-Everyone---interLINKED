@@ -15,8 +15,33 @@
 
 <div class="container">
     <div class="content">
-        <h1>Project</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at dignissimos dolore error facilis impedit ipsum minima nobis non repellat repudiandae, tempore ut vero? Ab enim esse harum soluta ullam!</p>
+        <div class="project-card">
+            <div class="project-card-content">
+                <h1>Projects</h1>
+                <table style="width:100%; margin-top: 15px;" class="table">
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Urgency</th>
+                        <th>Commissioned By</th>
+                        <th>Edit/Update</th>
+                    </tr>
+                    <tr>
+                        <td>Placeholder</td>
+                        <td>Placeholder</td>
+                        <td>Placeholder</td>
+                        <td>Placeholder</td>
+                        <td>Placeholder</td>
+                        <td>
+                            <form action="freelancer-edit-project.php" method="post">
+                                <button class="btn" id="btn-edit" name="user_id" value="">Edit</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
 </div>

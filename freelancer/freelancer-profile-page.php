@@ -8,7 +8,6 @@ $name = $_SESSION['userName'];
 $stmt = $conn->prepare("SELECT * FROM user where USER_NAME = ?");
 $stmt->execute([$name]);
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 
@@ -37,16 +36,11 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="profile">
             <div class="img">
                 <img src="imgs/profile.png" alt="">
-
             </div>
 
             <div class="profile-name">
                 <h1><?=$name?></h1>
                 <h2>Freelancer</h2>
-
-                <div class="edit">
-                    <button class="btn"><a href="">Edit</a></button>
-                </div>
             </div>
 
         </div>
@@ -87,24 +81,19 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Contact Details:</th>
                             <td><?=$res['USER_CONTACT']?></td>
                         </tr>
-
+                        <tr>
+                            <td>
+                                <form action="freelancer-edit-profile.php" method="post">
+                                    <button class="btn-edit" id="btn-edit" name="user_id" value="<?=$res['USER_ID']?>">Edit</button>
+                                </form>
+                            </td>
+                        </tr>
 
                     </table>
                 <?php } ?>
 
             </div>
-
-            <div class="details">
-                <h1>Links</h1>
-
-
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aspernatur aut consequuntur cum cupiditate dignissimos error magni obcaecati quo quod. Accusantium deleniti dolor fuga mollitia nulla placeat quidem veniam voluptatibus!</p>
-            </div>
         </div>
 
-    </div>
-
-</div>
 </body>
 </html>

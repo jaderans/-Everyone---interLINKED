@@ -1,0 +1,262 @@
+html, body {
+    color: #333;
+    background: white;
+    line-height: 1.6;
+    padding: 50px;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    z-index: -2;
+}
+
+.container h1,p {
+    font-size: 25px;
+    line-height:0;
+
+}
+
+.container2{
+    margin-top: 80px;
+}
+
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+}
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1;
+}
+.form-group input {
+    width: 120%;
+    margin-bottom: 5px;
+    padding: 9px;
+    border: 2px solid #4a8c8a;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+.form-group div {
+    width: 40%;
+}
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.form label{
+    font-size: 10px;
+}
+
+.form p{
+    font-size: 7px;
+    font-weight: lighter;
+    color: #c1c1c1;
+}
+
+button[value="update"]{
+    width: 108%;
+    height: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #1f4c4b;
+}
+
+button[value="reg"]{
+    width: 100%;
+    height: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #4a8c8a;
+}
+
+button[value="next"]{
+    width: 108%;
+    height: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #4a8c8a;
+}
+
+button[value="goBack"]{
+    width: 108%;
+    height: 50%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
+    background: #787878;
+}
+
+.form input[type="text"], form input[type="password"], select, option {
+
+}
+
+.credentials{
+    font-size: 12px;
+    color: #777777;
+    line-height: 0px;
+}
+
+.rectangle{
+    background: #1f4c4b;
+    height: 500px;
+    width: 100px;
+}
+.imageHeader{
+    max-width: 30%;
+    height: auto;
+    display: block;
+    margin-left: 550px;
+    margin-bottom: 500px;
+
+}
+.rectangle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    min-width: 300px;
+    max-width: 565px;
+    height: 100vh;
+    background: linear-gradient(to top, #1f4c4b,#4a8c8a);
+    z-index: -1;
+}
+
+.rectangle2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 100%;
+    background: white;
+    z-index: -1;
+}
+
+.rectangle3 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 40%;
+    min-width: 300px;
+    max-width: 565px;
+    height: 100vh;
+    background: linear-gradient(to top, #1f4c4b, #4a8c8a);
+    z-index: -1;
+}
+
+.topvar{
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    z-index: 2;
+}
+.logo {
+    margin-left: 50px;
+    margin-bottom: 2px;
+}
+
+.logo img{
+    width: auto;
+    height: 25px;
+}
+.spanWarning{
+    color:red;
+    font-size: 10px;
+    line-height:0;
+}
+
+
+/*----------------------------------------------select*/
+.cus-select {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cus-select label {
+    font-weight: 600;
+    color: #333;
+}
+
+/*.cus-select select {*/
+/*    width: 235px;*/
+/*    padding: 10px 14px;*/
+/*    border: 2px solid #1f4c4b;*/
+/*    border-radius: 6px;*/
+/*    font-size: 16px;*/
+/*    background-color: #fff;*/
+/*    color: #333;*/
+/*    cursor: pointer;*/
+/*    appearance: none;         !* Remove default styling *!*/
+/*    -webkit-appearance: none; !* Safari *!*/
+/*    -moz-appearance: none;    !* Firefox *!*/
+/*    background-image: url("data:image/svg+xml;utf8,<svg fill='%234CAF50' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: right 12px center;*/
+/*    background-size: 16px;*/
+/*    transition: border-color 0.3s ease;*/
+/*}*/
+
+.cus-select select {
+    width: 120%;
+    margin-bottom: 5px;
+    padding: 9px;
+    border: 2px solid #4a8c8a;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.cus-select select:focus {
+    outline: none;
+    border-color: #1f4c4b;
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}

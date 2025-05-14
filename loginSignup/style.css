@@ -14,7 +14,7 @@ html, body {
     z-index: -1;
 }
 
-html, body.indexClass {
+body.indexClass {
     color: #333;
     background: rgb(255, 255, 255);
     line-height: 1.6;
@@ -28,7 +28,7 @@ html, body.indexClass {
     z-index: -1;
 }
 
-html, body.headerClass {
+body.headerClass {
     color: #333;
     background: rgb(255, 255, 255);
     line-height: 1.6;

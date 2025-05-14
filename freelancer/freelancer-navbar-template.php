@@ -29,8 +29,8 @@ $user = $_SESSION['userName'];
     </div>
     <div class="top-right">
         <div class="right-btn">
-            <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Home</a></button>
-            <button class="btn-top" ><a href="../loginSignup/logIn.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
+<!--            <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Home</a></button>-->
+            <button class="btn-top" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></button>
         </div>
         <div class="profile">
             <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
@@ -48,22 +48,20 @@ $user = $_SESSION['userName'];
             <ul class="side-content">
                 <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i> Dashboard</a></li>
                 <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
-                <li><a href="freelancer-salary-page.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
+                <li><a href="salary.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
                 <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification</a></li>
 <!--                <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>-->
                 <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
             </ul>
 
             <div class="lower-content">
-                <button id="myBtn"><i class="fa-regular fa-paper-plane"></i> Post work</a></button>
+                <button id="myBtn"><i class="fa-regular fa-paper-plane"></i> Submit</a></button>
             </div>
 
             <div id="myModal" class="modal">
-
-                <!-- Modal Post content -->
                 <div class="modal-content">
                     <span class="close">&times;</span>
-                    <h1 style="font-weight: bold">CREATE POST</h1>
+                    <h1 style="font-weight: bold">UPLOAD</h1>
 
                     <form action="#" method="post" class="message-form">
                         <label for="">Title: </label>
@@ -115,6 +113,16 @@ $user = $_SESSION['userName'];
     </div>
 
 <script>
+
+        function myFunction() {
+          let text = "Do you want to log-out?";
+
+          if (confirm(text)== true){
+              window.location.replace("../loginSignup/logIn.php");
+          }
+        }
+
+
     // Get the modal
     var modal = document.getElementById("myModal");
     var modalMessage = document.getElementById("message");
