@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         header("Location: ../freelancer/freelancer-dashboard-page.php");
                     } elseif ($userType == "Admin") {
-                        header("Location: AdminDash.php");
+                        header("Location: ../admin/admindash.php");
                     }
                     exit();
                 } else {

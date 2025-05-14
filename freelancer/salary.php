@@ -84,11 +84,11 @@
                     <!-- Withdraw and Transfer Buttons -->
                     <div class="banking-actions">
                         <button id="withdrawBtn" class="banking-action-btn">
-                            <i class="fas fa-arrow-down"></i> Generate QR to Withdraw
+                            <i class="fas fa-arrow-down"></i> Withdraw
                         </button>
-<!--                        <button id="transferBtn" class="banking-action-btn">-->
-<!--                            <i class="fas fa-exchange-alt"></i> Transfer-->
-<!--                        </button>-->
+                        <button id="transferBtn" class="banking-action-btn">
+                            <i class="fas fa-exchange-alt"></i> Bank Details
+                        </button>
                     </div>
                 </div>
             </div>
@@ -152,8 +152,9 @@
         <div class="fund-modal">
             <h2>Withdraw</h2>
             <form id="withdrawForm">
-                <input type="password" id="withdrawPassword" placeholder="Password" required>
                 <input type="number" id="withdrawAmount" placeholder="Amount" required>
+                <input type="password" id="withdrawPassword" placeholder="Password" required>
+                <input type="password" id="withdrawPassword" placeholder="Confirm Password" required>
                 <div class="modal-actions">
                     <button type="button" class="cancel" id="cancelWithdraw">Cancel</button>
                     <button type="submit" class="submit">Withdraw</button>
@@ -165,17 +166,16 @@
     <!-- Transfer Modal -->
     <div id="transferModal" class="modal-overlay">
         <div class="fund-modal">
-            <h2>Transfer Funds</h2>
+            <h2>Bank Details</h2>
             <form id="transferForm">
                 <input type="text" id="transferBankName" placeholder="Account Name" required>
                 <input type="text" id="transferAccountNumber" placeholder="Bank Account Number" required>
                 <input type="tel" id="transferPhoneNumber" placeholder="Phone Number" required>
                 <input type="password" id="transferPassword" placeholder="Password" required>
-                <input type="number" id="transferAmount" placeholder="Amount" required>
-                <input type="text" id="transferPurpose" placeholder="Purpose of Transfer" required>
+                <input type="password" id="transferPassword" placeholder="Confirm Password" required>
                 <div class="modal-actions">
                     <button type="button" class="cancel" id="cancelTransfer">Cancel</button>
-                    <button type="submit" class="submit">Transfer</button>
+                    <button type="submit" class="submit">Save</button>
                 </div>
             </form>
         </div>

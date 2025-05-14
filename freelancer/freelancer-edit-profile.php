@@ -112,17 +112,16 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         $stmtCurrent = $conn->prepare("SELECT * FROM user WHERE user_id = :id");
         $stmtCurrent->execute(['id' => $id]);
         $currentUser = $stmtCurrent->fetch(PDO::FETCH_ASSOC);
-
         $redirectToLogin = false;
 
-        if (!empty($pass) || !empty($conPass)) {
+        if (!empty($pass) || !empty($conPass) || !empty($oldPass)) {
             if (empty($oldPass)) {
                 $error[] = "Old Password is required to change your password.<br>";
                 $hasError = true;
             } elseif ($pass !== $conPass) {
                 $error[] = "Passwords do not match.<br>";
                 $hasError = true;
-            } elseif ($currentUser && $currentUser['USER_PASSWORD'] !== $oldPass) {
+            } elseif ($currentUser['USER_PASSWORD'] !== $oldPass) {
                 $error[] = "Old password is incorrect.<br>";
                 $hasError = true;
             }
@@ -265,8 +264,8 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         <label for="oldPass">Old Password</label>
                         <input type="password" id="oldPass" name="oldPass" placeholder="Old Password">
                     </div>
-
                 </div>
+                <hr>
                 <div class="form-group">
                     <div>
                         <label for="newPass">Change Password</label>
