@@ -16,7 +16,7 @@
     <div class="topvar">
         <div class="navtitle">
             <h1>Admin | <br></h1>
-            <p style="padding-left: 8px">Dashboard</p>
+            <p style="padding-left: 8px">Message</p>
         </div>
 
         <div class="navprofile">
@@ -38,14 +38,14 @@
         </div>
     </div>
     <div class="navbuttons">
-    <ul class="side-content">
-        <li><a href="#"><i class="fas fa-database"></i> Dashboard</a></li>
-        <li><a href="#"><i class="fas fa-project-diagram"></i> Projects</a></li>
-        <li><a href="#"><i class="fas fa-dollar-sign"></i> Salary</a></li>
-        <li><a href="#"><i class="fas fa-bell"></i> Users</a></li>
-        <li><a href="#"><i class="fas fa-envelope"></i> Message</a></li>
-        <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-    </ul>
+        <ul class="side-content">
+            <li><a href="adminDash.php"><i class="fas fa-database"></i> Dashboard</a></li>
+            <li><a href="adminProj.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
+            <li><a href="adminPay.php"><i class="fas fa-dollar-sign"></i> Salary</a></li>
+            <li><a href="adminUser.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="adminMes.php"><i class="fas fa-envelope"></i> Message</a></li>
+            <li><a href="adminProf.php"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
     </div>
 </div>
 </body>
