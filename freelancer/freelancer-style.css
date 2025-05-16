@@ -81,22 +81,27 @@ html, body{
 }
 
 .profile .img{
-    margin: -200px 0 0 20px;
-    background-color: #5d5d5d;
-    width: 270px;
-    border-radius: 200px;
+    margin: -250px 0 0 30px;
+    background-color: #eeeeee;
+    width: 300px;
+    border-radius: 20px;
+    box-shadow:  0 0  20px #436a6d;
 }
 
+
 .profile .img img{
-    width: auto;
-    height: 200px;
+    margin-left: -60px;
+    margin-top: 25px;
+    width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .profile-name {
     color: white;
-    text-shadow: 0 0 20px #1f4c4b;
     width: 90%;
-    margin: -150px 0 0 10px;
+    margin: -190px 0 0 10px;
 }
 
 .edit .btn {
@@ -104,17 +109,33 @@ html, body{
     margin: 40px 0 10px 0;
 
 }
+
+.btn-project {
+    background: #357b80;
+    color: white;
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  0.1s ease;
+}
+
+.btn-project:hover {
+    background-color: #274d50;
+    color: #eaeaea;
+}
+
 .profile-details {
     display: flex;
     flex-direction: column;
-    margin: 20px;
     height: 300px;
+    margin: 50px 0 200px 0;
 
 }
 
 .details {
     color: #1f4c4b;
-    background-color: #d6d6d6;
+    background-color: #eeeeee;
     margin: 10px 10px 0 40px;
     border-radius: 20px;
     padding: 20px;
@@ -124,20 +145,49 @@ html, body{
 
 
 /*--------------------------------------------------------table design*/
-.table {
-    outline: #1f4c4b;
-    border-spacing: 0;
+/*.table {*/
+/*    outline: #1f4c4b;*/
+/*    border-spacing: 0;*/
+
+/*}*/
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #eee;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #a2a2a2;
+    }
+
+    th {
+        font-size: 14px;
+        font-weight: 600;
+        color: #555;
+        text-transform: uppercase;
+    }
+
+    td {
+        font-size: 14px;
+        color: #333;
+    }
 
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #1f4c4b;
-}
+/*th, td {*/
+/*    padding: 8px;*/
+/*    text-align: left;*/
+/*    border-bottom: 1px solid #1f4c4b;*/
+/*}*/
 
-tr:nth-child(even) {background-color: rgba(195, 196, 196, 0.73);}
-tr:hover {background-color: #a4b4b4;}
+/*tr:nth-child(even) {background-color: rgba(234, 234, 234, 0.73);}*/
+/*tr:hover {background-color: #d7d7d7;}*/
 
 
 /*----------------------------------------------------------------------------------------------dashboard*/
@@ -148,12 +198,21 @@ tr:hover {background-color: #a4b4b4;}
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 250px;
+    /*min-height: 60px;*/
+    height: 190px;
     background-size: cover;
     background-position: center;
     color: #0d3b3f;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
 }
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
 
 .container-dashboard {
     margin-left: 320px;
@@ -234,7 +293,7 @@ tr:hover {background-color: #a4b4b4;}
 }
 
 .check:hover {
-    background-color: #589494; /* darker shade when hovered */
+    background-color: #589494;
 }
 
 .card:hover {
@@ -254,7 +313,7 @@ tr:hover {background-color: #a4b4b4;}
     display: flex;
     flex-direction: row;
     position: relative;
-    margin-top: 100px;
+    margin-top: 70px;
     /*z-index: 10;*/
 }
 
@@ -305,15 +364,21 @@ tr:hover {background-color: #a4b4b4;}
 }
 
 .btn-edit {
+    color: white;
     background-color: #357e7e;
     width: 20%;
     height: 40px;
     border-radius: 10px;
     border: none;
+    transition: background-color 0.3s ease;
 }
 .btn-edit:hover {
     background-color: #4d9d9d;
     color: #000000;
+}
+
+.profile-name form {
+    margin-left: -15px;
 }
 
 /*-------------------------------------------------------------------------------PROJECT STYLE*/
@@ -324,6 +389,13 @@ tr:hover {background-color: #a4b4b4;}
     flex-direction: row;
     height: 80vh;
     border-radius: 10px;
+    margin-top: -20px;
+    margin-left: -10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.43);
+}
+
+.card-redirect {
+    text-decoration: none;
 }
 
 
@@ -341,7 +413,10 @@ tr:hover {background-color: #a4b4b4;}
 }
 
 
-
+/*-                                                      search result*/
+.search-result-item {
+    cursor: pointer;
+}
 
 
 

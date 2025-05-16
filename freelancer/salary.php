@@ -31,7 +31,7 @@
                 <div class="balance-card">
                     <div class="balance-info">
                         <p>Total Balance</p>
-                        <h2 id="totalBalanceDisplay">$20000.00</h2>
+                        <h2 id="totalBalanceDisplay">₱ 20000.00</h2>
                         <p class="balance-subtitle">Available Earnings</p>
                     </div>
                 </div>
@@ -42,14 +42,14 @@
                         <i class="fas fa-arrow-down"></i>
                         <div>
                             <span>Total Income</span>
-                            <h3 id="totalIncomeDisplay">$ 20,000.00</h3>
+                            <h3 id="totalIncomeDisplay">₱ 20,000.00</h3>
                         </div>
                     </div>
                     <div class="outcome">
                         <i class="fas fa-arrow-up"></i>
                         <div>
                             <span>Total Withdrawn</span>
-                            <h3 id="totalWithdrawnDisplay">$ 0.00</h3>
+                            <h3 id="totalWithdrawnDisplay">₱ 0.00</h3>
                         </div>
                     </div>
                 </div>
@@ -98,40 +98,35 @@
                 <table>
                     <thead>
                     <tr>
-                        <th class="center-align">Status</th>
-                        <th>PAYMENT ID</th>
                         <th>PROJECT NAME</th>
                         <th>AMOUNT</th>
+                        <th>PAYMENT DATE</th>
                         <th>PAYMENT STATUS</th>
                     </tr>
                     </thead>
                     <tbody id="paymentsTableBody">
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000001</td>
                         <td>Cafe Logo</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status success">Success</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000002</td>
                         <td>Interior Design</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status failed">Failed</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000003</td>
                         <td>Character Illustration</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status pending">Pending</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000004</td>
                         <td>Custom Shirt Design</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status success">Success</span></td>
                     </tr>
                     </tbody>
