@@ -1,6 +1,8 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
 
 $error = [];
 
@@ -13,7 +15,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
     $id = $_POST['user_id'];
     $_SESSION['user_id'] = $id;
 
-    $stmt = $conn->prepare("SELECT * FROM user WHERE user_id = :id");
+    $stmt = $slave_con->prepare("SELECT * FROM user WHERE user_id = :id");
     $stmt->execute(['id' => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -41,7 +43,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             $hasError = true;
         } else {
             // Check if username exists for another user
-            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = :userName AND USER_ID != :id");
+            $stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_NAME = :userName AND USER_ID != :id");
             $stmt->execute(['userName' => $userName, 'id' => $id]);
             $existingUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -66,7 +68,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             $error[] = "Invalid email format.<br>";
             $hasError = true;
         } else{
-            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_EMAIL = :email AND USER_ID != :id");
+            $stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_EMAIL = :email AND USER_ID != :id");
             $stmt->execute(['email' => $email, 'id' => $id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -95,7 +97,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                 $hasError = true;
             } else {
                 // Check if phone number already exists for another user
-                $stmt = $conn->prepare("SELECT * FROM user WHERE USER_CONTACT = :phone AND USER_ID != :id");
+                $stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_CONTACT = :phone AND USER_ID != :id");
                 $stmt->execute(['phone' => $phone, 'id' => $id]);
                 $existingPhone = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -109,20 +111,19 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
 
 
         // Fetch current user data
-        $stmtCurrent = $conn->prepare("SELECT * FROM user WHERE user_id = :id");
+        $stmtCurrent = $slave_con->prepare("SELECT * FROM user WHERE user_id = :id");
         $stmtCurrent->execute(['id' => $id]);
         $currentUser = $stmtCurrent->fetch(PDO::FETCH_ASSOC);
-
         $redirectToLogin = false;
 
-        if (!empty($pass) || !empty($conPass)) {
+        if (!empty($pass) || !empty($conPass) || !empty($oldPass)) {
             if (empty($oldPass)) {
                 $error[] = "Old Password is required to change your password.<br>";
                 $hasError = true;
             } elseif ($pass !== $conPass) {
                 $error[] = "Passwords do not match.<br>";
                 $hasError = true;
-            } elseif ($currentUser && $currentUser['USER_PASSWORD'] !== $oldPass) {
+            } elseif ($currentUser['USER_PASSWORD'] !== $oldPass) {
                 $error[] = "Old password is incorrect.<br>";
                 $hasError = true;
             }
@@ -136,7 +137,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             }
 
             // Update basic details
-            $stmt = $conn->prepare("UPDATE `user`
+            $stmt = $master_con->prepare("UPDATE `user`
                 SET USER_NAME = :userName, 
                     USER_FSTNAME = :firstName, 
                     USER_LSTNAME = :lastName, 
@@ -166,7 +167,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         $error[] = "Old password is incorrect.<br>";
                     } else {
                         // Proceed with updating the password
-                        $stmtPass = $conn->prepare("UPDATE `user` SET USER_PASSWORD = :pass WHERE USER_ID = :id");
+                        $stmtPass = $master_con->prepare("UPDATE `user` SET USER_PASSWORD = :pass WHERE USER_ID = :id");
                         $stmtPass->bindParam(':pass', $pass);
                         $stmtPass->bindParam(':id', $id);
                         $stmtPass->execute();
@@ -190,7 +191,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         }
 
         // Reload user data to refill form if errors
-        $stmt = $conn->prepare("SELECT * FROM user WHERE user_id = :id");
+        $stmt = $slave_con->prepare("SELECT * FROM user WHERE user_id = :id");
         $stmt->execute(['id' => $id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -265,8 +266,8 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         <label for="oldPass">Old Password</label>
                         <input type="password" id="oldPass" name="oldPass" placeholder="Old Password">
                     </div>
-
                 </div>
+                <hr>
                 <div class="form-group">
                     <div>
                         <label for="newPass">Change Password</label>

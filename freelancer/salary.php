@@ -31,7 +31,7 @@
                 <div class="balance-card">
                     <div class="balance-info">
                         <p>Total Balance</p>
-                        <h2 id="totalBalanceDisplay">$20000.00</h2>
+                        <h2 id="totalBalanceDisplay">₱ 20000.00</h2>
                         <p class="balance-subtitle">Available Earnings</p>
                     </div>
                 </div>
@@ -42,14 +42,14 @@
                         <i class="fas fa-arrow-down"></i>
                         <div>
                             <span>Total Income</span>
-                            <h3 id="totalIncomeDisplay">$ 20,000.00</h3>
+                            <h3 id="totalIncomeDisplay">₱ 20,000.00</h3>
                         </div>
                     </div>
                     <div class="outcome">
                         <i class="fas fa-arrow-up"></i>
                         <div>
                             <span>Total Withdrawn</span>
-                            <h3 id="totalWithdrawnDisplay">$ 0.00</h3>
+                            <h3 id="totalWithdrawnDisplay">₱ 0.00</h3>
                         </div>
                     </div>
                 </div>
@@ -84,11 +84,11 @@
                     <!-- Withdraw and Transfer Buttons -->
                     <div class="banking-actions">
                         <button id="withdrawBtn" class="banking-action-btn">
-                            <i class="fas fa-arrow-down"></i> Generate QR to Withdraw
+                            <i class="fas fa-arrow-down"></i> Withdraw
                         </button>
-<!--                        <button id="transferBtn" class="banking-action-btn">-->
-<!--                            <i class="fas fa-exchange-alt"></i> Transfer-->
-<!--                        </button>-->
+                        <button id="transferBtn" class="banking-action-btn">
+                            <i class="fas fa-exchange-alt"></i> Bank Details
+                        </button>
                     </div>
                 </div>
             </div>
@@ -98,40 +98,35 @@
                 <table>
                     <thead>
                     <tr>
-                        <th class="center-align">Status</th>
-                        <th>PAYMENT ID</th>
                         <th>PROJECT NAME</th>
                         <th>AMOUNT</th>
+                        <th>PAYMENT DATE</th>
                         <th>PAYMENT STATUS</th>
                     </tr>
                     </thead>
                     <tbody id="paymentsTableBody">
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000001</td>
                         <td>Cafe Logo</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status success">Success</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000002</td>
                         <td>Interior Design</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status failed">Failed</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000003</td>
                         <td>Character Illustration</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status pending">Pending</span></td>
                     </tr>
                     <tr>
-                        <td class="center-align"><i class="fas fa-check-circle"></i></td>
-                        <td>PAY000004</td>
                         <td>Custom Shirt Design</td>
                         <td>$299.00</td>
+                        <td>16-05-2025</td>
                         <td><span class="status success">Success</span></td>
                     </tr>
                     </tbody>
@@ -152,8 +147,9 @@
         <div class="fund-modal">
             <h2>Withdraw</h2>
             <form id="withdrawForm">
-                <input type="password" id="withdrawPassword" placeholder="Password" required>
                 <input type="number" id="withdrawAmount" placeholder="Amount" required>
+                <input type="password" id="withdrawPassword" placeholder="Password" required>
+                <input type="password" id="withdrawPassword" placeholder="Confirm Password" required>
                 <div class="modal-actions">
                     <button type="button" class="cancel" id="cancelWithdraw">Cancel</button>
                     <button type="submit" class="submit">Withdraw</button>
@@ -165,17 +161,16 @@
     <!-- Transfer Modal -->
     <div id="transferModal" class="modal-overlay">
         <div class="fund-modal">
-            <h2>Transfer Funds</h2>
+            <h2>Bank Details</h2>
             <form id="transferForm">
                 <input type="text" id="transferBankName" placeholder="Account Name" required>
                 <input type="text" id="transferAccountNumber" placeholder="Bank Account Number" required>
                 <input type="tel" id="transferPhoneNumber" placeholder="Phone Number" required>
                 <input type="password" id="transferPassword" placeholder="Password" required>
-                <input type="number" id="transferAmount" placeholder="Amount" required>
-                <input type="text" id="transferPurpose" placeholder="Purpose of Transfer" required>
+                <input type="password" id="transferPassword" placeholder="Confirm Password" required>
                 <div class="modal-actions">
                     <button type="button" class="cancel" id="cancelTransfer">Cancel</button>
-                    <button type="submit" class="submit">Transfer</button>
+                    <button type="submit" class="submit">Save</button>
                 </div>
             </form>
         </div>

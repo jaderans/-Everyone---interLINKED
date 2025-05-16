@@ -21,7 +21,10 @@ include_once 'interlinkedDB.php';
 
 <div class="container-dashboard">
     <div class="inner">
-        <div id="myChart" style="width:100%; max-width:400px; height:400px;" class="card"></div>
+        <a href="freelancer-project-page.php" class="card-redirect">
+            <div id="myChart" style="width:100%; max-width:400px; height:400px;" class="card"></div>
+        </a>
+
         <div class="content-card">
             <div class="header-section">
                 <h1>DASHBOARD</h1>
@@ -37,30 +40,32 @@ include_once 'interlinkedDB.php';
 
     </div>
 
+    <a href="freelancer-project-page.php" class="card-redirect">
+        <div class="card-container">
+            <div class="card" style="background-image: linear-gradient(to bottom,#e7fcf4 ,#bcd0f4,#6d79a2); ">
+                <h1><i class="fa-solid fa-arrows-spin fa-xl"></i>ONGOING</h1>
+                <div class="card-content">
+                    <h1 class="num">4</h1>
+                    <h1 class="label">Tasks</h1>
+                </div>
+            </div>
+            <div class="card" style="background-image: linear-gradient(to bottom,#ede7c8 ,#f6d9c5,#b68383);">
+                <h1><i class="fa-solid fa-clock fa-xl"></i>OVERDUE</h1>
+                <div class="card-content">
+                    <h1 class="num">9</h1>
+                    <h1 class="label">Tasks</h1>
+                </div>
+            </div>
+            <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
+                <h1><i class="fa-solid fa-check fa-xl"></i>COMPLETED</h1>
+                <div class="card-content">
+                    <h1 class="num">20</h1>
+                    <h1 class="label">Tasks</h1>
+                </div>
+            </div>
+        </div>
+    </a>
 
-    <div class="card-container">
-        <div class="card" style="background-image: linear-gradient(to bottom,#e7fcf4 ,#bcd0f4,#6d79a2); ">
-            <h1><i class="fa-solid fa-arrows-spin fa-xl"></i>ONGOING</h1>
-            <div class="card-content">
-                <h1 class="num">4</h1>
-                <h1 class="label">Tasks</h1>
-            </div>
-        </div>
-        <div class="card" style="background-image: linear-gradient(to bottom,#ede7c8 ,#f6d9c5,#b68383);">
-            <h1><i class="fa-solid fa-clock fa-xl"></i>PENDING</h1>
-            <div class="card-content">
-                <h1 class="num">9</h1>
-                <h1 class="label">Tasks</h1>
-            </div>
-        </div>
-        <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
-            <h1><i class="fa-solid fa-check fa-xl"></i>COMPLETED</h1>
-            <div class="card-content">
-                <h1 class="num">20</h1>
-                <h1 class="label">Tasks</h1>
-            </div>
-        </div>
-    </div>
 
     <div class="inner">
         <div class="project-card-dashboard">
@@ -98,7 +103,7 @@ include_once 'interlinkedDB.php';
         const data = google.visualization.arrayToDataTable([
             ['Commission', 'Mhl'],
             ['Ongoing', 4],
-            ['Pending', 9],
+            ['Overdue', 2],
             ['Completed', 20],
         ]);
 

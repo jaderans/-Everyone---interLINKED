@@ -1,11 +1,64 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
 
 $error = [];
+$success = [];
 
 function clean_text($data) {
     return htmlspecialchars(trim($data));
+}
+
+
+$allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'psd', 'ai', 'mp4', 'mov', 'avi', 'mkv', 'doc', 'docx', 'ppt', 'pptx'];
+$allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'application/pdf',
+    'image/vnd.adobe.photoshop',       // PSD
+    'application/postscript',          // AI (Illustrator may also return PDF or EPS)
+    'video/mp4',
+    'video/quicktime',                 // MOV
+    'video/x-msvideo',                 // AVI
+    'video/x-matroska',                 // MKV
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+    'application/vnd.ms-powerpoint',   // PPT
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation' // PPTX
+];
+
+$uploadDir = 'uploads/';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['file']['tmp_name'];
+        $fileName = $_FILES['file']['name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileType = mime_content_type($fileTmpPath);
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        // Check extension and MIME type
+        if (in_array($fileExt, $allowedExtensions) && in_array($fileType, $allowedMimeTypes)) {
+            // Sanitize filename
+            $safeFileName = uniqid() . '-' . basename($fileName);
+            $destination = $uploadDir . $safeFileName;
+
+            // Ensure upload directory exists
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            // Move the file
+            if (move_uploaded_file($fileTmpPath, $destination)) {
+                $success[] = "File uploaded successfully as: $safeFileName";
+            } else {
+                $error[] = "Error moving the uploaded file.";
+            }
+        } else {
+            $error[] = "Invalid file type.";
+        }
+    }
 }
 
 ?>
@@ -35,16 +88,18 @@ function clean_text($data) {
         <h1>UPDATE TASK</h1>
         <p class="credentials">Please update your task</p>
         <div class="form-container">
-            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
-                <div class="form-group">
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
                     <div>
                         <label for="userId">Project Name</label>
                         <input type="text" id="userId" name="userId" value="" readonly>
                     </div>
-                    <div>
+
+                    <div class="description">
                         <label for="userName">Description</label>
                         <input type="text" id="userName" name="userName" value="" readonly>
                     </div>
+
                 </div>
 
                 <div class="form-group">
@@ -59,6 +114,24 @@ function clean_text($data) {
                 </div>
 
                 <div class="form-group">
+                    <div>
+                        <label for="email">Date Start</label>
+                        <input type="email" id="text" name="date-start" value="" readonly>
+                    </div>
+                    <div>
+                        <label for="file">Due Date</label>
+                        <input class="attach" type="text" id="due" name="file" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label for="email">Type</label>
+                        <input type="text" id="email" name="email" value="" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="cus-select">
                         <label for="status">Status</label>
                         <select name="status" id="status">
@@ -68,8 +141,8 @@ function clean_text($data) {
                         </select>
                     </div>
                     <div class="cus-select">
-                        <label for="urgent">Urgency</label>
-                        <select name="urgent" id="urgent">
+                        <label for="urgent">Priority Level</label>
+                        <select name="priority" id="priority">
                             <option value="Moderate">Moderate</option>
                             <option value="Urgent">Urgent</option>
                             <option value="Flexible">Flexible</option>
@@ -84,9 +157,17 @@ function clean_text($data) {
                     <button type="button" onclick="window.location.href='freelancer-project-page.php';" value="goBack">◄ Go Back</button><br>
                     <span style="color: red"><?php
                         foreach ($error as $errorMsg) {
-                            echo $errorMsg;
+                            echo $errorMsg . "<br>";
                         }
-                        ?></span>
+                        ?>
+                    </span>
+
+                    <span style="color: #88bb80">
+                        <?php foreach ($success as $suc) {
+                            echo $suc . "<br>";
+                        }
+                        ?>
+                    </span>
                 </div>
             </form>
         </div>

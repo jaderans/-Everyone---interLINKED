@@ -2,6 +2,6 @@
     $db_server = "127.0.0.1";
     $db_user = "root";
     $db_password = "";
-    $db_name = "interlinkdb";
+    $db_name = "finals";
     $conn = mysqli_connect($db_server, $db_user, $db_password, $db_name, 3306);
 ?>

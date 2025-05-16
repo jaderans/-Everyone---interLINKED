@@ -39,6 +39,11 @@ html, body {
     font-size: 14px;
     line-height: 1;
 }
+
+.description input {
+    height: 100px;
+}
+
 .form-group input {
     width: 120%;
     margin-bottom: 5px;

@@ -1,13 +1,20 @@
 <?php
 include 'freelancer-navbar-template.php';
 include_once 'interlinkedDB.php';
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
 
 $name = $_SESSION['userName'];
 
-//code to display
-$stmt = $conn->prepare("SELECT * FROM user where USER_NAME = ?");
+$stmt = $slave_con->prepare("SELECT * FROM user where USER_NAME = ?");
 $stmt->execute([$name]);
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($result as $res) {
+    $_SESSION['USER_ID'] = $res['USER_ID'];
+}
+
+$id = $_SESSION['USER_ID'];
 ?>
 
 
@@ -35,14 +42,17 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="content">
         <div class="profile">
             <div class="img">
-                <img src="imgs/profile.png" alt="">
+                <img src="../imgs/profile.png" alt="">
             </div>
 
             <div class="profile-name">
                 <h1><?=$name?></h1>
                 <h2>Freelancer</h2>
-            </div>
 
+                <form action="freelancer-edit-profile.php" method="post">
+                    <button class="btn-edit" id="btn-edit" name="user_id" value="<?=$id?>">Edit</button>
+                </form>
+            </div>
         </div>
         <div class="profile-details">
             <div class="details">
@@ -81,13 +91,13 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Contact Details:</th>
                             <td><?=$res['USER_CONTACT']?></td>
                         </tr>
-                        <tr>
-                            <td>
-                                <form action="freelancer-edit-profile.php" method="post">
-                                    <button class="btn-edit" id="btn-edit" name="user_id" value="<?=$res['USER_ID']?>">Edit</button>
-                                </form>
-                            </td>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <form action="freelancer-edit-profile.php" method="post">-->
+<!--                                    <button class="btn-edit" id="btn-edit" name="user_id" value="--><?php //=$res['USER_ID']?><!--">Edit</button>-->
+<!--                                </form>-->
+<!--                            </td>-->
+<!--                        </tr>-->
 
                     </table>
                 <?php } ?>
