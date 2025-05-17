@@ -86,7 +86,7 @@ $applicantsResult = fetchUsers($conn, 'Applicant', $search);
     <div class="topvar">
         <div class="navtitle">
             <h1>Admin | </h1>
-            <p>PROJECTS</p>
+            <p>PROJECT MANAGEMENT</p>
         </div>
         <div class="navprofile">
             <div class="name">

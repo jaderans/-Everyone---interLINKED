@@ -242,7 +242,7 @@ $applicantsResult = fetchUsers($conn, 'Applicant', $search);
                     <img src="<?= !empty($selectedUser['USER_IMG']) ? htmlspecialchars($selectedUser['USER_IMG']) : 'default.jpg' ?>" alt="User Profile" class="profile-avatar">
                     <div class="profile-name"><?= htmlspecialchars($selectedUser['USER_NAME'] ?? 'No Username') ?></div>
                     <div class="profile-title"><?= htmlspecialchars($selectedUser['USER_TYPE']) ?></div>
-                    <div class="profile-location"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($selectedUser['USER_ADDRESS'] ?? 'No Location') ?></div>
+                    <div class="profile-location"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($selectedUser['USER_COUNTRY'] ?? 'No Location') ?></div>
                 </div>
 
                 <div class="profile-actions">
