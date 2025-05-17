@@ -57,13 +57,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             } elseif ($userType == "Freelancer") {
                                 header("Location: ../freelancer/freelancer-dashboard-page.php");
                             } elseif ($userType == "Admin") {
-                                header("Location: AdminDash.php");
+                                header("Location: adminDash.php");
                             }
                             exit();
                         }
                         header("Location: ../freelancer/freelancer-dashboard-page.php");
                     } elseif ($userType == "Admin") {
-                        header("Location: ../admin/admindash.php");
+                        $user = $result->fetch_assoc();
+                        $_SESSION['userName'] = $user['USER_NAME'];
+                        header("Location: ../admin/adminDash.php");
                     }
                     exit();
                 } else {

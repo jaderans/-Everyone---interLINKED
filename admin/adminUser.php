@@ -1,8 +1,9 @@
 <?php
+session_start();
 include('interlinkedDB.php');
-
 $conn = connectToDatabase();
-
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
 // Default search
 $search = $_GET['search'] ?? '';
 
@@ -30,8 +31,6 @@ function fetchUsers($conn, $type, $search = '') {
     return $stmt;
 }
 
-
-
 $selectedUser = null;
 
 if (isset($_GET['id'])) {
@@ -42,6 +41,11 @@ if (isset($_GET['id'])) {
 
 $usersResult = fetchUsers($conn, 'User', $search);
 $applicantsResult = fetchUsers($conn, 'Applicant', $search);
+
+$name = $_SESSION['userName'];
+$stmt = $slave_con->prepare("SELECT * FROM user where USER_NAME = ?");
+$stmt->execute([$name]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -91,7 +95,7 @@ $applicantsResult = fetchUsers($conn, 'Applicant', $search);
         </div>
         <div class="navprofile">
             <div class="name">
-                <h4>Ian Harvey Yap</h4>
+                <h4><?=$name?></h4>
             </div>
             <div class="profile">
                 <img src="../../imgs/profile.png" alt="Admin Profile">
@@ -242,7 +246,7 @@ $applicantsResult = fetchUsers($conn, 'Applicant', $search);
                     <img src="<?= !empty($selectedUser['USER_IMG']) ? htmlspecialchars($selectedUser['USER_IMG']) : 'default.jpg' ?>" alt="User Profile" class="profile-avatar">
                     <div class="profile-name"><?= htmlspecialchars($selectedUser['USER_NAME'] ?? 'No Username') ?></div>
                     <div class="profile-title"><?= htmlspecialchars($selectedUser['USER_TYPE']) ?></div>
-                    <div class="profile-location"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($selectedUser['USER_ADDRESS'] ?? 'No Location') ?></div>
+                    <div class="profile-location"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($selectedUser['USER_COUNTRY'] ?? 'No Location') ?></div>
                 </div>
 
                 <div class="profile-actions">
