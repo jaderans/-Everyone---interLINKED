@@ -40,10 +40,12 @@ $notifId = $_SESSION['NOTIF_ID'];
 <body>
 
 <div class="container">
-    <div class="content">
+    <div class="content-notif">
+        <div class="title">
+            <h1>NOTIFICATION</h1>
+            <h3><?=$id?></h3>
+        </div>
         <div class="notif-content">
-            <h1>Notification</h1>
-            <p><?=$id?></p>
             <?php foreach ($notifResult as $row) { ?>
                 <div class="notif">
                     <h3 style="font-weight: bolder">MESSAGE</h3>

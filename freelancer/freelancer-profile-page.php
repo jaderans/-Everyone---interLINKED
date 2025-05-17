@@ -40,7 +40,7 @@ $id = $_SESSION['USER_ID'];
 
 <div class="container">
     <div class="content">
-        <div class="profile">
+        <div class="profile-img">
             <div class="img">
                 <img src="../imgs/profile.png" alt="">
             </div>
