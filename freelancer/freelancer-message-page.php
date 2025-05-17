@@ -1,5 +1,95 @@
 <?php
-include 'freelancer-navbar-template.php'
+include_once 'freelancer-navbar-template.php';
+
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
+
+$user = $_SESSION['userName'];
+$error = [];
+
+$stmt = $slave_con->prepare("SELECT * FROM user where USER_NAME = ?");
+$stmt->execute([$user]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($result as $res) {
+    $_SESSION['USER_ID'] = $res['USER_ID'];
+}
+
+$id = $_SESSION['USER_ID'];
+
+$stmt = $slave_con->prepare("
+    SELECT email.*, user.USER_NAME
+    FROM email
+    INNER JOIN user ON email.USER_ID = user.USER_ID
+    WHERE email.EM_RECEPIENT = :user
+    ORDER BY email.EM_ID DESC
+");
+$stmt->execute(['user' => $user]);
+$result = $stmt->fetchAll();
+
+
+$inputRecipient = $inputSubject = $inputMessage = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $recipient = $_POST['keyword'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+
+
+    $hasError = false;
+
+    if (empty($recipient)) {
+        $error[] = "Recipient name is required";
+        $hasError = true;
+    }
+
+    $stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
+    $stmt->execute(['recipient' => $recipient]);
+    $recipientUser = $stmt->fetch();
+
+    if (!$recipientUser) {
+        $error[] = "User does not exist";
+        $hasError = true;
+    }
+
+    if (empty($subject)) {
+        $error[] = "Subject is required";
+        $hasError = true;
+    }
+    if (empty($message)) {
+        $error[] = "Message is required";
+        $hasError = true;
+    }
+
+    if ($hasError) {
+        $inputRecipient = htmlspecialchars($recipient);
+        $inputSubject = htmlspecialchars($subject);
+        $inputMessage = htmlspecialchars($message);
+    } else {
+        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE)
+        VALUES (:user_id, :em_subject, :em_comp,:em_recipient, CURRENT_TIMESTAMP)");
+        $stmt->bindParam(':user_id', $id);
+        $stmt->bindParam(':em_subject', $subject);
+        $stmt->bindParam(':em_comp', $message);
+        $stmt->bindParam(':em_recipient', $recipient);
+        $result = $stmt->execute();
+
+        $stmt = $slave_con->prepare("
+        SELECT email.*, user.USER_NAME
+        FROM email
+        INNER JOIN user ON email.USER_ID = user.USER_ID
+        WHERE email.EM_RECEPIENT = :user
+        ORDER BY email.EM_ID DESC
+        ");
+        $stmt->execute(['user' => $user]);
+        $result = $stmt->fetchAll();
+
+
+    }
+
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,52 +107,103 @@ include 'freelancer-navbar-template.php'
 
 <div class="container">
     <div class="content">
-        <div class="parent">
-            <div class="contact">
-                <h1>Message</h1>
+        <div class="email">
+            <div class="messages">
+                <h1>Messages</h1>
+                <h1><?=$user?></h1>
+                <h1><?=$id?></h1>
 
-                <div class="selection">
-                    <div class="sel">
-                        <button class="btn-left"><a href="">Compose</a></button>
-                    </div>
-                    <div class="sel">
-                        <button class="btn-left"><a href="">Inbox</a></button>
-                    </div>
-                    <div class="sel">
-                        <button class="btn-left"><a href="">Sent</a></button>
-                    </div>
-                </div>
+                <div class="message-content">
+<!--                    enclose the msg with for each later-->
+                    <?php foreach ($result as $res) {?>
+                        <div class="msg">
+                            <h3 style="font-weight: bolder">MESSAGE</h3>
+                            <h4>From: <?=$res['USER_NAME']?></h4>
+                            <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
+                            <p><?=$res['EM_COMP']?></p>
+                            <p><?=$res['EM_DATE']?></p>
 
-            </div>
+                            <form action="freelancer-delete-notif.php" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this notification?');">
+                                <button class="btn-edit" name="notif_Id" value="">Delete</button>
+                            </form>
+                        </div>
+                    <?php }?>
 
-            <div class="receiver-details">
-                <div class="msg-profile">
-                    <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
-                </div>
-                <div class="name">
-                    <a href="freelancer-profile-page.php"><h4 style="font-weight: 700">Client</h4></a>
-                    <p style="font-size: 12px">Client</p>
                 </div>
             </div>
+            <div class="compose">
+                <h1>Compose</h1>
+                <div class="message-area">
+                    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="message-form" enctype="multipart/form-data">
+                        <div class="info">
+                            <label for="">To </label>
+                            <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" value="<?= htmlspecialchars($inputRecipient) ?>"><br>
+                            <label for="">Subject </label>
+                            <input type="text" name="subject" placeholder="Add Subject" value="<?= htmlspecialchars($inputSubject) ?>"><br>
+                            <div id="search-results" class="result"></div>
+                        </div>
 
-            <div class="message">
-                <form action="#" method="post" class="message-form">
-                    <label for="">To: </label>
-                    <input type="text" name="admin" placeholder="@Admin eg." required><br>
-                    <label for="">Subject: </label>
-                    <input type="text" name="subject" placeholder="Add Subject" required><br>
-                    <label for="">Message: </label>
-                    <textarea id="" name="message" required placeholder="Type here..."></textarea><br>
-                    <input class="attach" type="file" id="" name="myfile" multiple><br><br>
-                    <button class="btn" type="submit" name="action" value="login"><a href=""><i class="fa-regular fa-paper-plane"></i>Send</a></button>
-                </form>
 
+                        <div class="type">
+                            <label for="">Message</label>
+                            <textarea name="message" placeholder="Type here..."><?= htmlspecialchars($inputMessage) ?></textarea><br>
+                        </div>
+
+
+                        <div class="info">
+                            <button class="send" type="submit" name="action" value="login"><i class="fa-regular fa-paper-plane"></i> Send</button>
+                            <span style="color: red">
+                                <?php
+                                foreach ($error as $error) {
+                                    echo $error . "<br>";
+                                }
+                                ?>
+                            </span>
+
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
     </div>
 
 </div>
+
+<script>
+    function search(input) {
+        const resultBox = document.getElementById("search-results");
+
+        if (input.length === 0) {
+            resultBox.style.display = "none"; // Hide if empty
+            resultBox.innerHTML = "";
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                if (this.responseText.trim() !== "") {
+                    resultBox.innerHTML = this.responseText;
+                    resultBox.style.display = "block"; // Show if has content
+                } else {
+                    resultBox.innerHTML = "No results found.";
+                    resultBox.style.display = "block";
+                }
+            }
+        };
+
+        xhr.open("GET", "search.php?keyword=" + encodeURIComponent(input), true);
+        xhr.send();
+    }
+
+
+    function selectUser(userName) {
+        document.querySelector('input[name="keyword"]').value = userName;
+        document.getElementById("search-results").innerHTML = "";
+        document.getElementById("search-results").style.display = "none";
+    }
+</script>
 </body>
 </html>
 

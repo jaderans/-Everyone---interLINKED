@@ -9,9 +9,9 @@ $slave_con = connectToDatabase(3007);
 
 $id = 1;
 
-$stmt = $slave_con->prepare("SELECT * FROM projects where PRO_ID = ?");
-$stmt->execute([$id]);
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//$stmt = $slave_con->prepare("SELECT * FROM projects where PRO_ID = ?");
+//$stmt->execute([$id]);
+//$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 //echo '<pre>';
@@ -38,34 +38,35 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="project-card-content">
                 <h1>Projects</h1>
                 <table style="width:100%; margin-top: 15px;" class="table">
-                    <?php foreach ($result as $project) { ?>
-                        <tr>
-                            <th>Project Title</th>
-                            <th>Description</th>
-                            <th>Type</th>
-                            <th>Date Start</th>
-                            <th>Due Date</th>
-                            <th>Status</th>
-                            <th>Priority Level</th>
-                            <th>Commissioned By</th>
-                            <th>Edit/Update</th>
-                        </tr>
-                        <tr>
-                            <td><?=$project['PRO_TITLE']?></td>
-                            <td><?=$project['PRO_DESCRIPTION']?></td>
-                            <td><?=$project['PRO_TYPE']?></td>
-                            <td><?=$project['PRO_START_DATE']?></td>
-                            <td><?=$project['PRO_END_DATE']?></td>
-                            <td><?=$project['PRO_STATUS']?></td>
-                            <td><?=$project['PRO_PRIORITY_LEVEL']?></td>
-                            <td><?=$project['PRO_COMISSIONED_BY']?></td>
-                            <td>
-                                <form action="freelancer-edit-project.php" method="post">
-                                    <button class="btn-project" id="btn-edit" name="user_id" value="">Edit</button>
-                                </form>
-                            </td>
-                        </tr>
-                   <?php } ?>
+                    <tr>
+                        <th>Project Title</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Date Start</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Priority Level</th>
+                        <th>Commissioned By</th>
+                        <th>Edit/Update</th>
+                    </tr>
+                    <tr>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>
+                            <form action="freelancer-edit-project.php" method="post">
+                                <button class="btn-project" id="btn-edit" name="user_id" value="">Edit</button>
+                            </form>
+                        </td>
+                    </tr>
+<!--                    --><?php //foreach ($result as $project) { ?>
+<!--                        -->
+<!--                   --><?php //} ?>
 
                 </table>
             </div>

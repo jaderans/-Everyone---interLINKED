@@ -20,7 +20,6 @@
         <!-- Header with Actions -->
         <div class="earnings-header">
             <header>
-                <h1>EARNINGS</h1>
             </header>
         </div>
 

@@ -31,39 +31,74 @@ html, body{
 
 
 
-/*!*------------------------------------------------freelancer  message left side*!*/
-/*.selection{*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*    padding: 10px;*/
-/*    margin: 10px 10px 0 20px ;*/
-/*}*/
+/*------------------------------------------------freelancer  message */
+.email {
+    margin-top: -40px;
+    margin-left: -20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 83vh;
+}
 
-/*.sel button{*/
-/*    width: 100px;*/
-/*    margin: 20px 10px 0 10px;*/
-/*}*/
-/*.sel button:hover{*/
-/*    background-color: #1a858d;*/
-/*}*/
-/*.btn-left{*/
-/*    display: flex;*/
-/*    width: 30%;*/
-/*    background-color: #105D63;*/
-/*    border: none;*/
-/*    padding: 10px;*/
-/*    border-radius: 8px;*/
-/*    cursor: pointer;*/
-/*    transition: background-color 0.3s;*/
-/*    color: #cfcfcf;*/
-/*}*/
+.messages {
+    background-color: #ffffff;
+    width: 50%;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
-/*.btn-left a {*/
-/*    color: white;*/
-/*    text-decoration: none;*/
-/*    font-weight: bold;*/
-/*    text-align: left;*/
-/*}*/
+.message-content {
+    max-height: 500px; /* or whatever height you want */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.compose {
+    background-color: #ffffff;
+    width: 50%;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.msg {
+    background-color: #f0f4ff;
+    border-left: 10px solid #436a6d;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 10px rgba(67, 106, 109, 0.22);
+    width: 90%;
+    overflow: auto;
+}
+
+
+.msg h3 {
+    margin: 0 0 8px 0;
+    color: #595959;
+    font-weight: 600;
+}
+
+.msg p {
+    margin: 5px 0;
+    color: #595959;
+    font-size: 14px;
+}
+
+.message-area {
+    margin-top: 15px;
+    height: 65vh;
+    background-color: #e8e8e8;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+
+
 
 /*------------------------------------------------freelancer Profile page*/
 
@@ -80,28 +115,33 @@ html, body{
     z-index: 1;
 }
 
-.profile .img{
+.profile-img .img {
     margin: -250px 0 0 30px;
+    width: 200px;
+    height: 200px;
     background-color: #eeeeee;
-    width: 300px;
-    border-radius: 20px;
-    box-shadow:  0 0  20px #436a6d;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #436a6d;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-
-.profile .img img{
-    margin-left: -60px;
-    margin-top: 25px;
-    width: 400px;
-    height: auto;
+.profile-img .img img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
+    display: block;
 }
+
 
 .profile-name {
     color: white;
     width: 90%;
-    margin: -190px 0 0 10px;
+    margin: -150px 0 0 250px;
 }
 
 .edit .btn {
@@ -139,7 +179,7 @@ html, body{
     margin: 10px 10px 0 40px;
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 0  20px #436a6d;
+    box-shadow: 0 0  20px rgba(67, 106, 109, 0.24);
 
 }
 
@@ -179,6 +219,59 @@ table {
     }
 
 }
+
+.notif-content {
+    margin-top: -30px;
+    background-color: #eeeeee;
+    padding: 20px;
+    height: 70vh;
+    border-radius: 10px;
+    overflow: auto;
+}
+.notif {
+    background-color: #f0f4ff;
+    border-left: 5px solid #436a6d;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 20px rgba(67, 106, 109, 0.22);
+    width: 95%;
+}
+
+.content-notif {
+    margin-top: -50px;
+    border-radius: 10px;
+}
+
+.notif h3 {
+    margin: 0 0 8px 0;
+    color: #436a6d; /* Dark blue text */
+    font-weight: 600;
+}
+
+.notif p {
+    margin: 5px 0;
+    color: #436a6d;
+    font-size: 14px;
+}
+
+.title {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 20px;
+    height: 8vh;
+    z-index: 10;
+}
+
+.title h1 {
+    color: #1d4e5e;
+    font-weight: 600;
+}
+
+
+
+
 
 /*th, td {*/
 /*    padding: 8px;*/
@@ -391,7 +484,7 @@ table {
     border-radius: 10px;
     margin-top: -20px;
     margin-left: -10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.43);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.14);
 }
 
 .card-redirect {
