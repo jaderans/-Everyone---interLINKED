@@ -96,6 +96,24 @@ html, body{
     border-radius: 20px;
 }
 
+.btn-delete {
+    background: #b2c1c2;
+    color: white;
+    width: 10%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  1s ease;
+}
+
+.btn-delete:hover {
+    background: #608e91;
+    color: white;
+}
+.form-delete {
+    padding: 1px;
+}
+
 
 
 

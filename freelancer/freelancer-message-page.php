@@ -117,15 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!--                    enclose the msg with for each later-->
                     <?php foreach ($result as $res) {?>
                         <div class="msg">
-                            <h3 style="font-weight: bolder">MESSAGE</h3>
                             <h4>From: <?=$res['USER_NAME']?></h4>
                             <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
+                            <h4>Test ID: <?=$res['EM_ID']?></h4>
                             <p><?=$res['EM_COMP']?></p>
                             <p><?=$res['EM_DATE']?></p>
 
-                            <form action="freelancer-delete-notif.php" method="post"
+                            <form action="freelancer-delete-message.php" method="post" class="form-delete"
                                   onsubmit="return confirm('Are you sure you want to delete this notification?');">
-                                <button class="btn-edit" name="notif_Id" value="">Delete</button>
+                                <button class="btn-delete" name="message-id" value="<?= $res['EM_ID'] ?>"><i class="fa-solid fa-trash fa-1.5xl" <i class="fa-solid fa-trash" style="color: #9f3535;"></i></i></button>
                             </form>
                         </div>
                     <?php }?>
@@ -138,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="message-form" enctype="multipart/form-data">
                         <div class="info">
                             <label for="">To </label>
-                            <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" value="<?= htmlspecialchars($inputRecipient) ?>"><br>
+                            <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" value="<?= htmlspecialchars($inputRecipient) ?>" autocomplete="off"><br>
                             <label for="">Subject </label>
-                            <input type="text" name="subject" placeholder="Add Subject" value="<?= htmlspecialchars($inputSubject) ?>"><br>
+                            <input type="text" name="subject" placeholder="Add Subject" value="<?= htmlspecialchars($inputSubject) ?>" autocomplete="off"><br>
                             <div id="search-results" class="result"></div>
                         </div>
 
