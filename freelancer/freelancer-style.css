@@ -12,6 +12,31 @@ html, body{
     height: 100vh;
 }
 
+ .priority-badge {
+     display: inline-block;
+     padding: 4px 15px;
+     border-radius: 999px;
+     color: white;
+     font-size: 0.9em;
+     font-weight: bold;
+     text-align: center;
+     align-items: center;
+ }
+
+.priority-high {
+    background-color: #ef5d5d;
+}
+
+.priority-medium {
+    background-color: #dead5c;
+}
+
+.priority-low {
+    background-color: #56d256;
+}
+
+
+
 /*------------------------------------------------content*/
 .container {
     margin-left: 320px;
@@ -113,6 +138,7 @@ html, body{
 .form-delete {
     padding: 1px;
 }
+
 
 
 
@@ -468,6 +494,27 @@ table {
     font-size: 30px;
     font-weight: 900;
 }
+
+.label {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.btn-sort {
+    background: #b2c1c2;
+    color: #1f4c4b;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  1s ease;
+}
+
+.btn-sort:hover {
+    background: #608e91;
+}
 /* ----------------------------------------------------------------------------------edit form*/
 .edit-form {
     display: flex;
@@ -498,9 +545,9 @@ table {
     background-color: #ffffff;
     display: flex;
     flex-direction: row;
-    height: 80vh;
+    height: 85vh;
     border-radius: 10px;
-    margin-top: -20px;
+    margin-top: -50px;
     margin-left: -10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.14);
 }

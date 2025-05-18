@@ -203,7 +203,6 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                 }
             }
 
-
             if (empty($error)) {
                 if ($redirectToLogin) {
                     header('Location: ../loginSignUp/login.php');

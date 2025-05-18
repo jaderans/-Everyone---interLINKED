@@ -11,57 +11,75 @@ function clean_text($data) {
     return htmlspecialchars(trim($data));
 }
 
+$pro_Id = $_POST['PRO_ID'] ?? null;
 
-$allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'psd', 'ai', 'mp4', 'mov', 'avi', 'mkv', 'doc', 'docx', 'ppt', 'pptx'];
-$allowedMimeTypes = [
-    'image/jpeg',
-    'image/png',
-    'application/pdf',
-    'image/vnd.adobe.photoshop',       // PSD
-    'application/postscript',          // AI (Illustrator may also return PDF or EPS)
-    'video/mp4',
-    'video/quicktime',                 // MOV
-    'video/x-msvideo',                 // AVI
-    'video/x-matroska',                 // MKV
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
-    'application/vnd.ms-powerpoint',   // PPT
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation' // PPTX
-];
+if (!$pro_Id) {
+    die("Project ID is missing.");
+}
 
-$uploadDir = 'uploads/';
+// Fetch existing data to validate readonly fields and for display
+$stmt = $slave_con->prepare("SELECT * FROM projects WHERE PRO_ID = :id");
+$stmt->execute(['id' => $pro_Id]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['file']['tmp_name'];
-        $fileName = $_FILES['file']['name'];
-        $fileSize = $_FILES['file']['size'];
-        $fileType = mime_content_type($fileTmpPath);
-        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+if (!$result) {
+    die("Project not found.");
+}
 
-        // Check extension and MIME type
-        if (in_array($fileExt, $allowedExtensions) && in_array($fileType, $allowedMimeTypes)) {
-            // Sanitize filename
-            $safeFileName = uniqid() . '-' . basename($fileName);
-            $destination = $uploadDir . $safeFileName;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
 
-            // Ensure upload directory exists
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
+    // Validate readonly fields against DB values to prevent tampering
+    $readonlyFields = [
+        'userId' => $result['PRO_TITLE'],
+        'userName' => $result['PRO_DESCRIPTION'],
+        'commissionedBy' => $result['PRO_COMMISSIONED_BY'],
+        'email' => $result['PRO_TYPE'],
+        'date-start' => $result['PRO_START_DATE'],
+        'due' => $result['PRO_END_DATE']
+    ];
 
-            // Move the file
-            if (move_uploaded_file($fileTmpPath, $destination)) {
-                $success[] = "File uploaded successfully as: $safeFileName";
-            } else {
-                $error[] = "Error moving the uploaded file.";
-            }
+    foreach ($readonlyFields as $field => $expected) {
+        if (!isset($_POST[$field]) || trim($_POST[$field]) !== trim($expected)) {
+            $error[] = "Invalid or modified data detected in field: $field.";
+        }
+    }
+
+    // Validate Status - must be one of these
+    $validStatuses = ['Working', 'Pending', 'Completed', 'Cancelled'];
+    $status = $_POST['status'] ?? '';
+    if (!in_array($status, $validStatuses)) {
+        $error[] = "Invalid status selected.";
+    }
+
+    // Validate Priority - must be one of these
+    $validPriorities = ['High', 'Medium', 'Low'];
+    $priority = $_POST['priority'] ?? '';
+    if (!in_array($priority, $validPriorities)) {
+        $error[] = "Invalid priority level selected.";
+    }
+
+    if (empty($error)) {
+        // Update only status and priority level, as other fields are readonly and validated
+        $updateStmt = $master_con->prepare("UPDATE projects SET PRO_STATUS = :status, PRO_PRIORITY_LEVEL = :priority WHERE PRO_ID = :id");
+        $updated = $updateStmt->execute([
+            ':status' => $status,
+            ':priority' => $priority,
+            ':id' => $pro_Id
+        ]);
+
+        if ($updated) {
+            $success[] = "Project updated successfully.";
+            // Refresh $result to show updated values in the form
+            $stmt = $slave_con->prepare("SELECT * FROM projects WHERE PRO_ID = :id");
+            $stmt->execute(['id' => $pro_Id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
-            $error[] = "Invalid file type.";
+            $error[] = "Failed to update project.";
         }
     }
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,15 +107,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="credentials">Please update your task</p>
         <div class="form-container">
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
+                <input type="hidden" name="PRO_ID" value="<?= htmlspecialchars($result['PRO_ID']) ?>">
+
+                <div class="form-group">
                     <div>
                         <label for="userId">Project Name</label>
-                        <input type="text" id="userId" name="userId" value="" readonly>
+                        <input type="text" id="userId" name="userId" value="<?=$result['PRO_TITLE']?>" readonly>
                     </div>
 
                     <div class="description">
                         <label for="userName">Description</label>
-                        <input type="text" id="userName" name="userName" value="" readonly>
+                        <textarea id="userName" name="userName" readonly rows="5" cols="40"><?= htmlspecialchars($result['PRO_DESCRIPTION']) ?></textarea>
                     </div>
 
                 </div>
@@ -105,49 +125,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <div>
                         <label for="email">Commissioned By</label>
-                        <input type="email" id="email" name="email" value="" readonly>
+                        <input type="email" id="commissioned" name="commissionedBy" value="<?=$result['PRO_COMMISSIONED_BY']?>" readonly>
                     </div>
-                    <div>
-                        <label for="file">Submit File</label>
-                        <input class="attach" type="file" id="file" name="file">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div>
-                        <label for="email">Date Start</label>
-                        <input type="email" id="text" name="date-start" value="" readonly>
-                    </div>
-                    <div>
-                        <label for="file">Due Date</label>
-                        <input class="attach" type="text" id="due" name="file" readonly>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <div>
                         <label for="email">Type</label>
-                        <input type="text" id="email" name="email" value="" readonly>
+                        <input type="text" id="email" name="email" value="<?=$result['PRO_TYPE']?>" readonly>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label for="date">Date Start</label>
+                        <input type="text" id="text" name="date-start" value="<?=$result['PRO_START_DATE']?>" readonly>
+                    </div>
+                    <div>
+                        <label for="due">Due Date</label>
+                        <input type="text" id="text" name="due" value="<?=$result['PRO_END_DATE']?>" readonly>
                     </div>
                 </div>
+
 
                 <div class="form-group">
                     <div class="cus-select">
                         <label for="status">Status</label>
                         <select name="status" id="status">
-                            <option value="Ongoing">Ongoing</option>
-                            <option value="Drop">Drop</option>
-                            <option value="Completed">Completed</option>
+                            <option value="Working" <?= ($result['PRO_STATUS'] === 'Working') ? 'selected' : '' ?>>Working</option>
+                            <option value="Pending" <?= ($result['PRO_STATUS'] === 'Pending') ? 'selected' : '' ?>>Pending</option>
+                            <option value="Completed" <?= ($result['PRO_STATUS'] === 'Completed') ? 'selected' : '' ?>>Completed</option>
+                            <option value="Cancelled" <?= ($result['PRO_STATUS'] === 'Cancelled') ? 'selected' : '' ?>>Cancelled</option>
                         </select>
                     </div>
+
                     <div class="cus-select">
                         <label for="urgent">Priority Level</label>
                         <select name="priority" id="priority">
-                            <option value="Moderate">Moderate</option>
-                            <option value="Urgent">Urgent</option>
-                            <option value="Flexible">Flexible</option>
+                            <option value="High" <?= ($result['PRO_PRIORITY_LEVEL'] === 'High') ? 'selected' : '' ?>>High</option>
+                            <option value="Medium" <?= ($result['PRO_PRIORITY_LEVEL'] === 'Medium') ? 'selected' : '' ?>>Medium</option>
+                            <option value="Low" <?= ($result['PRO_PRIORITY_LEVEL'] === 'Low') ? 'selected' : '' ?>>Low</option>
                         </select>
                     </div>
+
                 </div>
 
 
