@@ -5,23 +5,37 @@ $conn = connectToDatabase();
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
 
-// Default search
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Not logged in – redirect to login
+    header("Location: logIn.php");
+    exit();
+}
+
+// Get session user ID and fetch current user details
+$userId = $_SESSION['user_id'];
+$name = $_SESSION['userName'] ?? 'Unknown';
+
+$stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_ID = ?");
+$stmt->execute([$userId]);
+$currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Set search/filter defaults
 $search = $_GET['search'] ?? '';
 $filter = $_GET['filter'] ?? 'all';
 
+// Fetch projects
 function fetchProjects($conn, $status = 'all', $search = '') {
-    // Start building the query
     $query = "SELECT p.*, u.USER_FSTNAME, u.USER_LSTNAME 
               FROM projects p 
               LEFT JOIN user u ON p.USER_ID = u.USER_ID";
 
-    // Add status filter if provided
     if ($status !== 'all') {
         $query .= " WHERE p.PRO_STATUS = :status";
         if (!empty($search)) {
             $query .= " AND (p.PRO_TITLE LIKE :search OR p.PRO_DESCRIPTION LIKE :search)";
         }
-    } else if (!empty($search)) {
+    } elseif (!empty($search)) {
         $query .= " WHERE (p.PRO_TITLE LIKE :search OR p.PRO_DESCRIPTION LIKE :search)";
     }
 
@@ -29,11 +43,9 @@ function fetchProjects($conn, $status = 'all', $search = '') {
 
     $stmt = $conn->prepare($query);
 
-    // Bind parameters
     if ($status !== 'all') {
         $stmt->bindValue(':status', $status);
     }
-
     if (!empty($search)) {
         $stmt->bindValue(':search', "%$search%");
     }
@@ -42,6 +54,7 @@ function fetchProjects($conn, $status = 'all', $search = '') {
     return $stmt;
 }
 
+// Fetch team members
 function fetchUsers($conn) {
     $query = "SELECT USER_ID, USER_FSTNAME, USER_LSTNAME, USER_TYPE FROM user WHERE USER_TYPE IN ('Freelancer', 'Admin')";
     $stmt = $conn->prepare($query);
@@ -49,29 +62,21 @@ function fetchUsers($conn) {
     return $stmt;
 }
 
-// Get selected project details
+// Selected project (if any)
 $selectedProject = null;
 if (isset($_GET['id'])) {
     $stmt = $conn->prepare("SELECT p.*, u.USER_FSTNAME, u.USER_LSTNAME 
-                           FROM projects p 
-                           LEFT JOIN user u ON p.USER_ID = u.USER_ID 
-                           WHERE p.PRO_ID = ?");
+                            FROM projects p 
+                            LEFT JOIN user u ON p.USER_ID = u.USER_ID 
+                            WHERE p.PRO_ID = ?");
     $stmt->execute([$_GET['id']]);
     $selectedProject = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Fetch projects based on filter
 $projectsResult = fetchProjects($conn, $filter, $search);
-
-// Fetch team members for assignment
 $teamMembers = fetchUsers($conn);
 
-// Current user
-$name = $_SESSION['userName'];
-$stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_NAME = ?");
-$stmt->execute([$name]);
-$currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
-
+// Project status counts
 $stmt = $conn->prepare("SELECT PRO_STATUS, COUNT(*) as count FROM projects GROUP BY PRO_STATUS");
 $stmt->execute();
 $statusCounts = [];
@@ -84,6 +89,7 @@ $pendingCount = $statusCounts['Pending'] ?? 0;
 $completedCount = $statusCounts['Completed'] ?? 0;
 $canceledCount = $statusCounts['Canceled'] ?? 0;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,7 +138,7 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                 <h4><?=$name?></h4>
             </div>
             <div class="profile">
-                <img src="../../imgs/profile.png" alt="Admin Profile">
+                <img src="../imgs/profile.png" alt="Admin Profile">
             </div>
         </div>
     </div>
@@ -249,7 +255,12 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                                     <td class="actions">
                                         <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
                                         <a href="#" onclick="editProject(<?= $row['PRO_ID'] ?>)"><i class="fas fa-edit action-icon"></i></a>
-                                        <a href="deleteProject.php?id=<?= $row['PRO_ID'] ?>" onclick="return confirm('Are you sure you want to delete this project?')"><i class="fas fa-trash action-icon"></i></a>
+                                        <form class="delete-form" data-id="<?= $row['PRO_ID'] ?>" style="display:inline;">
+                                            <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -521,6 +532,30 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
 </div>
 
 <script src="projScript.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.delete-btn').on('click', function () {
+            if (!confirm("Are you sure you want to delete this project?")) return;
+
+            const form = $(this).closest('.delete-form');
+            const projectId = form.data('id');
+
+            $.ajax({
+                url: 'deleteProject.php',
+                type: 'POST',
+                data: { project_id: projectId },
+                success: function (response) {
+                    // Optional: show toast or alert here
+                    location.reload(); // Reload the page to reflect changes
+                },
+                error: function () {
+                    alert("Failed to delete project.");
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
