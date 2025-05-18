@@ -306,6 +306,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </div>
 </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $('a[href^="editUser.php"]').on('click', function (e) {
         e.preventDefault();

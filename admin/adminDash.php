@@ -100,7 +100,7 @@ $profile_img = $_SESSION['profile_img'];
         <li><a href="adminMes.php"><i class="fas fa-envelope"></i> Message</a></li>
         <li><a href="adminProf.php"><i class="fas fa-user"></i> Profile</a></li>
         <div class="btm-content">
-            <button class="logout-button" onclick="window.location.href='../loginSignup/logOut.php';">
+            <button class="logout-button" onclick="window.location.href='../loginSignup/logIn.php';">
                 <i class="fas fa-sign-out-alt"></i> Log Out
             </button>
         </div>

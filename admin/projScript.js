@@ -426,3 +426,22 @@ document.getElementById('password-form').addEventListener('submit', function(e) 
     }
 });
 
+function deleteProject(projectId) {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+
+    fetch('deleteProject.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'project_id=' + encodeURIComponent(projectId)
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.success) {
+                location.reload(); // or remove project from DOM
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
