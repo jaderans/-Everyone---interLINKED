@@ -1,6 +1,57 @@
 <?php
 include 'freelancer-navbar-template.php' ;
 include_once 'interlinkedDB.php';
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
+
+$user = $_SESSION['userName'];
+
+$stmt = $slave_con->prepare("SELECT * FROM user where USER_NAME = ?");
+$stmt->execute([$user]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($result as $res) {
+    $_SESSION['USER_ID'] = $res['USER_ID'];
+}
+$id = $_SESSION['USER_ID'];
+
+$pro = $slave_con->prepare("
+    SELECT 
+        PRO_STATUS,
+        COUNT(*) AS count 
+    FROM projects 
+    WHERE USER_ID = ? 
+      AND PRO_STATUS IN ('Pending', 'Working', 'Ongoing', 'Completed', 'Cancelled') 
+    GROUP BY PRO_STATUS
+");
+$pro->execute([$id]);
+$results = $pro->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Initialize all statuses to 0
+$statuses = [
+    'Pending' => 0,
+    'Working' => 0,
+    'Ongoing' => 0,
+    'Completed' => 0,
+    'Cancelled' => 0
+];
+
+// Fill in values from the query
+foreach ($results as $row) {
+    $statuses[$row['PRO_STATUS']] = $row['count'];
+}
+
+// Now you can use:
+$pending = $statuses['Pending'];
+$working = $statuses['Working'];
+$ongoing = $statuses['Ongoing'];
+$completed = $statuses['Completed'];
+$cancelled = $statuses['Cancelled'];
+
+
+
+
 
 ?>
 <!doctype html>
@@ -27,10 +78,23 @@ include_once 'interlinkedDB.php';
 
         <div class="content-card">
             <div class="header-section">
-                <h1>DASHBOARD</h1>
+                <h1 style="color: #1f4c4b">DASHBOARD</h1>
+<!--                <h2>--><?php //=$user?><!--</h2>-->
+<!--                <h2>--><?php //=$id?><!--</h2>-->
                 <h2>My Commissions</h2>
-                <p><?= date("d/m/y H:i") ?></p>
+                <h3 style="margin-top: 5px"><?= date("d/m/y H:i") ?></h3>
             </div>
+            <a href="salary.php" class="card-redirect">
+                <div class="salary">
+                    <div class="sal-details">
+                        <p>SALARY DETAILS</p>
+                        <h1>₱ 100,000.09</h1>
+                        <h3>Available Earnings</h3>
+                    </div>
+
+                </div>
+
+            </a>
 
             <div class="check">
                 <a href="freelancer-project-page.php">Check project</a>
@@ -43,55 +107,35 @@ include_once 'interlinkedDB.php';
     <a href="freelancer-project-page.php" class="card-redirect">
         <div class="card-container">
             <div class="card" style="background-image: linear-gradient(to bottom,#e7fcf4 ,#bcd0f4,#6d79a2); ">
-                <h1><i class="fa-solid fa-arrows-spin fa-xl"></i>ONGOING</h1>
+                <h1><i class="fa-solid fa-arrows-spin fa-xl"></i>WORKING</h1>
                 <div class="card-content">
-                    <h1 class="num">4</h1>
-                    <h1 class="label">Tasks</h1>
+                    <h1><?=$working?></h1>
+                    <h2 class="label">Tasks</h2>
                 </div>
             </div>
             <div class="card" style="background-image: linear-gradient(to bottom,#ede7c8 ,#f6d9c5,#b68383);">
-                <h1><i class="fa-solid fa-clock fa-xl"></i>OVERDUE</h1>
+                <h1><i class="fa-solid fa-clock fa-xl"></i>PENDING</h1>
                 <div class="card-content">
-                    <h1 class="num">9</h1>
-                    <h1 class="label">Tasks</h1>
+                    <h1><?=$pending?></h1>
+                    <h2 class="label">Tasks</h2>
                 </div>
             </div>
             <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
                 <h1><i class="fa-solid fa-check fa-xl"></i>COMPLETED</h1>
                 <div class="card-content">
-                    <h1 class="num">20</h1>
-                    <h1 class="label">Tasks</h1>
+                    <h1><?=$completed?></h1>
+                    <h2 class="label">Tasks</h2>
+                </div>
+            </div>
+            <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
+                <h1><i class="fa-solid fa-check fa-xl"></i>CANCELLED</h1>
+                <div class="card-content">
+                    <h1><?=$cancelled?></h1>
+                    <h2 class="label">Tasks</h2>
                 </div>
             </div>
         </div>
     </a>
-
-
-    <div class="inner">
-        <div class="project-card-dashboard">
-            <div class="project-card-content-dashboard">
-                <h1>PROJECTS</h1>
-                <table style="width:100%; margin-top: 15px;" class="table">
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Urgency</th>
-                        <th>Commissioned By</th>
-                    </tr>
-                    <tr>
-                        <td>Placeholder</td>
-                        <td>Placeholder</td>
-                        <td>Placeholder</td>
-                        <td>Placeholder</td>
-                        <td>Placeholder</td>
-
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-    </div>
 </div>
 
 
@@ -102,9 +146,11 @@ include_once 'interlinkedDB.php';
     function drawChart() {
         const data = google.visualization.arrayToDataTable([
             ['Commission', 'Mhl'],
-            ['Ongoing', 4],
-            ['Overdue', 2],
-            ['Completed', 20],
+            ['Working', <?= $working ?>],
+            ['Ongoing', <?= $ongoing ?>],
+            ['Pending', <?= $pending ?>],
+            ['Completed', <?= $completed ?>],
+            ['Cancelled', <?= $cancelled ?>]
         ]);
 
         const options = {
@@ -120,10 +166,10 @@ include_once 'interlinkedDB.php';
                 left: 0,
                 top: 20,
                 width: '100%',
-                height: '70%'
+                height: '60%'
             },
             colors: ['#81b7e5', '#cb8a76', '#60b981'],
-            pieHole: 0.4,   // Optional: set to 0.4 if you want a donut chart
+            pieHole: 1,   // Optional: set to 0.4 if you want a donut chart
         };
 
         const chart = new google.visualization.PieChart(document.getElementById('myChart'));
