@@ -15,6 +15,7 @@ foreach ($result as $res) {
 }
 
 $id = $_SESSION['USER_ID'];
+
 ?>
 
 
@@ -42,12 +43,13 @@ $id = $_SESSION['USER_ID'];
     <div class="content">
         <div class="profile-img">
             <div class="img">
-                <img src="../imgs/profile.png" alt="">
+                <img src="show-profile-img.php?id=<?= htmlspecialchars($result['USER_ID']) ?>" alt="Profile Image">
             </div>
 
             <div class="profile-name">
                 <h1><?=$name?></h1>
                 <h2>Freelancer</h2>
+
 
                 <form action="freelancer-edit-profile.php" method="post">
                     <button class="btn-edit" id="btn-edit" name="user_id" value="<?=$id?>">Edit</button>
@@ -56,6 +58,7 @@ $id = $_SESSION['USER_ID'];
         </div>
         <div class="profile-details">
             <div class="details">
+                <img src="show-profile-img.php?id=<?= htmlspecialchars($result['USER_ID']) ?>" alt="Profile Image">
                 <h1>Details</h1>
                 <?php foreach ($result as $res) { ?>
                     <table style="width:100%" class="table">
@@ -74,6 +77,10 @@ $id = $_SESSION['USER_ID'];
                         <tr>
                             <th>Email:</th>
                             <td><?=$res['USER_EMAIL']?></td>
+                        </tr>
+                        <tr>
+                            <th>Country:</th>
+                            <td><?=$res['USER_COUNTRY']?></td>
                         </tr>
                         <tr>
                             <th>ID:</th>

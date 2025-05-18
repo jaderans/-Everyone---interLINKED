@@ -34,6 +34,22 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         $pass = trim($_POST["pass"] ?? '');
         $conPass = trim($_POST["conPass"] ?? '');
         $oldPass = trim($_POST["oldPass"] ?? '');
+        $img = null;
+        if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+            // Validate file type (optional)
+            $fileTmpPath = $_FILES['img']['tmp_name'];
+            $fileType = mime_content_type($fileTmpPath);
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+            if (in_array($fileType, $allowedTypes)) {
+                // Read file content as binary
+                $img = file_get_contents($fileTmpPath);
+            } else {
+                $error[] = "Invalid image type. Only JPG, PNG, and GIF are allowed.";
+                $hasError = true;
+            }
+        }
+
 
         $hasError = false;
 
@@ -138,14 +154,15 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
 
             // Update basic details
             $stmt = $master_con->prepare("UPDATE `user`
-                SET USER_NAME = :userName, 
-                    USER_FSTNAME = :firstName, 
-                    USER_LSTNAME = :lastName, 
-                    USER_BIRTHDAY = :bday, 
-                    USER_CONTACT = :contact, 
-                    USER_EMAIL = :email,
-                    USER_TYPE = :type
-                WHERE USER_ID = :id");
+            SET USER_NAME = :userName, 
+                USER_FSTNAME = :firstName, 
+                USER_LSTNAME = :lastName, 
+                USER_BIRTHDAY = :bday, 
+                USER_CONTACT = :contact, 
+                USER_EMAIL = :email,
+                USER_TYPE = :type,
+                USER_IMG = COALESCE(:image, USER_IMG)
+            WHERE USER_ID = :id");
 
             $stmt->bindParam(':userName', $userName);
             $stmt->bindParam(':firstName', $firstName);
@@ -155,7 +172,16 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':type', $type);
             $stmt->bindParam(':id', $id);
+
+            if ($img !== null) {
+                $stmt->bindParam(':image', $img, PDO::PARAM_LOB);
+            } else {
+                // Bind NULL to :image to keep existing image in DB
+                $null = null;
+                $stmt->bindParam(':image', $null, PDO::PARAM_NULL);
+            }
             $stmt->execute();
+
 
             // Password update if requested
             if (!empty($pass) && !empty($oldPass)) {
@@ -223,7 +249,14 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         <h1>Edit Profile</h1>
         <p class="credentials">Please edit your credentials</p>
         <div class="form-container">
-            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
+                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                <div class="form-group">
+                    <div>
+                        <label for="file">Update Profile</label>
+                        <input class="attach" type="file" id="img" name="img" accept="image/jpg">
+                    </div>
+                </div>
                 <div class="form-group">
                     <div>
                         <label for="userName">User Name</label>
