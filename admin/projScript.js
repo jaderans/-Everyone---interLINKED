@@ -241,3 +241,188 @@ function bulkDeleteProjects() {
             alert('An error occurred while deleting projects');
         });
 }
+
+// Tab Switching
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+
+        // Hide all tabs and remove active class
+        tabContents.forEach(tab => tab.style.display = 'none');
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+
+        // Show selected tab and add active class
+        document.getElementById(tabId).style.display = 'block';
+        button.classList.add('active');
+    });
+});
+
+// Modal handling
+const modals = {
+    'upload-image-modal': {
+        openBtn: document.getElementById('change-photo-btn'),
+        closeBtn: document.querySelector('#upload-image-modal .close-modal'),
+        cancelBtn: document.getElementById('cancel-upload'),
+        modal: document.getElementById('upload-image-modal')
+    },
+    'edit-admin-modal': {
+        openBtns: document.querySelectorAll('.edit-admin'),
+        closeBtn: document.querySelector('#edit-admin-modal .close-modal'),
+        cancelBtn: document.getElementById('cancel-edit-admin'),
+        modal: document.getElementById('edit-admin-modal')
+    }
+};
+
+// Open modal function
+function openModal(modal) {
+    modal.style.display = 'block';
+}
+
+// Close modal function
+function closeModal(modal) {
+    modal.style.display = 'none';
+}
+
+// Setup modal event listeners
+Object.keys(modals).forEach(key => {
+    const modal = modals[key];
+
+    // Open button(s)
+    if(modal.openBtn) {
+        modal.openBtn.addEventListener('click', () => openModal(modal.modal));
+    } else if(modal.openBtns) {
+        modal.openBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const adminId = this.getAttribute('data-id');
+
+                if(key === 'view-admin-modal') {
+                    loadAdminDetails(adminId);
+                } else if(key === 'delete-admin-modal') {
+                    document.getElementById('delete_admin_id').value = adminId;
+                } else if(key === 'edit-admin-modal') {
+                    loadAdminForEdit(adminId);
+                }
+
+                openModal(modal.modal);
+            });
+        });
+    }
+
+    // Close button
+    if(modal.closeBtn) {
+        modal.closeBtn.addEventListener('click', () => closeModal(modal.modal));
+    }
+
+    // Cancel button
+    if(modal.cancelBtn) {
+        modal.cancelBtn.addEventListener('click', () => closeModal(modal.modal));
+    }
+
+    // Close when clicking outside
+    window.addEventListener('click', (e) => {
+        if(e.target === modal.modal) {
+            closeModal(modal.modal);
+        }
+    });
+});
+
+// Image preview
+const profileImageInput = document.getElementById('profile_image');
+const imagePreview = document.getElementById('image-preview');
+
+profileImageInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Edit profile button links to profile tab
+document.getElementById('edit-profile-btn').addEventListener('click', function() {
+    // Click the profile details tab
+    document.querySelector('[data-tab="profile-details"]').click();
+    // Scroll to profile form
+    document.getElementById('profile-form').scrollIntoView({ behavior: 'smooth' });
+});
+
+// Search functionality
+document.getElementById('admin-search').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.getElementById('admin-table-body').querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchValue) ? '' : 'none';
+    });
+});
+
+// Load admin details for view modal
+function loadAdminDetails(adminId) {
+    // In a real application, you would fetch this data via AJAX
+    // For now we'll use dummy data based on the table
+    fetch(`get_admin.php?id=${adminId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('view-admin-name').textContent = data.firstName + ' ' + data.lastName;
+            document.getElementById('view-admin-email').textContent = data.email;
+            document.getElementById('view-admin-username').textContent = data.username;
+            document.getElementById('view-admin-contact').textContent = data.contact;
+            document.getElementById('view-admin-country').textContent = data.country;
+            document.getElementById('view-admin-birthday').textContent = data.birthday;
+            document.getElementById('view-admin-image').src = data.image || '../../imgs/profile.png';
+        })
+        .catch(error => {
+            console.error('Error loading admin details:', error);
+            alert('Error loading administrator details. Please try again.');
+        });
+}
+
+// Load admin data for edit modal
+function loadAdminForEdit(adminId) {
+    // In a real application, you would fetch this data via AJAX
+    fetch(`get_admin.php?id=${adminId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('edit_admin_id').value = adminId;
+            document.getElementById('edit_first_name').value = data.firstName;
+            document.getElementById('edit_last_name').value = data.lastName;
+            document.getElementById('edit_email').value = data.email;
+            document.getElementById('edit_username').value = data.username;
+            document.getElementById('edit_contact').value = data.contact;
+            document.getElementById('edit_country').value = data.country;
+            document.getElementById('edit_birthday').value = data.birthday;
+        })
+        .catch(error => {
+            console.error('Error loading admin data for edit:', error);
+            alert('Error loading administrator data. Please try again.');
+        });
+}
+
+// Password validation
+document.getElementById('password-form').addEventListener('submit', function(e) {
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+
+    if(newPassword !== confirmPassword) {
+        e.preventDefault();
+        alert('New password and confirm password do not match.');
+        return false;
+    }
+
+    // Password strength validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if(!passwordRegex.test(newPassword)) {
+        e.preventDefault();
+        alert('Password does not meet the requirements. Please check the requirements list.');
+        return false;
+    }
+});
+

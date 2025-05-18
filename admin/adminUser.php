@@ -144,11 +144,15 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <table>
                             <tbody id="userTableBody">
                             <?php while ($row = $usersResult->fetch(PDO::FETCH_ASSOC)): ?>
+                                <?php
+                                $imageData = $row['USER_IMG'];
+                                $imageSrc = $imageData ? 'data:image/jpeg;base64,' . base64_encode($imageData) : 'default.jpg';
+                                ?>
                                 <tr>
                                     <td class="checkbox-cell"><input type="checkbox"></td>
                                     <td>
                                         <div class="user-row">
-                                            <img src="<?= !empty($row['USER_IMG']) ? htmlspecialchars($row['USER_IMG']) : 'default.jpg' ?>" class="user-avatar" alt="User Avatar">
+                                            <img src="<?= $imageSrc ?>" class="user-avatar" alt="User Avatar">
                                         </div>
                                     </td>
                                     <td><?= htmlspecialchars($row['USER_ID']) ?></td>
@@ -169,7 +173,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <td><?= htmlspecialchars($row['USER_CONTACT']) ?></td>
                                     <td class="actions">
                                         <a href="?id=<?= $row['USER_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
-                                        <i href="deleteUser.php?id=<?= $row['USER_ID'] ?>" onclick="return confirm('Are you sure?')" class="fas fa-trash action-icon"></i>
+                                        <i onclick="if(confirm('Are you sure?')) location.href='deleteUser.php?id=<?= $row['USER_ID'] ?>'" class="fas fa-trash action-icon"></i>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -212,11 +216,15 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <table>
                             <tbody id="applicantTableBody">
                             <?php while ($row = $applicantsResult->fetch(PDO::FETCH_ASSOC)): ?>
+                                <?php
+                                $imageData = $row['USER_IMG'];
+                                $imageSrc = $imageData ? 'data:image/jpeg;base64,' . base64_encode($imageData) : 'default.jpg';
+                                ?>
                                 <tr>
                                     <td class="checkbox-cell"><input type="checkbox"></td>
                                     <td>
                                         <div class="user-row">
-                                            <img src="<?= !empty($row['USER_IMG']) ? htmlspecialchars($row['USER_IMG']) : 'default.jpg' ?>" class="user-avatar" alt="Applicant Avatar">
+                                            <img src="<?= $imageSrc ?>" class="user-avatar" alt="Applicant Avatar">
                                         </div>
                                     </td>
                                     <td><?= htmlspecialchars($row['USER_ID']) ?></td>
@@ -242,8 +250,12 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Right Pane (Profile Details) -->
         <div id="right-pane">
             <?php if ($selectedUser): ?>
+                <?php
+                $imageData = $selectedUser['USER_IMG'];
+                $imageSrc = $imageData ? 'data:image/jpeg;base64,' . base64_encode($imageData) : 'default.jpg';
+                ?>
                 <div class="profile-header">
-                    <img src="<?= !empty($selectedUser['USER_IMG']) ? htmlspecialchars($selectedUser['USER_IMG']) : 'default.jpg' ?>" alt="User Profile" class="profile-avatar">
+                    <img src="<?= $imageSrc ?>" alt="User Profile" class="profile-avatar">
                     <div class="profile-name"><?= htmlspecialchars($selectedUser['USER_NAME'] ?? 'No Username') ?></div>
                     <div class="profile-title"><?= htmlspecialchars($selectedUser['USER_TYPE']) ?></div>
                     <div class="profile-location"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($selectedUser['USER_COUNTRY'] ?? 'No Location') ?></div>
@@ -293,7 +305,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             <?php endif; ?>
         </div>
-
 </div>
 <script>
     $('a[href^="editUser.php"]').on('click', function (e) {

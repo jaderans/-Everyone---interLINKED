@@ -1,42 +1,30 @@
 <?php
 session_start();
 include('interlinkedDB.php');
-$conn = connectToDatabase();
-$master_con = connectToDatabase(3306);
-$slave_con = connectToDatabase(3307);
 
-// Security check - verify user is logged in and is admin
-if(!isset($_SESSION['user_id'])) {
+// Check if user is logged in
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['admin_data'])) {
     header("Location: ../loginSignup/logIn.php");
     exit();
 }
 
+$conn = connectToDatabase();
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
+
 $user_id = $_SESSION['user_id'];
+$admin = $_SESSION['admin_data']; // Get admin data from session
+$name = $_SESSION['userName'];
+$profile_img = $_SESSION['profile_img'];
 
-// Fetch admin data using PDO with proper error handling
 try {
-    $stmt = $master_con->prepare("SELECT * FROM user WHERE USER_ID = :user_id AND USER_TYPE = 'Admin'");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if(!$admin) {
-        header("Location: ../loginSignup/logIn.php");
-        exit();
-    }
-
-    // Get admin name for display
-    $name = $admin['USER_FSTNAME'] . ' ' . $admin['USER_LSTNAME'];
-    // Get profile picture or use default
-    $profile_img = !empty($admin['USER_IMG']) ? $admin['USER_IMG'] : '../../imgs/profile.png';
-
-    // Fetch all admin users for the list - Fix: changed table name to 'user' to match
-    $adminStmt = $slave_con->prepare("SELECT * FROM user WHERE USER_TYPE = 'ADMIN' ORDER BY USER_FSTNAME ASC");
+    // Fetch all admin users for the list
+    $adminStmt = $slave_con->prepare("SELECT * FROM user WHERE USER_TYPE = 'Admin' ORDER BY USER_FSTNAME ASC");
     $adminStmt->execute();
     $adminUsers = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Count total admins - Fix: changed table name to 'user' to match
-    $countStmt = $slave_con->prepare("SELECT COUNT(*) as total FROM user WHERE USER_TYPE = 'ADMIN'");
+    // Count total admins
+    $countStmt = $slave_con->prepare("SELECT COUNT(*) as total FROM user WHERE USER_TYPE = 'Admin'");
     $countStmt->execute();
     $totalAdmins = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
 
@@ -57,7 +45,6 @@ if(isset($_POST['update_profile'])) {
     $birthday = $_POST['birthday'];
 
     try {
-        // Fix: corrected USER_LST_NAME to USER_LSTNAME for consistency
         $updateStmt = $master_con->prepare("UPDATE user SET 
             USER_FSTNAME = :first_name,
             USER_LSTNAME = :last_name,
@@ -79,15 +66,17 @@ if(isset($_POST['update_profile'])) {
 
         if($updateStmt->execute()) {
             // Update session data
-            $_SESSION['name'] = $first_name . ' ' . $last_name;
+            $_SESSION['userName'] = $first_name . ' ' . $last_name;
+            $_SESSION['name'] = $_SESSION['userName'];
+            $name = $_SESSION['userName'];
             $success = "Profile updated successfully!";
 
-            // Refresh `admin` data
+            // Refresh admin data in session
             $stmt = $master_con->prepare("SELECT * FROM user WHERE USER_ID = :user_id");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-            $name = $admin['USER_FSTNAME'] . ' ' . $admin['USER_LSTNAME'];
+            $_SESSION['admin_data'] = $admin;
         }
     } catch(PDOException $e) {
         error_log("Update error: " . $e->getMessage());
@@ -119,6 +108,10 @@ if(isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
 
                 if($imgStmt->execute()) {
                     $profile_img = $upload_path;
+                    $_SESSION['profile_img'] = $upload_path;
+                    // Update admin data in session
+                    $_SESSION['admin_data']['USER_IMG'] = $upload_path;
+                    $admin['USER_IMG'] = $upload_path;
                     $success = "Profile image updated successfully!";
                 }
             } catch(PDOException $e) {
@@ -150,6 +143,9 @@ if(isset($_POST['change_password'])) {
                 $passStmt->bindParam(':user_id', $user_id);
 
                 if($passStmt->execute()) {
+                    // Update session data
+                    $_SESSION['admin_data']['USER_PASSWORD'] = $hashed_password;
+                    $admin['USER_PASSWORD'] = $hashed_password;
                     $success = "Password changed successfully!";
                 }
             } catch(PDOException $e) {
@@ -197,7 +193,6 @@ try {
     <link rel="icon" type="image/x-icon" href="../imgs/inlFaviconwhite.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Add this style to fix the right pane positioning -->
     <style>
         .admin-panel {
             display: flex;
@@ -213,7 +208,6 @@ try {
             top: 20px;
             align-self: flex-start;
         }
-        /* Responsive adjustments */
         @media (max-width: 992px) {
             .admin-panel {
                 flex-direction: column;
@@ -412,51 +406,48 @@ try {
 
                     <div class="tab-content" id="system-stats" style="display: none;">
                         <div class="stats-cards">
+                            <!-- Admin Card -->
                             <div class="stat-card">
                                 <div class="stat-icon admin-icon">
                                     <i class="fas fa-user-shield"></i>
                                 </div>
                                 <div class="stat-info">
                                     <h4>Administrators</h4>
-                                    <span class="stat-count"><?=isset($userTypeCounts['ADMIN']) ? $userTypeCounts['ADMIN'] : 0?></span>
+                                    <span class="stat-count"><?= isset($userTypeCounts['Admin']) ? $userTypeCounts['Admin'] : 0 ?></span>
                                 </div>
                             </div>
 
+                            <!-- Client Card -->
                             <div class="stat-card">
                                 <div class="stat-icon client-icon">
                                     <i class="fas fa-user-tie"></i>
                                 </div>
                                 <div class="stat-info">
                                     <h4>Clients</h4>
-                                    <span class="stat-count"><?=isset($userTypeCounts['CLIENT']) ? $userTypeCounts['CLIENT'] : 0?></span>
+                                    <span class="stat-count"><?= isset($userTypeCounts['Client']) ? $userTypeCounts['Client'] : 0 ?></span>
                                 </div>
                             </div>
 
+                            <!-- Freelancer Card -->
                             <div class="stat-card">
                                 <div class="stat-icon freelancer-icon">
                                     <i class="fas fa-laptop-code"></i>
                                 </div>
                                 <div class="stat-info">
                                     <h4>Freelancers</h4>
-                                    <span class="stat-count"><?=isset($userTypeCounts['FREELANCER']) ? $userTypeCounts['FREELANCER'] : 0?></span>
+                                    <span class="stat-count"><?= isset($userTypeCounts['Freelancer']) ? $userTypeCounts['Freelancer'] : 0 ?></span>
                                 </div>
                             </div>
 
+                            <!-- Applicant Card -->
                             <div class="stat-card">
                                 <div class="stat-icon applicant-icon">
                                     <i class="fas fa-user-plus"></i>
                                 </div>
                                 <div class="stat-info">
                                     <h4>Applicants</h4>
-                                    <span class="stat-count"><?=isset($userTypeCounts['APPLICANT']) ? $userTypeCounts['APPLICANT'] : 0?></span>
+                                    <span class="stat-count"><?= isset($userTypeCounts['Applicant']) ? $userTypeCounts['Applicant'] : 0 ?></span>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="system-chart">
-                            <h4>User Distribution</h4>
-                            <div class="chart-container">
-                                <canvas id="user-distribution-chart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -568,237 +559,8 @@ try {
         </form>
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-<script>
-    // Tab Switching
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabId = button.getAttribute('data-tab');
-
-            // Hide all tabs and remove active class
-            tabContents.forEach(tab => tab.style.display = 'none');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-
-            // Show selected tab and add active class
-            document.getElementById(tabId).style.display = 'block';
-            button.classList.add('active');
-        });
-    });
-
-    // Modal handling
-    const modals = {
-        'upload-image-modal': {
-            openBtn: document.getElementById('change-photo-btn'),
-            closeBtn: document.querySelector('#upload-image-modal .close-modal'),
-            cancelBtn: document.getElementById('cancel-upload'),
-            modal: document.getElementById('upload-image-modal')
-        },
-        'edit-admin-modal': {
-            openBtns: document.querySelectorAll('.edit-admin'),
-            closeBtn: document.querySelector('#edit-admin-modal .close-modal'),
-            cancelBtn: document.getElementById('cancel-edit-admin'),
-            modal: document.getElementById('edit-admin-modal')
-        }
-    };
-
-    // Open modal function
-    function openModal(modal) {
-        modal.style.display = 'block';
-    }
-
-    // Close modal function
-    function closeModal(modal) {
-        modal.style.display = 'none';
-    }
-
-    // Setup modal event listeners
-    Object.keys(modals).forEach(key => {
-        const modal = modals[key];
-
-        // Open button(s)
-        if(modal.openBtn) {
-            modal.openBtn.addEventListener('click', () => openModal(modal.modal));
-        } else if(modal.openBtns) {
-            modal.openBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const adminId = this.getAttribute('data-id');
-
-                    if(key === 'view-admin-modal') {
-                        loadAdminDetails(adminId);
-                    } else if(key === 'delete-admin-modal') {
-                        document.getElementById('delete_admin_id').value = adminId;
-                    } else if(key === 'edit-admin-modal') {
-                        loadAdminForEdit(adminId);
-                    }
-
-                    openModal(modal.modal);
-                });
-            });
-        }
-
-        // Close button
-        if(modal.closeBtn) {
-            modal.closeBtn.addEventListener('click', () => closeModal(modal.modal));
-        }
-
-        // Cancel button
-        if(modal.cancelBtn) {
-            modal.cancelBtn.addEventListener('click', () => closeModal(modal.modal));
-        }
-
-        // Close when clicking outside
-        window.addEventListener('click', (e) => {
-            if(e.target === modal.modal) {
-                closeModal(modal.modal);
-            }
-        });
-    });
-
-    // Image preview
-    const profileImageInput = document.getElementById('profile_image');
-    const imagePreview = document.getElementById('image-preview');
-
-    profileImageInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = 'block';
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Edit profile button links to profile tab
-    document.getElementById('edit-profile-btn').addEventListener('click', function() {
-        // Click the profile details tab
-        document.querySelector('[data-tab="profile-details"]').click();
-        // Scroll to profile form
-        document.getElementById('profile-form').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Search functionality
-    document.getElementById('admin-search').addEventListener('keyup', function() {
-        const searchValue = this.value.toLowerCase();
-        const rows = document.getElementById('admin-table-body').querySelectorAll('tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchValue) ? '' : 'none';
-        });
-    });
-
-    // Load admin details for view modal
-    function loadAdminDetails(adminId) {
-        // In a real application, you would fetch this data via AJAX
-        // For now we'll use dummy data based on the table
-        fetch(`get_admin.php?id=${adminId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('view-admin-name').textContent = data.firstName + ' ' + data.lastName;
-                document.getElementById('view-admin-email').textContent = data.email;
-                document.getElementById('view-admin-username').textContent = data.username;
-                document.getElementById('view-admin-contact').textContent = data.contact;
-                document.getElementById('view-admin-country').textContent = data.country;
-                document.getElementById('view-admin-birthday').textContent = data.birthday;
-                document.getElementById('view-admin-image').src = data.image || '../../imgs/profile.png';
-            })
-            .catch(error => {
-                console.error('Error loading admin details:', error);
-                alert('Error loading administrator details. Please try again.');
-            });
-    }
-
-    // Load admin data for edit modal
-    function loadAdminForEdit(adminId) {
-        // In a real application, you would fetch this data via AJAX
-        fetch(`get_admin.php?id=${adminId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('edit_admin_id').value = adminId;
-                document.getElementById('edit_first_name').value = data.firstName;
-                document.getElementById('edit_last_name').value = data.lastName;
-                document.getElementById('edit_email').value = data.email;
-                document.getElementById('edit_username').value = data.username;
-                document.getElementById('edit_contact').value = data.contact;
-                document.getElementById('edit_country').value = data.country;
-                document.getElementById('edit_birthday').value = data.birthday;
-            })
-            .catch(error => {
-                console.error('Error loading admin data for edit:', error);
-                alert('Error loading administrator data. Please try again.');
-            });
-    }
-
-    // User Distribution Chart
-    window.addEventListener('load', function() {
-        const userTypes = <?=json_encode(array_keys($userTypeCounts))?>;
-        const userCounts = <?=json_encode(array_values($userTypeCounts))?>;
-        const colors = [
-            'rgba(255, 77, 77, 0.7)',   // Admin
-            'rgba(255, 183, 0, 0.7)',   // Client
-            'rgba(255, 146, 0, 0.7)',   // Freelancer
-            'rgba(240, 103, 217, 0.7)'  // Applicant
-        ];
-
-        const ctx = document.getElementById('user-distribution-chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: userTypes,
-                datasets: [{
-                    data: userCounts,
-                    backgroundColor: colors,
-                    borderColor: colors.map(color => color.replace('0.7', '1')),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                                const percentage = Math.round((value / total) * 100);
-                                return `${label}: ${value} (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    });
-
-    // Password validation
-    document.getElementById('password-form').addEventListener('submit', function(e) {
-        const newPassword = document.getElementById('new_password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-
-        if(newPassword !== confirmPassword) {
-            e.preventDefault();
-            alert('New password and confirm password do not match.');
-            return false;
-        }
-
-        // Password strength validation
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if(!passwordRegex.test(newPassword)) {
-            e.preventDefault();
-            alert('Password does not meet the requirements. Please check the requirements list.');
-            return false;
-        }
-    });
-</script>
+<script src="projScript.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </body>
 </html>
