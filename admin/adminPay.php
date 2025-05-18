@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('interlinkedDB.php');
 
 $conn = connectToDatabase();
@@ -42,6 +43,8 @@ if (isset($_GET['id'])) {
 
 $usersResult = fetchUsers($conn, 'User', $search);
 $applicantsResult = fetchUsers($conn, 'Applicant', $search);
+
+$name = $_SESSION['userName'];
 
 ?>
 
@@ -90,7 +93,7 @@ $applicantsResult = fetchUsers($conn, 'Applicant', $search);
         </div>
         <div class="navprofile">
             <div class="name">
-                <h4>Ian Harvey Yap</h4>
+                <h4><?=$name?></h4>
             </div>
             <div class="profile">
                 <img src="../../imgs/profile.png" alt="Admin Profile">

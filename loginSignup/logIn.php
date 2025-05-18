@@ -5,7 +5,6 @@ include('interlinkedDB.php');
 $nameMsg = $emailMsg = $passMsg = $userErrorMsg = "";
 $userName = $email = $pass = $userType = "";
 
-
 function clean_text($text) {
     return htmlspecialchars(trim($text));
 }
@@ -16,69 +15,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userType = clean_text($_POST['type']);
     $password = clean_text($_POST['pass']);
 
-
-    if (isset($_POST['action'])) {
-        if ($_POST['action'] == "Log In") {
-            if (empty($userName)) {
-                $nameMsg = "Username is required <br>";
-            }
-
-            if (empty($email)) {
-                $emailMsg = "Email is required <br>";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailMsg = "Input a valid email address <br>";
-            }
-
-            if (empty($password)) {
-                $passMsg = "Password is required <br>";
-            }
-
-            if (empty($nameMsg) && empty($emailMsg) && empty($passMsg) && !empty($userType)) {
-                // Password should ideally be hashed and verified using password_verify
-                $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ? AND USER_EMAIL = ? AND USER_PASSWORD = ? AND USER_TYPE = ?");
-                $stmt->bind_param("ssss", $userName, $email, $password, $userType);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows == 1) {
-                    // Successful login
-
-                    if ($userType == "Client") {
-                        header("Location: clientHome.php");
-                    } elseif ($userType == "Freelancer") {
-                        if ($result->num_rows == 1) {
-                            $user = $result->fetch_assoc();
-                            $_SESSION['userName'] = $user['USER_NAME'];
-                            $_SESSION['email'] = $user['USER_EMAIL'];
-                            $_SESSION['userType'] = $user['USER_TYPE'];
-
-                            if ($userType == "Client") {
-                                header("Location: clientHome.php");
-                            } elseif ($userType == "Freelancer") {
-                                header("Location: ../freelancer/freelancer-dashboard-page.php");
-                            } elseif ($userType == "Admin") {
-                                header("Location: adminDash.php");
-                            }
-                            exit();
-                        }
-                        header("Location: ../freelancer/freelancer-dashboard-page.php");
-                    } elseif ($userType == "Admin") {
-                        header("Location: ../admin/adminDash.php");
-                    }
-                    exit();
-                } else {
-                    $userErrorMsg = "Invalid credentials or user type. Please try again.<br>";
-                }
-            }
-
-        } elseif ($_POST['action'] == "Sign In") {
-            header("Location: signIn.php");
-            exit();
+    if (isset($_POST['action']) && $_POST['action'] == "Log In") {
+        if (empty($userName)) $nameMsg = "Username is required <br>";
+        if (empty($email)) {
+            $emailMsg = "Email is required <br>";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailMsg = "Invalid email format <br>";
         }
+        if (empty($password)) $passMsg = "Password is required <br>";
+
+        if (empty($nameMsg) && empty($emailMsg) && empty($passMsg) && !empty($userType)) {
+            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ? AND USER_EMAIL = ? AND USER_PASSWORD = ? AND USER_TYPE = ?");
+            $stmt->bind_param("ssss", $userName, $email, $password, $userType);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 1) {
+                $user = $result->fetch_assoc();
+
+                // Set all necessary session variables
+                $_SESSION['user_id'] = $user['USER_ID'];
+                $_SESSION['userName'] = $user['USER_NAME'];
+                $_SESSION['email'] = $user['USER_EMAIL'];
+                $_SESSION['userType'] = $user['USER_TYPE'];
+
+                // Redirect based on user type
+                if ($userType === "Client") {
+                    header("Location: clientHome.php");
+                } elseif ($userType === "Freelancer") {
+                    header("Location: ../freelancer/freelancer-dashboard-page.php");
+                } elseif ($userType === "Admin") {
+                    header("Location: ../admin/adminDash.php");
+                }
+                exit();
+            } else {
+                $userErrorMsg = "Invalid credentials or user type. Please try again.<br>";
+            }
+        }
+    } elseif ($_POST['action'] == "Sign In") {
+        header("Location: signIn.php");
+        exit();
     }
 }
-
-
 
 ?>
 
