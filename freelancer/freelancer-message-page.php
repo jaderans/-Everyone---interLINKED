@@ -1,5 +1,6 @@
 <?php
 include_once 'freelancer-navbar-template.php';
+include_once 'interlinkedDB.php';
 
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
@@ -66,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $inputSubject = htmlspecialchars($subject);
         $inputMessage = htmlspecialchars($message);
     } else {
-        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE)
-        VALUES (:user_id, :em_subject, :em_comp,:em_recipient, CURRENT_TIMESTAMP)");
+        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS)
+        VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread')");
         $stmt->bindParam(':user_id', $id);
         $stmt->bindParam(':em_subject', $subject);
         $stmt->bindParam(':em_comp', $message);
@@ -83,6 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ");
         $stmt->execute(['user' => $user]);
         $result = $stmt->fetchAll();
+
+
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
 
 
     }

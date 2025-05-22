@@ -5,9 +5,14 @@ $slave_con = connectToDatabase(3007);
 
 $name = $_GET['keyword'];
 
-$stmt = $slave_con->prepare("SELECT * FROM `user` WHERE `USER_NAME` LIKE :name OR `USER_TYPE` LIKE :name ");
-$stmt->execute(array('name' => "%$name%"));
+$stmt = $slave_con->prepare("
+    SELECT * FROM `user` 
+    WHERE (`USER_NAME` LIKE :name OR `USER_TYPE` LIKE :name)
+    AND `USER_TYPE` <> 'Applicant'
+");
+$stmt->execute(['name' => "%$name%"]);
 $result = $stmt->fetchAll();
+
 
 if(empty($result)){
     echo "User not found!";

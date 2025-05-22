@@ -5,6 +5,7 @@ $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
 
 $error = [];
+$saved = [];
 
 function clean_text($data) {
     return htmlspecialchars(trim($data));
@@ -209,8 +210,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                     exit();
                 } else {
                     // Stay on the page after update if no need to re-login
-                    header('Location: freelancer-profile-page.php');
-                    exit();
+                    $saved[] = "Changes Saved Successfully!";
                 }
             }
         }
@@ -295,7 +295,7 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         <input type="tel" id="phone" name="phone" value="<?= $result['USER_CONTACT'] ?>" >
                     </div>
                     <div>
-                        <label for="oldPass">Old Password</label>
+                        <label for="oldPass">Old Password*</label>
                         <input type="password" id="oldPass" name="oldPass" placeholder="Old Password">
                     </div>
                 </div>
@@ -317,6 +317,11 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                     <span style="color: red"><?php
                         foreach ($error as $errorMsg) {
                             echo $errorMsg;
+                        }
+                        ?></span>
+                    <span style="color: #8cb660"><?php
+                        foreach ($saved as $saveMsg) {
+                            echo $saveMsg;
                         }
                         ?></span>
                 </div>

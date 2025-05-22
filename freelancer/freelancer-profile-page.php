@@ -58,7 +58,7 @@ $id = $_SESSION['USER_ID'];
         </div>
         <div class="profile-details">
             <div class="details">
-                <img src="show-profile-img.php?id=<?= htmlspecialchars($result['USER_ID']) ?>" alt="Profile Image">
+<!--                <img src="show-profile-img.php?id=--><?php //= htmlspecialchars($result['USER_ID']) ?><!--" alt="Profile Image">-->
                 <h1>Details</h1>
                 <?php foreach ($result as $res) { ?>
                     <table style="width:100%" class="table">

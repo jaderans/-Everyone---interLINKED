@@ -40,23 +40,24 @@ $pro = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="project-card-content">
                 <div class="label">
                     <h1>PROJECTS</h1>
-<!--                    <h1>--><?php //=$id?><!--</h1>-->
-                    <button id="sortPriorityBtn" class="btn-sort"><i class="fa-solid fa-sort"></i></button>
                 </div>
 
 
                 <table style="width:100%; margin-top: 15px;" class="table" id="projectsTable">
+                    <thead>
                     <tr>
-                        <th>Project Title</th>
-                        <th>Description</th>
-                        <th>Type</th>
-                        <th>Date Start</th>
-                        <th>Due Date</th>
-                        <th>Status</th>
-                        <th>Priority Level</th>
-                        <th>Commissioned By</th>
+                        <th onclick="sortTable(0)">Project Title</th>
+                        <th onclick="sortTable(1)">Description</th>
+                        <th onclick="sortTable(2)">Type</th>
+                        <th onclick="sortTable(3)">Date Start</th>
+                        <th onclick="sortTable(4)">Due Date</th>
+                        <th onclick="sortTable(5)">Status</th>
+                        <th onclick="sortTable(6)">Priority Level</th>
+                        <th onclick="sortTable(7)">Commissioned By</th>
                         <th>Edit/Update</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <?php foreach ($pro as $res) { ?>
                         <tr>
                             <td><?= htmlspecialchars($res['PRO_TITLE']) ?></td>
@@ -87,41 +88,49 @@ $pro = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                         </tr>
                     <?php } ?>
+                    </tbody>
                 </table>
 
+
                 <script>
-                    const sortBtn = document.getElementById('sortPriorityBtn');
-                    const table = document.getElementById('projectsTable');
-                    let asc = true; // toggle order
+                    let sortDirection = [];
 
-                    // Priority mapping to sort easily
-                    const priorityMap = {
-                        'high': 3,
-                        'medium': 2,
-                        'low': 1
-                    };
+                    function sortTable(columnIndex) {
+                        const table = document.getElementById("projectsTable");
+                        const tbody = table.tBodies[0];
+                        const rows = Array.from(tbody.rows);
+                        const isPriority = columnIndex === 6;
 
-                    sortBtn.addEventListener('click', () => {
-                        const rowsArray = Array.from(table.rows).slice(1); // skip header row
+                        // Toggle sort direction
+                        sortDirection[columnIndex] = !sortDirection[columnIndex];
 
-                        rowsArray.sort((a, b) => {
-                            // Get the priority text (7th cell index = 6)
-                            const priorityA = a.cells[6].innerText.trim().toLowerCase();
-                            const priorityB = b.cells[6].innerText.trim().toLowerCase();
+                        const priorityMap = {
+                            'high': 3,
+                            'medium': 2,
+                            'low': 1
+                        };
 
-                            // Use priorityMap to compare numeric values
-                            const valA = priorityMap[priorityA] || 0;
-                            const valB = priorityMap[priorityB] || 0;
+                        rows.sort((a, b) => {
+                            let valA = a.cells[columnIndex].innerText.trim().toLowerCase();
+                            let valB = b.cells[columnIndex].innerText.trim().toLowerCase();
 
-                            return asc ? valB - valA : valA - valB; // Desc or asc
+                            if (isPriority) {
+                                valA = priorityMap[valA] || 0;
+                                valB = priorityMap[valB] || 0;
+                            } else if (!isNaN(Date.parse(valA)) && !isNaN(Date.parse(valB))) {
+                                valA = new Date(valA);
+                                valB = new Date(valB);
+                            }
+
+                            if (valA < valB) return sortDirection[columnIndex] ? -1 : 1;
+                            if (valA > valB) return sortDirection[columnIndex] ? 1 : -1;
+                            return 0;
                         });
 
-                        // Append sorted rows back to the table body
-                        rowsArray.forEach(row => table.appendChild(row));
-
-                        asc = !asc; // toggle sorting order for next click
-                    });
+                        rows.forEach(row => tbody.appendChild(row));
+                    }
                 </script>
+
 
             </div>
         </div>

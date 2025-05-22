@@ -1,9 +1,34 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+$master_con = connectToDatabase(3306);
+$slave_con = connectToDatabase(3307);
 
 $user = $_SESSION['userName'];
 $id = $_SESSION['user_id'];
+
+$stmt = $slave_con->prepare("SELECT * FROM user where USER_NAME = ?");
+$stmt->execute([$user]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($result as $res) {
+    $_SESSION['USER_ID'] = $res['USER_ID'];
+}
+
+$id = $_SESSION['user_id'];
+$notif = $slave_con->prepare("SELECT COUNT(*) as count FROM notifications WHERE NOTIF_STATUS = 'Unread' and USER_ID =:userId ;");
+$notif->execute(['userId' => $id]);
+$notif->execute();
+$resNotif = $notif->fetch(PDO::FETCH_ASSOC);
+
+$mes = $slave_con->prepare("SELECT COUNT(*) as countMes FROM email WHERE EM_STATUS = 'Unread' and USER_ID =:userId ;");
+$mes->execute(['userId' => $id]);
+$mes->execute();
+$mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
+
+
+
+
 
 ?>
 <!doctype html>
@@ -51,9 +76,10 @@ $id = $_SESSION['user_id'];
             <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i> Dashboard</a></li>
             <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
             <li><a href="salary.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
-            <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification</a></li>
-             <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
+            <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification (<?=$resNotif['count']?>)</a></li>
+             <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message (<?=$mesNotif['countMes']?>)</a></li>
             <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
+            <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i><?=$res['USER_ID'] ."<br>"?></a></li>
         </ul>
 
         <div class="lower-content">

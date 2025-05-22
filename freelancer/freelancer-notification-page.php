@@ -25,6 +25,17 @@ foreach ($notifResult as $res) {
 }
 $notifId = $_SESSION['NOTIF_ID'];
 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notifId'])) {
+    $notifId = $_POST['notifId'];
+
+    $stmt = $master_con->prepare("UPDATE notifications SET NOTIF_STATUS = 'Read' WHERE NOTIF_ID = :notifId");
+    $stmt->bindParam(':notifId', $notifId);
+    $stmt->execute();
+}
+
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -56,6 +67,10 @@ $notifId = $_SESSION['NOTIF_ID'];
                     <form action="freelancer-delete-notif.php" method="post"
                           onsubmit="return confirm('Are you sure you want to delete this notification?');">
                         <button class="btn-edit" name="notif_Id" value="<?= $row['NOTIF_ID'] ?>">Delete</button>
+                    </form>
+
+                    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+                        <button class="btn-edit" name="notifId" value="<?= $row['NOTIF_ID'] ?>">Mark As Read</button>
                     </form>
                 </div>
             <?php } ?>
