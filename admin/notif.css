@@ -1,0 +1,109 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Inter",sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.notif-container {
+    background-color: #ffffff;
+    position: absolute;
+    top: 90px;
+    left: 220px;
+    height: 85vh;
+    width: 85%;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: rgba(143, 143, 143, 0.66) 1px 1px 10px;
+}
+
+.notif-content {
+    margin-top: -30px;
+    background-color: #eeeeee;
+    padding: 20px;
+    height: 65vh;
+    border-radius: 10px;
+    overflow: auto;
+}
+.notif {
+    background-color: #ffffff;
+    border-left: 5px solid #436a6d;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 5px rgb(124, 124, 124);
+    width: 95%;
+}
+
+
+
+.content-notif {
+    margin-top: -30px;
+    border-radius: 10px;
+}
+
+.notif h3 {
+    margin: 0 0 8px 0;
+    color: #436a6d; /* Dark blue text */
+    font-weight: 600;
+}
+
+.notif p {
+    margin: 5px 0;
+    color: #436a6d;
+    font-size: 14px;
+}
+
+.title {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 20px;
+    height: 12vh;
+    margin-bottom: 50px;
+    z-index: 10;
+}
+
+.title h1 {
+    color: #1d4e5e;
+    font-weight: 800;
+    margin-left: 10px;
+}
+
+
+.sort-buttons .btn-sort {
+    color: white;
+    background-color: #357e7e;
+    width: 90px;
+    height: 20px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sort-buttons {
+    display: flex;
+    flex-direction: row;
+    background-color: #e8e8e8;
+    border-radius: 50px;
+    margin-bottom: 20px;
+}
+
+
+.btn-edit {
+    border: none;
+    width: 100px;
+    height: 30px;
+    margin: 5px;
+    background-color: #357e7e;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.btn-edit:hover {
+    background-color: #78cccc;
+    color: #3d3d3d;
+}

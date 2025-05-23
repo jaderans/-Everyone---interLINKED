@@ -73,7 +73,7 @@ $name = $_SESSION['userName'];
         <li><a href="adminProj.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
         <li><a href="adminPay.php"><i class="fas fa-dollar-sign"></i> Salary</a></li>
         <li><a href="adminUser.php"><i class="fas fa-users"></i> Users</a></li>
-        <li><a href="adminUser.php"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="adminNotif.php"><i class="fas fa-bell"></i> Notifications</a></li>
         <li><a href="adminMes.php"><i class="fas fa-envelope"></i> Message</a></li>
         <li><a href="adminProf.php"><i class="fas fa-user"></i> Profile</a></li>
         <div class="btm-content">
