@@ -106,29 +106,29 @@ $cancelled = $statuses['Cancelled'];
 
     <a href="freelancer-project-page.php" class="card-redirect">
         <div class="card-container">
-            <div class="card" style="background-image: linear-gradient(to bottom,#e7fcf4 ,#bcd0f4,#6d79a2); ">
-                <h1><i class="fa-solid fa-arrows-spin fa-xl"></i>WORKING</h1>
+            <div class="card" ">
+                <h1><i class="fa-solid fa-pencil"></i> WORKING</h1>
                 <div class="card-content">
                     <h1><?=$working?></h1>
                     <h2 class="label">Tasks</h2>
                 </div>
             </div>
-            <div class="card" style="background-image: linear-gradient(to bottom,#ede7c8 ,#f6d9c5,#b68383);">
-                <h1><i class="fa-solid fa-clock fa-xl"></i>PENDING</h1>
+            <div class="card">
+                <h1><i class="fa-solid fa-hourglass-half"></i> PENDING</h1>
                 <div class="card-content">
                     <h1><?=$pending?></h1>
                     <h2 class="label">Tasks</h2>
                 </div>
             </div>
-            <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
-                <h1><i class="fa-solid fa-check fa-xl"></i>COMPLETED</h1>
+            <div class="card">
+                <h1><i class="fa-solid fa-check fa-l"></i>COMPLETED</h1>
                 <div class="card-content">
                     <h1><?=$completed?></h1>
                     <h2 class="label">Tasks</h2>
                 </div>
             </div>
-            <div class="card" style="background-image: linear-gradient(to bottom,#c8edd1 ,#a4d3cf,#99b3c9); ">
-                <h1><i class="fa-solid fa-check fa-xl"></i>CANCELLED</h1>
+            <div class="card">
+                <h1><i class="fa-solid fa-xmark"></i> CANCELLED</h1>
                 <div class="card-content">
                     <h1><?=$cancelled?></h1>
                     <h2 class="label">Tasks</h2>

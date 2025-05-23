@@ -26,10 +26,6 @@ $mes->execute(['userId' => $id]);
 $mes->execute();
 $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
 
-
-
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,12 +41,6 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
     <title>Navigation Template</title>
 </head>
 <body>
-
-<!--<!-- Floating message button -->-->
-<!--<div class="float-message" id="float-message">-->
-<!--    <h3><i class="fa-solid fa-message"></i></h3>-->
-<!--</div>-->
-
 <div class="topvar">
     <div class="logo">
         <img src="../imgs/inl2Logo.png" alt="">
@@ -77,50 +67,13 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
             <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
             <li><a href="salary.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
             <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification (<?=$resNotif['count']?>)</a></li>
-             <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message (<?=$mesNotif['countMes']?>)</a></li>
+             <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
             <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
-            <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i><?=$res['USER_ID'] ."<br>"?></a></li>
         </ul>
 
         <div class="lower-content">
             <button class="btn-top" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
         </div>
-
-        <!-- Message Modal -->
-<!--        <div id="message" class="modal-msg" style="display:none;">-->
-<!--            <div class="modal-msg-content">-->
-<!--                <span class="close">&times;</span>-->
-<!--                <h1 style="font-weight: bold">MESSAGE</h1>-->
-<!---->
-<!--                <div class="message">-->
-<!--                    <form action="--><?php //= htmlspecialchars($_SERVER['PHP_SELF']) ?><!--" method="post" class="message-form" enctype="multipart/form-data">-->
-<!--                        <div class="info">-->
-<!--                            <label for="">To </label>-->
-<!--                            <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" ><br>-->
-<!--                            <label for="">Subject </label>-->
-<!--                            <input type="text" name="subject" placeholder="Add Subject" ><br>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div id="search-results" class="result"></div>-->
-<!---->
-<!--                        <label for="">Message</label>-->
-<!--                        <textarea name="message"  placeholder="Type here..."></textarea><br>-->
-<!---->
-<!--                        <div class="info">-->
-<!--                            <button class="send" type="submit" name="action" value="login"><i class="fa-regular fa-paper-plane"></i> Send</button>-->
-<!--                            <span style="color: red">-->
-<!--                                --><?php
-//                                foreach ($error as $error) {
-//                                    echo $error . "<br>";
-//                                }
-//                                ?>
-<!--                            </span>-->
-<!---->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
 
         <div class="help">
             <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
@@ -129,30 +82,6 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-    // function search(input){
-    //     if(input.length==0){
-    //         document.getElementById("search-results").innerHTML = "";
-    //         return;
-    //     }
-    //
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.onreadystatechange=function() {
-    //         if(this.readyState==4 && this.status==200){
-    //             document.getElementById("search-results").innerHTML = this.responseText;
-    //         } else {
-    //             document.getElementById("search-results").innerHTML = "No Results Found";
-    //         }
-    //     }
-    //     xhr.open("GET","search.php?keyword=" + input,true);
-    //     xhr.send();
-    // }
-    //
-    // function selectUser(userName) {
-    //     document.querySelector('input[name="keyword"]').value = userName;
-    //     document.getElementById("search-results").innerHTML = "";
-    // }
-    //
-    //
     function myFunction() {
         let text = "Do you want to log-out?";
         if (confirm(text) === true){
