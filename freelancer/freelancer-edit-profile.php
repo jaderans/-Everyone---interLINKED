@@ -8,6 +8,7 @@ $slave_con = connectToDatabase(3307);
 $error = [];
 $saved = [];
 
+
 function clean_text($data) {
     return htmlspecialchars(trim($data));
 }
