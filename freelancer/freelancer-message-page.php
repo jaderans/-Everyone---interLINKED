@@ -1,10 +1,6 @@
 <?php
 include_once 'freelancer-navbar-template.php';
-
-if (!isset($_SESSION['userName']) || empty($_SESSION['userName'])) {
-    header("Location: ../loginSignup/login.php");  // Redirect to login or another page
-    exit();
-}
+include_once 'SecurityCheck.php';
 include_once 'interlinkedDB.php';
 
 // Redirect if session userName is not set or empty

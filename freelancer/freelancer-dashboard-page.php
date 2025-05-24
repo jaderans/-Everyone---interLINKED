@@ -1,6 +1,8 @@
 <?php
 include 'freelancer-navbar-template.php' ;
 include_once 'interlinkedDB.php';
+include_once 'SecurityCheck.php';
+
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
 
