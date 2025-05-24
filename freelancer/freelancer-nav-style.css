@@ -110,7 +110,7 @@
 
 .side-content {
     list-style-type: none;
-    padding: 10px;
+    padding: 2px;
     margin: 10px;
     width: 100%;
 }
@@ -140,7 +140,7 @@
     text-decoration: none;
     color: #595959;
     font-weight: 700;
-    padding: 15px;
+    padding: 9px;
     display: block;
     border-radius: 10px;
     width: 80%;

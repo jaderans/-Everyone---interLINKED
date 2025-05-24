@@ -42,7 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notifId'])) {
     $stmt = $master_con->prepare("UPDATE notifications SET NOTIF_STATUS = 'Read' WHERE NOTIF_ID = :notifId");
     $stmt->bindParam(':notifId', $notifId);
     $stmt->execute();
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
+
+
+$notif = $slave_con->prepare("SELECT COUNT(*) as count FROM notifications WHERE NOTIF_STATUS = 'Unread' and USER_ID =:userId ;");
+$notif->execute(['userId' => $id]);
+$notif->execute();
+$resNotif = $notif->fetch(PDO::FETCH_ASSOC);
+
+$notif = $slave_con->prepare("SELECT COUNT(*) as countUnread FROM notifications WHERE NOTIF_STATUS = 'Read' and USER_ID =:userId ;");
+$notif->execute(['userId' => $id]);
+$notif->execute();
+$unreadNotif = $notif->fetch(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -69,6 +83,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notifId'])) {
                     <input type="hidden" name="sort" value="DESC">
                     <button type="submit" class="btn-sort">Newest</button>
                 </form>
+                
+                <div class="sum">
+                    <p>Unread <?=$resNotif['count']?></p>
+                </div>
+
+                <div class="sum">
+                    <p>Read <?=$unreadNotif['countUnread']?></p>
+                </div>
             </div>
         </div>
 

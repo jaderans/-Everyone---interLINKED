@@ -21,6 +21,7 @@ $notif->execute(['userId' => $id]);
 $notif->execute();
 $resNotif = $notif->fetch(PDO::FETCH_ASSOC);
 
+
 $mes = $slave_con->prepare("SELECT COUNT(*) as countMes FROM email WHERE EM_STATUS = 'Unread' and USER_ID =:userId ;");
 $mes->execute(['userId' => $id]);
 $mes->execute();
@@ -66,7 +67,14 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
             <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i> Dashboard</a></li>
             <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
             <li><a href="salary.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
-            <li><a href="freelancer-notification-page.php"><i class="fa-solid fa-bell"></i> Notification (<?=$resNotif['count']?>)</a></li>
+            <li><a href="freelancer-notification-page.php">
+                        <?php if ($resNotif['count'] > 0) { ?>
+                            <i class="fa-solid fa-bell" style="color: #9d3a3a"></i>
+                        <?php } else{ ?>
+                            <i class="fa-solid fa-bell"></i>
+                        <?php  } ?>
+                                Notifications</a>
+            </li>
              <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
             <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
         </ul>

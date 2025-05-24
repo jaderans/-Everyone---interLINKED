@@ -311,6 +311,20 @@ table {
     font-size: 14px;
 }
 
+.sum{
+    background-color: #357e7e;
+    text-align: center;
+    align-items: center;
+    height: 19px;
+    padding: 1px;
+    font-size: 13px;
+    color: white;
+    margin-top: 20px;
+    border-radius: 10px;
+    width: 100px;
+    margin-left: 25px;
+}
+
 .title {
     background-color: #f8f8f8;
     border-radius: 15px;

@@ -17,20 +17,31 @@ foreach ($result as $res) {
 }
 
 $id = $_SESSION['USER_ID'];
+$filter = $_GET['filter'] ?? 'received';
 
-$stmt = $slave_con->prepare("
-    SELECT email.*, user.USER_NAME
-    FROM email
-    INNER JOIN user ON email.USER_ID = user.USER_ID
-    WHERE email.EM_RECEPIENT = :user
-    ORDER BY email.EM_ID DESC
-");
-$stmt->execute(['user' => $user]);
+if ($filter === 'sent') {
+    $stmt = $slave_con->prepare("
+        SELECT email.*, user.USER_NAME
+        FROM email
+        INNER JOIN user ON email.EM_RECEPIENT = user.USER_NAME
+        WHERE email.USER_ID = :user_id
+        ORDER BY email.EM_ID DESC
+    ");
+    $stmt->execute(['user_id' => $id]);
+} else {
+    $stmt = $slave_con->prepare("
+        SELECT email.*, user.USER_NAME
+        FROM email
+        INNER JOIN user ON email.USER_ID = user.USER_ID
+        WHERE email.EM_RECEPIENT = :user
+        ORDER BY email.EM_ID DESC
+    ");
+    $stmt->execute(['user' => $user]);
+}
 $result = $stmt->fetchAll();
 
 
 $inputRecipient = $inputSubject = $inputMessage = '';
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $recipient = $_POST['keyword'];
     $subject = $_POST['subject'];
@@ -47,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
     $stmt->execute(['recipient' => $recipient]);
     $recipientUser = $stmt->fetch();
+
 
     if (!$recipientUser) {
         $error[] = "User does not exist";
@@ -74,17 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':em_comp', $message);
         $stmt->bindParam(':em_recipient', $recipient);
         $result = $stmt->execute();
-
-        $stmt = $slave_con->prepare("
-        SELECT email.*, user.USER_NAME
-        FROM email
-        INNER JOIN user ON email.USER_ID = user.USER_ID
-        WHERE email.EM_RECEPIENT = :user
-        ORDER BY email.EM_ID DESC
-        ");
-        $stmt->execute(['user' => $user]);
-        $result = $stmt->fetchAll();
-
 
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -115,14 +116,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="email">
             <div class="messages">
                 <h1>Messages</h1>
-                <h1><?=$user?></h1>
-                <h1><?=$id?></h1>
+                <div class="message-filter">
+                    <form method="get" action="">
+                        <button type="submit" name="filter" value="received" class="btn-edit">Received</button>
+                        <button type="submit" name="filter" value="sent" class="btn-edit">Sent</button>
+                    </form>
+                </div>
 
                 <div class="message-content">
-<!--                    enclose the msg with for each later-->
+
+
+                    <!--                    enclose the msg with for each later-->
                     <?php foreach ($result as $res) {?>
                         <div class="msg">
-                            <h4>From: <?=$res['USER_NAME']?></h4>
+                            <h4><?= $filter === 'sent' ? 'To' : 'From' ?>: <?=$res['USER_NAME']?></h4>
                             <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
                             <h4>Test ID: <?=$res['EM_ID']?></h4>
                             <p><?=$res['EM_COMP']?></p>
