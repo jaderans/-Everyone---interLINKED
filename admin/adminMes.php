@@ -10,6 +10,19 @@ $search = $_GET['search'] ?? '';
 $userName = $_SESSION['userName'];
 $id = $_SESSION['user_id'];
 
+
+$userName = $_SESSION['userName'];
+$stmt = $slave_con->prepare("SELECT * FROM user WHERE USER_ID = ?");
+$stmt->execute([$id]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($result as $res) {
+    $_SESSION['USER_NAME'] = $res['USER_NAME'];
+}
+
+$userNameProfile = $_SESSION['USER_NAME'];
+
+
 function fetchUsers($conn, $type, $search = '') {
     // Determine if we want applicants or non-applicants
     $typeCondition = $type === 'Applicant' ? "USER_TYPE = 'Applicant'" : "USER_TYPE != 'Applicant'";
@@ -58,7 +71,7 @@ $stmt = $slave_con->prepare("
     WHERE email.EM_RECEPIENT = :user
     ORDER BY email.EM_ID DESC
 ");
-$stmt->execute(['user' => $userName]);
+$stmt->execute(['user' => $userNameProfile]);
 $result = $stmt->fetchAll();
 
 
@@ -66,63 +79,63 @@ $inputRecipient = $inputSubject = $inputMessage = '';
 $error = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-$recipient = $_POST['keyword'];
-$subject = $_POST['subject'];
-$message = $_POST['message'];
+    $recipient = $_POST['keyword'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
 
 
-$hasError = false;
+    $hasError = false;
 
-if (empty($recipient)) {
-    $error[] = "Recipient name is required";
-    $hasError = true;
-}
+    if (empty($recipient)) {
+        $error[] = "Recipient name is required";
+        $hasError = true;
+    }
 
-$stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
-$stmt->execute(['recipient' => $recipient]);
-$recipientUser = $stmt->fetch();
+    $stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
+    $stmt->execute(['recipient' => $recipient]);
+    $recipientUser = $stmt->fetch();
 
-if (!$recipientUser) {
-    $error[] = "User does not exist";
-    $hasError = true;
-}
+    if (!$recipientUser) {
+        $error[] = "User does not exist";
+        $hasError = true;
+    }
 
-if (empty($subject)) {
-    $error[] = "Subject is required";
-    $hasError = true;
-}
-if (empty($message)) {
-    $error[] = "Message is required";
-    $hasError = true;
-}
+    if (empty($subject)) {
+        $error[] = "Subject is required";
+        $hasError = true;
+    }
+    if (empty($message)) {
+        $error[] = "Message is required";
+        $hasError = true;
+    }
 
-if ($hasError) {
-    $inputRecipient = htmlspecialchars($recipient);
-    $inputSubject = htmlspecialchars($subject);
-    $inputMessage = htmlspecialchars($message);
-} else {
-    $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS)
-        VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread')");
-    $stmt->bindParam(':user_id', $id);
-    $stmt->bindParam(':em_subject', $subject);
-    $stmt->bindParam(':em_comp', $message);
-    $stmt->bindParam(':em_recipient', $recipient);
-    $result = $stmt->execute();
+    if ($hasError) {
+        $inputRecipient = htmlspecialchars($recipient);
+        $inputSubject = htmlspecialchars($subject);
+        $inputMessage = htmlspecialchars($message);
+    } else {
+        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS)
+            VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread')");
+        $stmt->bindParam(':user_id', $id);
+        $stmt->bindParam(':em_subject', $subject);
+        $stmt->bindParam(':em_comp', $message);
+        $stmt->bindParam(':em_recipient', $recipient);
+        $result = $stmt->execute();
 
-    $stmt = $slave_con->prepare("
-        SELECT email.*, user.USER_NAME
-        FROM email
-        INNER JOIN user ON email.USER_ID = user.USER_ID
-        WHERE email.EM_RECEPIENT = :user
-        ORDER BY email.EM_ID DESC
-        ");
-    $stmt->execute(['user' => $userName]);
-    $result = $stmt->fetchAll();
+        $stmt = $slave_con->prepare("
+            SELECT email.*, user.USER_NAME
+            FROM email
+            INNER JOIN user ON email.USER_ID = user.USER_ID
+            WHERE email.EM_RECEPIENT = :user
+            ORDER BY email.EM_ID DESC
+            ");
+        $stmt->execute(['user' => $userName]);
+        $result = $stmt->fetchAll();
 
 
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
 
 }
 
@@ -186,6 +199,8 @@ if ($hasError) {
     <div class="message-container">
         <div class="messages">
             <h1>INBOX</h1>
+<!--            <p>--><?php //=$userName?><!--</p>-->
+<!--            <p>--><?php //=$userNameProfile?><!--</p>-->
             <div class="message-content">
                 <!--                    enclose the msg with for each later-->
                 <?php foreach ($result as $res) {?>
