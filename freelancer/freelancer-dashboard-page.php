@@ -23,7 +23,7 @@ $pro = $slave_con->prepare("
         COUNT(*) AS count 
     FROM projects 
     WHERE USER_ID = ? 
-      AND PRO_STATUS IN ('Pending', 'Working', 'Ongoing', 'Completed', 'Cancelled') 
+      AND PRO_STATUS IN ('Pending', 'Submitted', 'Ongoing', 'Completed', 'Cancelled') 
     GROUP BY PRO_STATUS
 ");
 $pro->execute([$id]);
@@ -33,7 +33,7 @@ $results = $pro->fetchAll(PDO::FETCH_ASSOC);
 // Initialize all statuses to 0
 $statuses = [
     'Pending' => 0,
-    'Working' => 0,
+    'Submitted' => 0,
     'Ongoing' => 0,
     'Completed' => 0,
     'Cancelled' => 0
@@ -46,14 +46,10 @@ foreach ($results as $row) {
 
 // Now you can use:
 $pending = $statuses['Pending'];
-$working = $statuses['Working'];
+$submitted = $statuses['Submitted'];
 $ongoing = $statuses['Ongoing'];
 $completed = $statuses['Completed'];
 $cancelled = $statuses['Cancelled'];
-
-
-
-
 
 ?>
 <!doctype html>
@@ -75,7 +71,7 @@ $cancelled = $statuses['Cancelled'];
 <div class="container-dashboard">
     <div class="inner">
         <a href="freelancer-project-page.php" class="card-redirect">
-            <div id="myChart" style="width:100%; max-width:400px; height:400px;" class="card"></div>
+            <div id="myChart" style="width:100%; max-width:400px; height:400px;" class="card-chart"></div>
         </a>
 
         <div class="content-card">
@@ -109,9 +105,9 @@ $cancelled = $statuses['Cancelled'];
     <a href="freelancer-project-page.php" class="card-redirect">
         <div class="card-container">
             <div class="card" ">
-                <h1><i class="fa-solid fa-pencil"></i> WORKING</h1>
+                <h1><i class="fa-solid fa-pencil"></i> SUBMITTED</h1>
                 <div class="card-content">
-                    <h1><?=$working?></h1>
+                    <h1><?=$submitted?></h1>
                     <h2 class="label">Tasks</h2>
                 </div>
             </div>
@@ -148,7 +144,7 @@ $cancelled = $statuses['Cancelled'];
     function drawChart() {
         const data = google.visualization.arrayToDataTable([
             ['Commission', 'Mhl'],
-            ['Working', <?= $working ?>],
+            ['Submitted', <?= $submitted ?>],
             ['Ongoing', <?= $ongoing ?>],
             ['Pending', <?= $pending ?>],
             ['Completed', <?= $completed ?>],

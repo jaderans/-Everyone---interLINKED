@@ -18,6 +18,24 @@ foreach ($result as $res) {
 
 $id = $_SESSION['USER_ID'];
 
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $stmt = $slave_con->prepare("SELECT USER_IMG FROM user WHERE USER_ID = :id");
+    $stmt->execute(['id' => $id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && $user['USER_IMG']) {
+        header("Content-Type: image/jpeg"); // Adjust if you're supporting other formats
+        echo $user['USER_IMG'];
+        exit;
+    }
+}
+
+http_response_code(404);
+echo "Image not found.";
+
 ?>
 
 
@@ -45,7 +63,7 @@ $id = $_SESSION['USER_ID'];
     <div class="content">
         <div class="profile-img">
             <div class="img">
-                <img src="show-profile-img.php?id=<?= htmlspecialchars($result['USER_ID']) ?>" alt="Profile Image">
+                <img src="getUserImage.php?id=<?= htmlspecialchars($id) ?>" alt="Profile Image" style="max-width: 200px;">
             </div>
 
             <div class="profile-name">
@@ -60,7 +78,6 @@ $id = $_SESSION['USER_ID'];
         </div>
         <div class="profile-details">
             <div class="details">
-<!--                <img src="show-profile-img.php?id=--><?php //= htmlspecialchars($result['USER_ID']) ?><!--" alt="Profile Image">-->
                 <h1>Details</h1>
                 <?php foreach ($result as $res) { ?>
                     <table style="width:100%" class="table">

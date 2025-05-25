@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+include_once 'SecurityCheck.php';
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
 
@@ -27,6 +28,23 @@ $mes->execute(['userId' => $id]);
 $mes->execute();
 $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
 
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $stmt = $slave_con->prepare("SELECT USER_IMG FROM user WHERE USER_ID = :id");
+    $stmt->execute(['id' => $id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && $user['USER_IMG']) {
+        header("Content-Type: image/jpeg"); // Adjust if you're supporting other formats
+        echo $user['USER_IMG'];
+        exit;
+    }
+}
+
+http_response_code(404);
+//echo "Image not found.";
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -47,12 +65,10 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
         <img src="../imgs/inl2Logo.png" alt="">
     </div>
     <div class="top-right">
-        <div class="right-btn">
-            <!-- Optional Home Button -->
-            <!-- <button class="btn-top"><a href="../index.php"><i class="fa-solid fa-magnifying-glass"></i> Home</a></button> -->
-        </div>
         <div class="profile">
-            <a href="freelancer-profile-page.php"><img src="../imgs/profile.png" alt=""></a>
+            <div class="img">
+                <img src="getUserImage.php?id=<?= htmlspecialchars($id) ?>" alt="Profile Image">
+            </div>
         </div>
         <div class="name">
             <a href="freelancer-profile-page.php"><h4 style="font-weight: 700"><?= htmlspecialchars($user) ?></h4></a>
@@ -80,12 +96,16 @@ $mesNotif = $mes->fetch(PDO::FETCH_ASSOC);
         </ul>
 
         <div class="lower-content">
-            <button class="btn-top" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
+            <button class="btn-top" ><a href="https://drive.google.com/drive/folders/1Nr1mkELXDzzGG6DfkXlGW76BUxgBfa8f?usp=sharing" target="_blank"><i class="fa-solid fa-file-import"></i> Submit</a> </button>
+
+            <button class="btn-top" style="margin-top: 10px" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
+
+            <div class="help" style="text-align: left; margin-top: -15px">
+                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
+            </div>
         </div>
 
-        <div class="help">
-            <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
-        </div>
+
     </div>
 </div>
 

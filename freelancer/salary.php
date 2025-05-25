@@ -1,5 +1,5 @@
 <?php
-include_once 'SecurityCheck.php';
+//include_once 'SecurityCheck.php';
 ?>
 
 <!doctype html>

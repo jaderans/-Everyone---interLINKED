@@ -251,11 +251,10 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         <p class="credentials">Please edit your credentials</p>
         <div class="form-container">
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
-                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
                 <div class="form-group">
                     <div>
                         <label for="file">Update Profile</label>
-                        <input class="attach" type="file" id="img" name="img" accept="image/jpg">
+                        <input class="attach" type="file" id="img" name="img" accept="image/jpeg, image/png, image/gif">
                     </div>
                 </div>
                 <div class="form-group">

@@ -76,9 +76,10 @@ html, body{
 }
 
 .message-content {
-    max-height: 500px; /* or whatever height you want */
+    /*max-height: 500px; !* or whatever height you want *!*/
     overflow-y: auto;
     padding-right: 10px;
+    height: 80%;
 }
 
 .compose {
@@ -175,11 +176,11 @@ html, body{
     background-color: #eeeeee;
     border-radius: 50%;
     box-shadow: 0 0 20px #436a6d;
-
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    border: 2px solid #436a6d;
 }
 
 .profile-img .img img {
@@ -375,16 +376,15 @@ table {
 
 /*----------------------------------------------------------------------------------------------dashboard*/
 .card {
-    flex: 1; /* Each card will stretch equally */
-    border-radius: 20px;
+    border-left: 5px solid #436a6d;
+    flex: 1;
+    border-radius: 15px;
     background-color: #ffffff;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /*min-height: 60px;*/
     height: 180px;
-    background-size: cover;
     background-position: center;
     color: #0d3b3f;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
@@ -395,6 +395,22 @@ table {
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.card-chart {
+    flex: 1;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    background-position: center;
+    color: #0d3b3f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+    transition: 0.3s;
+    cursor: pointer;
 }
 
 

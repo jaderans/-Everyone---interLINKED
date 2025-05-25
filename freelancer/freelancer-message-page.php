@@ -3,8 +3,6 @@ include_once 'freelancer-navbar-template.php';
 include_once 'SecurityCheck.php';
 include_once 'interlinkedDB.php';
 
-// Redirect if session userName is not set or empty
-
 
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
@@ -23,6 +21,16 @@ foreach ($result as $res) {
 $id = $_SESSION['USER_ID'];
 $filter = $_GET['filter'] ?? 'received';
 
+$stmt = $slave_con->prepare("SELECT * FROM email WHERE EM_RECIPIENT_ID = ?");
+$stmt->execute([$id]);
+$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($res as $ressult) {
+    $_SESSION['EM_RECIPIENT_ID'] = $ressult['EM_RECIPIENT_ID'];
+}
+$resShow = $_SESSION['EM_RECIPIENT_ID'];
+
+
 if ($filter === 'sent') {
     $stmt = $slave_con->prepare("
         SELECT email.*, user.USER_NAME
@@ -37,20 +45,18 @@ if ($filter === 'sent') {
         SELECT email.*, user.USER_NAME
         FROM email
         INNER JOIN user ON email.USER_ID = user.USER_ID
-        WHERE email.EM_RECEPIENT = :user
+        WHERE email.EM_RECIPIENT_ID = :user
         ORDER BY email.EM_ID DESC
     ");
-    $stmt->execute(['user' => $user]);
+    $stmt->execute(['user' => $resShow]);
 }
 $result = $stmt->fetchAll();
-
 
 $inputRecipient = $inputSubject = $inputMessage = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $recipient = $_POST['keyword'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
-
 
     $hasError = false;
 
@@ -61,8 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
     $stmt->execute(['recipient' => $recipient]);
-    $recipientUser = $stmt->fetch();
+    $recipientUser = $stmt->fetchAll();
 
+    foreach ($recipientUser as $res) {
+        $_SESSION['RES_ID'] = $res['USER_ID'];
+        $_SESSION['RES_NAME'] = $res['USER_NAME'];
+    }
+    $resID = $_SESSION['RES_ID'];
+    $resName = $_SESSION['RES_NAME'];
 
     if (!$recipientUser) {
         $error[] = "User does not exist";
@@ -83,23 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $inputSubject = htmlspecialchars($subject);
         $inputMessage = htmlspecialchars($message);
     } else {
-        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS)
-        VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread')");
+        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS, EM_RECIPIENT_ID)
+        VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread',:resUser)");
         $stmt->bindParam(':user_id', $id);
         $stmt->bindParam(':em_subject', $subject);
         $stmt->bindParam(':em_comp', $message);
         $stmt->bindParam(':em_recipient', $recipient);
+        $stmt->bindParam(':resUser', $resID);
         $result = $stmt->execute();
 
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
-
-
     }
-
 }
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -125,18 +133,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button type="submit" name="filter" value="received" class="btn-edit">Received</button>
                         <button type="submit" name="filter" value="sent" class="btn-edit">Sent</button>
                     </form>
+
                 </div>
 
                 <div class="message-content">
-
-
-                    <!--                    enclose the msg with for each later-->
                     <?php foreach ($result as $res) {?>
                         <div class="msg">
                             <h4><?= $filter === 'sent' ? 'To' : 'From' ?>: <?=$res['USER_NAME']?></h4>
                             <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
-                            <h4>Test ID: <?=$res['EM_ID']?></h4>
-                            <p><?=$res['EM_COMP']?></p>
+                            <p>Message: <?=$res['EM_COMP']?></p>
                             <p><?=$res['EM_DATE']?></p>
 
                             <form action="freelancer-delete-message.php" method="post" class="form-delete"

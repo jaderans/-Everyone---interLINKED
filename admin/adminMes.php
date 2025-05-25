@@ -47,8 +47,6 @@ function fetchUsers($conn, $type, $search = '') {
     return $stmt;
 }
 
-
-
 $selectedUser = null;
 
 if (isset($_GET['id'])) {
@@ -64,15 +62,38 @@ $name = $_SESSION['userName'];
 
 
 //-------------------------------------------------------------------------Message
-$stmt = $slave_con->prepare("
-    SELECT email.*, user.USER_NAME
-    FROM email
-    INNER JOIN user ON email.USER_ID = user.USER_ID
-    WHERE email.EM_RECEPIENT = :user
-    ORDER BY email.EM_ID DESC
-");
-$stmt->execute(['user' => $userNameProfile]);
+$filter = $_GET['filter'] ?? 'received';
+
+$stmt = $slave_con->prepare("SELECT * FROM email WHERE EM_RECIPIENT_ID = ?");
+$stmt->execute([$id]);
+$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($res as $ressult) {
+    $_SESSION['EM_RECIPIENT_ID'] = $ressult['EM_RECIPIENT_ID'];
+}
+$resShow = $_SESSION['EM_RECIPIENT_ID'];
+
+if ($filter === 'sent') {
+    $stmt = $slave_con->prepare("
+        SELECT email.*, user.USER_NAME
+        FROM email
+        INNER JOIN user ON email.EM_RECEPIENT = user.USER_NAME
+        WHERE email.USER_ID = :user_id
+        ORDER BY email.EM_ID DESC
+    ");
+    $stmt->execute(['user_id' => $id]);
+} else {
+    $stmt = $slave_con->prepare("
+        SELECT email.*, user.USER_NAME
+        FROM email
+        INNER JOIN user ON email.USER_ID = user.USER_ID
+        WHERE email.EM_RECIPIENT_ID = :user
+        ORDER BY email.EM_ID DESC
+    ");
+    $stmt->execute(['user' => $resShow]);
+}
 $result = $stmt->fetchAll();
+
 
 
 $inputRecipient = $inputSubject = $inputMessage = '';
@@ -93,7 +114,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt = $slave_con->prepare("SELECT * FROM `user` WHERE USER_NAME = :recipient");
     $stmt->execute(['recipient' => $recipient]);
-    $recipientUser = $stmt->fetch();
+    $recipientUser = $stmt->fetchAll();
+
+    foreach ($recipientUser as $res) {
+        $_SESSION['RES_ID'] = $res['USER_ID'];
+        $_SESSION['RES_NAME'] = $res['USER_NAME'];
+    }
+    $resID = $_SESSION['RES_ID'];
+    $resName = $_SESSION['RES_NAME'];
 
     if (!$recipientUser) {
         $error[] = "User does not exist";
@@ -114,23 +142,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $inputSubject = htmlspecialchars($subject);
         $inputMessage = htmlspecialchars($message);
     } else {
-        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS)
-            VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread')");
+        $stmt = $master_con->prepare("INSERT INTO email(USER_ID, EM_SUBJECT, EM_COMP, EM_RECEPIENT, EM_DATE, EM_STATUS, EM_RECIPIENT_ID)
+        VALUES (:user_id, :em_subject, :em_comp, :em_recipient, CURRENT_TIMESTAMP, 'Unread',:resUser)");
         $stmt->bindParam(':user_id', $id);
         $stmt->bindParam(':em_subject', $subject);
         $stmt->bindParam(':em_comp', $message);
         $stmt->bindParam(':em_recipient', $recipient);
+        $stmt->bindParam(':resUser', $resID);
         $result = $stmt->execute();
-
-        $stmt = $slave_con->prepare("
-            SELECT email.*, user.USER_NAME
-            FROM email
-            INNER JOIN user ON email.USER_ID = user.USER_ID
-            WHERE email.EM_RECEPIENT = :user
-            ORDER BY email.EM_ID DESC
-            ");
-        $stmt->execute(['user' => $userName]);
-        $result = $stmt->fetchAll();
 
 
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -196,64 +215,73 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <div class="message-container">
-        <div class="messages">
-            <h1>INBOX</h1>
-<!--            <p>--><?php //=$userName?><!--</p>-->
-<!--            <p>--><?php //=$userNameProfile?><!--</p>-->
-            <div class="message-content">
-                <!--                    enclose the msg with for each later-->
-                <?php foreach ($result as $res) {?>
-                    <div class="msg">
-                        <h4>From: <?=$res['USER_NAME']?></h4>
-                        <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
-                        <h4>Test ID: <?=$res['EM_ID']?></h4>
-                        <p><?=$res['EM_COMP']?></p>
-                        <p><?=$res['EM_DATE']?></p>
+    <div class="container">
+        <div class="email">
+            <div class="messages">
+                <h1>Messages</h1>
+                <div class="message-filter">
+                    <form method="get" action="">
+                        <button type="submit" name="filter" value="received" class="btn-edit">Received</button>
+                        <button type="submit" name="filter" value="sent" class="btn-edit">Sent</button>
+                    </form>
 
-                        <form action="admin-delete-message.php" method="post" class="form-delete"
-                              onsubmit="return confirm('Are you sure you want to delete this notification?');">
-                            <button class="btn-delete" name="message-id" value="<?= $res['EM_ID'] ?>"><i class="fa-solid fa-trash fa-1.5xl" <i class="fa-solid fa-trash" style="color: #9f3535;"></i></i></button>
-                        </form>
-                    </div>
-                <?php }?>
+                </div>
 
+                <div class="message-content">
+                    <?php foreach ($result as $res) {?>
+                        <div class="msg">
+                            <h4><?= $filter === 'sent' ? 'To' : 'From' ?>: <?=$res['USER_NAME']?></h4>
+                            <h4>Subject: <?=$res['EM_SUBJECT']?></h4>
+<!--                            <h4>Test ID: --><?php //=$res['EM_ID']?><!--</h4>-->
+                            <p>Message: <?=$res['EM_COMP']?></p>
+                            <p><?=$res['EM_DATE']?></p>
+
+                            <form action="admin-delete-message.php" method="post" class="form-delete"
+                                  onsubmit="return confirm('Are you sure you want to delete this notification?');">
+                                <button class="btn-delete" name="message-id" value="<?= $res['EM_ID'] ?>"><i class="fa-solid fa-trash fa-1.5xl" <i class="fa-solid fa-trash" style="color: #9f3535;"></i></i></button>
+                            </form>
+                        </div>
+                    <?php }?>
+
+                </div>
             </div>
-        </div>
-        <div class="compose">
-            <h1>Compose</h1>
-            <div class="message-area">
-                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="message-form" enctype="multipart/form-data">
-                    <div class="info">
-                        <label for="">To </label>
-                        <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" value="<?= htmlspecialchars($inputRecipient) ?>" autocomplete="off"><br>
-                        <label for="">Subject </label>
-                        <input type="text" name="subject" placeholder="Add Subject" value="<?= htmlspecialchars($inputSubject) ?>" autocomplete="off"><br>
-                        <div id="search-results" class="result"></div>
-                    </div>
+            <div class="compose">
+                <h1>Compose</h1>
+                <div class="message-area">
+                    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="message-form" enctype="multipart/form-data">
+                        <div class="info">
+                            <label for="">To </label>
+                            <input type="text" name="keyword" placeholder="Admin" onkeyup="search(this.value)" value="<?= htmlspecialchars($inputRecipient) ?>" autocomplete="off"><br>
+                            <label for="">Subject </label>
+                            <input type="text" name="subject" placeholder="Add Subject" value="<?= htmlspecialchars($inputSubject) ?>" autocomplete="off"><br>
+                            <div id="search-results" class="result"></div>
+                        </div>
 
 
-                    <div class="type">
-                        <label for="">Message</label>
-                        <textarea name="message" placeholder="Type here..."><?= htmlspecialchars($inputMessage) ?></textarea><br>
-                    </div>
+                        <div class="type">
+                            <label for="">Message</label>
+                            <textarea name="message" placeholder="Type here..."><?= htmlspecialchars($inputMessage) ?></textarea><br>
+                        </div>
 
 
-                    <div class="info">
-                        <button class="send" type="submit" name="action" value="login"><i class="fa-regular fa-paper-plane"></i> Send</button>
-                        <span style="color: red">
+                        <div class="info">
+                            <button class="send" type="submit" name="action" value="login"><i class="fa-regular fa-paper-plane"></i> Send</button>
+                            <span style="color: red">
                                 <?php
-                                foreach ($error as $err) {
-                                    echo "<p> $err </p>" . "<br>";
+                                foreach ($error as $error) {
+                                    echo $error . "<br>";
                                 }
                                 ?>
                             </span>
 
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
+
 
     <script>
         function search(input) {
