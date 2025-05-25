@@ -1,15 +1,17 @@
 <?php
 session_start();
-include('interlinkedDB.php');
+require('../applicant/db_config.php'); // includes $master_db, $slave_db, generateNewUserId()
 
 function clean_text($text) {
     return htmlspecialchars(trim($text));
 }
-$userName = isset($_SESSION['userName']) ? $_SESSION['userName'] : '';
-$userType = isset($_SESSION['type']) ? $_SESSION['type'] : '';
+
+// Get session/user data
+$userName = $_SESSION['userName'] ?? '';
+$userType = $_SESSION['type'] ?? '';
 $password = isset($_POST['pass']) ? clean_text($_POST['pass']) : '';
 $confirmPassword = isset($_POST['conPass']) ? clean_text($_POST['conPass']) : '';
-$email = isset($_POST['email']) ? $_POST['email'] : '';
+$email = $_POST['email'] ?? '';
 $phone = isset($_POST['phone']) ? clean_text($_POST['phone']) : '';
 $firstName = isset($_POST['firstName']) ? clean_text($_POST['firstName']) : '';
 $lastName = isset($_POST['lastName']) ? clean_text($_POST['lastName']) : '';
@@ -24,42 +26,34 @@ if (isset($_GET['reset'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
-
     $_SESSION["email"] = $email;
-    $_SESSION["type"] = isset($_POST['type']) ? clean_text($_POST['type']) : $userType;
+    $_SESSION["type"] = $_POST['type'] ?? $userType;
     $userType = $_SESSION["type"];
 
     if ($_POST['action'] == "next") {
-        if (empty($firstName)) {
-            $fstNameMsg = "First name is required <br>";
-        }
-        if (empty($lastName)) {
-            $lstNameMsg = "Last name is required <br>";
-        }
+        if (empty($firstName)) $fstNameMsg = "First name is required <br>";
+        if (empty($lastName)) $lstNameMsg = "Last name is required <br>";
 
         if (empty($email)) {
             $emailMsg = "Email is required <br>";
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $emailMsg = "Input a valid email address <br>";
+            $emailMsg = "Invalid email format <br>";
         } else {
-            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_EMAIL = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $emailMsg = "A user already exists with this email.";
+            $stmt = $slave_con->prepare("SELECT 1 FROM USER WHERE USER_EMAIL = ?");
+            $stmt->execute([$email]);
+            if ($stmt->fetch()) {
+                $emailMsg = "Email already exists.";
             }
         }
 
         if (empty($password)) {
             $passMsg = "Password is required.";
         } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
-            $passMsg = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+            $passMsg = "Password must be at least 8 characters, including upper, lower, number, and special character.";
         }
 
         if (empty($confirmPassword)) {
-            $conpassMsg = "Confirm your password <br>";
+            $conpassMsg = "Please confirm your password <br>";
         } elseif ($password !== $confirmPassword) {
             $conpassMsg = "Passwords do not match <br>";
         }
@@ -77,126 +71,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         }
 
         if (empty($fstNameMsg) && empty($lstNameMsg) && empty($passMsg) && empty($conpassMsg) && empty($phoneMsg) && empty($bdayMsg)) {
+            try {
+                $userId = generateUserId($slave_con);
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $birthday = date("Y-m-d", strtotime($birthday));
 
-//                $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // secure password storage
+                $stmt = $master_con->prepare("INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME) 
+                                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $hashedPassword, $userName]);
 
-            $userIdPrefix = "25-INTL-";
+                $_SESSION['user_id'] = $userId;
 
-            $query = "SELECT USER_ID FROM USER WHERE USER_ID LIKE ? ORDER BY CAST(SUBSTRING_INDEX(USER_ID, '-', -1) AS UNSIGNED) DESC LIMIT 1";
-            if ($stmt = $conn->prepare($query)) {
-                $likePattern = $userIdPrefix . "%";
-                $stmt->bind_param("s", $likePattern);
-                $stmt->execute();
-                $stmt->bind_result($lastUserId);
-                $stmt->fetch();
-                $stmt->close();
-
-                if ($lastUserId) {
-                    $numericPart = (int) substr($lastUserId, strrpos($lastUserId, '-') + 1);
-                    $newUserIdNumber = $numericPart + 1;
+                if ($_SESSION['application_data']['user_type'] === "Client") {
+                    header("Location: ../client/clientHome.php");
+                } elseif ($_SESSION['application_data']['user_type'] === "Freelancer") {
+                    header("Location: ../applicant/categories.php");
                 } else {
-                    $newUserIdNumber = 1;
+                    header("Location: FormSignUser.php");
                 }
-            } else {
-                $newUserIdNumber = 1;
-            }
-
-            do {
-                $formattedNumber = str_pad($newUserIdNumber, 5, '0', STR_PAD_LEFT);
-                $userId = $userIdPrefix . $formattedNumber;
-
-                $checkQuery = "SELECT USER_ID FROM USER WHERE USER_ID = ?";
-                $checkStmt = $conn->prepare($checkQuery);
-                $checkStmt->bind_param("s", $userId);
-                $checkStmt->execute();
-                $checkStmt->store_result();
-
-                $exists = $checkStmt->num_rows > 0;
-                $checkStmt->close();
-
-                if ($exists) {
-                    $newUserIdNumber++;
-                }
-            } while ($exists);
-
-
-            $birthday = date("Y/m/d", strtotime($birthday));
-
-            $sql = "INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("sssssssss", $userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $password, $userName);
-
-                if ($stmt->execute()) {
-                    $_SESSION['user_id'] = $userId;
-
-                    // Generate type-based ID for specific table
-                    $typePrefixes = [
-                        "Client" => "CL25-",
-                        "Freelancer" => "FR25-"
-                    ];
-                    $typeIdPrefix = $typePrefixes[$userType];
-
-                    $typeTables = [
-                        "Client" => ["table" => "CLIENT", "column" => "CL_ID"],
-                        "Freelancer" => ["table" => "FREELANCER", "column" => "FR_ID"]
-                    ];
-
-                    $typeTable = $typeTables[$userType]["table"];
-                    $typeColumn = $typeTables[$userType]["column"];
-
-                    $query = "SELECT $typeColumn FROM $typeTable WHERE $typeColumn LIKE ? ORDER BY CAST(SUBSTRING_INDEX($typeColumn, '-', -1) AS UNSIGNED) DESC LIMIT 1";
-                    if ($stmt = $conn->prepare($query)) {
-                        $likePattern = $typeIdPrefix . "%";
-                        $stmt->bind_param("s", $likePattern);
-                        $stmt->execute();
-                        $stmt->bind_result($lastTypeId);
-                        $stmt->fetch();
-                        $stmt->close();
-
-                        if ($lastTypeId) {
-                            $numericPart = (int) substr($lastTypeId, strrpos($lastTypeId, '-') + 1);
-                            $newTypeIdNumber = $numericPart + 1;
-                        } else {
-                            $newTypeIdNumber = 1;
-                        }
-                    } else {
-                        $newTypeIdNumber = 1;
-                    }
-
-                    $formattedNumber = str_pad($newTypeIdNumber, 5, '0', STR_PAD_LEFT);
-                    $typeUserId = $typeIdPrefix . $formattedNumber;
-
-
-                    if ($userType === "Client") {
-                        $sql = "INSERT INTO CLIENT(CL_ID, USER_ID) VALUES (?, ?)";
-                        if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("ss", $typeUserId, $userId);
-                            $stmt->execute();
-                            $stmt->close();
-                        }
-                        header("Location: ../client/clientHome.php");
-                        exit();
-                    } elseif ($userType === "Freelancer") {
-                        $sql = "INSERT INTO FREELANCER(FR_ID, USER_ID) VALUES (?, ?)";
-                        if ($stmt = $conn->prepare($sql)) {
-                            $stmt->bind_param("ss", $typeUserId, $userId);
-                            $stmt->execute();
-                            $stmt->close();
-                        }
-                        header("Location: ../freelancer/frlanceHome.php");
-                        exit();
-                    } else {
-                        header("Location: FormSignUser.php");
-                    }
-                } else {
-                    $userErr = "Something went wrong while creating your account.";
-                }
-                $stmt->close();
+            } catch (PDOException $e) {
+                $userErr = "Error: " . $e->getMessage();
             }
         }
     }
 }
+
+$_SESSION['application_data']['user_id'] = $userId ?? null;
+$_SESSION['application_data']['user_email'] = $email;
+$_SESSION['application_data']['user_type'] = $userType;
+$_SESSION['application_data']['user_name'] = $userName;
+$_SESSION['application_data']['first_name'] = $firstName;
+$_SESSION['application_data']['last_name'] = $lastName;
+$_SESSION['application_data']['birthday'] = $birthday;
+$_SESSION['application_data']['contact'] = $phone;
+
 ?>
 
 <!-- HTML -->
