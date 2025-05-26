@@ -153,18 +153,18 @@ $cancelled = $statuses['Cancelled'];
 
         const options = {
             title: 'Tasks',
-            width: 400,    // Control chart size here
-            height: 400,
+            width: 370,    // Control chart size here
+            height: 370,
             legend: {
                 position: 'bottom',   // Move labels to bottom
                 alignment: 'center',
                 textStyle: { fontSize: 14 }
             },
             chartArea: {
-                left: 0,
-                top: 20,
-                width: '100%',
-                height: '60%'
+                left: 20,
+                top: 40,
+                width: '90%',
+                height: '70%'
             },
             colors: ['#81b7e5', '#cb8a76', '#60b981'],
             pieHole: 1,   // Optional: set to 0.4 if you want a donut chart

@@ -12,16 +12,16 @@ html, body{
     height: 100vh;
 }
 
- .priority-badge {
-     display: inline-block;
-     padding: 4px 15px;
-     border-radius: 999px;
-     color: white;
-     font-size: 0.9em;
-     font-weight: bold;
-     text-align: center;
-     align-items: center;
- }
+.priority-badge {
+    display: inline-block;
+    padding: 4px 15px;
+    border-radius: 999px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
 
 .priority-high {
     background-color: #ef5d5d;
@@ -35,8 +35,6 @@ html, body{
     background-color: #56d256;
 }
 
-
-
 /*------------------------------------------------content*/
 .container {
     margin-left: 320px;
@@ -45,8 +43,6 @@ html, body{
     padding: 20px;
 }
 
-
-
 .content {
     color: #1f4c4b;
 }
@@ -54,8 +50,6 @@ html, body{
 .content h1 {
     font-weight: 900;
 }
-
-
 
 /*------------------------------------------------freelancer  message */
 .email {
@@ -76,7 +70,6 @@ html, body{
 }
 
 .message-content {
-    /*max-height: 500px; !* or whatever height you want *!*/
     overflow-y: auto;
     padding-right: 10px;
     height: 80%;
@@ -101,7 +94,6 @@ html, body{
     width: 90%;
     overflow: auto;
 }
-
 
 .msg h3 {
     margin: 0 0 8px 0;
@@ -137,23 +129,19 @@ html, body{
     background: #608e91;
     color: white;
 }
+
 .form-delete {
     padding: 1px;
 }
 
-
-
-
-
-
 /*------------------------------------------------freelancer Profile page*/
-
 .header {
     width: 100vw;
     height: 30vh;
     background-color: #357b80;
     z-index: -6;
 }
+
 .profile {
     display: flex;
     flex-direction: row;
@@ -191,7 +179,6 @@ html, body{
     display: block;
 }
 
-
 .profile-name {
     color: white;
     width: 90%;
@@ -201,7 +188,6 @@ html, body{
 .edit .btn {
     width: 70px;
     margin: 40px 0 10px 0;
-
 }
 
 .btn-project {
@@ -224,7 +210,6 @@ html, body{
     flex-direction: column;
     height: 300px;
     margin: 30px 0 200px 0;
-
 }
 
 .details {
@@ -234,44 +219,35 @@ html, body{
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 0  20px rgba(67, 106, 109, 0.24);
-
 }
 
-
 /*--------------------------------------------------------table design*/
-/*.table {*/
-/*    outline: #1f4c4b;*/
-/*    border-spacing: 0;*/
-
-/*}*/
-
 table {
     width: 100%;
     border-collapse: collapse;
+}
 
-    thead {
-        background-color: #f9f9f9;
-        border-bottom: 1px solid #eee;
-    }
+table thead {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
 
-    th, td {
-        padding: 15px;
-        text-align: left;
-        border-bottom: 1px solid #a2a2a2;
-    }
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #a2a2a2;
+}
 
-    th {
-        font-size: 14px;
-        font-weight: 600;
-        color: #555;
-        text-transform: uppercase;
-    }
+table th {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+}
 
-    td {
-        font-size: 14px;
-        color: #333;
-    }
-
+table td {
+    font-size: 14px;
+    color: #333;
 }
 
 .notif-content {
@@ -282,6 +258,7 @@ table {
     border-radius: 10px;
     overflow: auto;
 }
+
 .notif {
     background-color: #ffffff;
     border-left: 5px solid #436a6d;
@@ -293,8 +270,6 @@ table {
     width: 95%;
 }
 
-
-
 .content-notif {
     margin-top: -30px;
     border-radius: 10px;
@@ -302,7 +277,7 @@ table {
 
 .notif h3 {
     margin: 0 0 8px 0;
-    color: #436a6d; /* Dark blue text */
+    color: #436a6d;
     font-weight: 600;
 }
 
@@ -341,7 +316,6 @@ table {
     margin-left: 10px;
 }
 
-
 .sort-buttons .btn-sort {
     color: white;
     background-color: #357e7e;
@@ -360,19 +334,6 @@ table {
     border-radius: 50px;
     margin-bottom: 20px;
 }
-
-
-
-
-/*th, td {*/
-/*    padding: 8px;*/
-/*    text-align: left;*/
-/*    border-bottom: 1px solid #1f4c4b;*/
-/*}*/
-
-/*tr:nth-child(even) {background-color: rgba(234, 234, 234, 0.73);}*/
-/*tr:hover {background-color: #d7d7d7;}*/
-
 
 /*----------------------------------------------------------------------------------------------dashboard*/
 .card {
@@ -413,20 +374,17 @@ table {
     cursor: pointer;
 }
 
-
 .container-dashboard {
     margin-left: 320px;
     margin-top: 55px;
     margin-right: 10px;
     padding: 20px;
-
 }
 
 .inner {
     display: flex;
     flex-direction: row;
     gap: 30px;
-
 }
 
 .content-card {
@@ -447,7 +405,7 @@ table {
     background-color: #1b5640;
     height: 100px;
     padding: 15px;
-    width: 40%;
+    width: 47%;
     border-radius: 10px;
     color: white;
     z-index: 200;
@@ -458,9 +416,6 @@ table {
     flex-direction: column;
     gap: 20px;
     margin-top: 5px;
-}
-
-.sal-details{
     color: #e5e5e5;
     text-align: left;
 }
@@ -484,26 +439,23 @@ table {
     font-size: 20px;
 }
 
-.header-section p {
+.header-section h3 {
     margin: 5px 0 0 0;
     font-size: 14px;
     line-height: 20px;
 }
 
-
 .check{
     position: absolute;
-    bottom: 20px; /* distance from the bottom of .content-card */
+    bottom: 20px;
     right: 20px;
     background-color: #1f4c4b;
     border-radius: 90px;
-
 }
 
 .check a {
     display: inline-block;
     color: white;
-
     padding: 10px 20px;
     text-decoration: none;
     font-weight: bold;
@@ -520,9 +472,10 @@ table {
 
 .card h1 {
     color: #1f4c4b;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 800;
 }
+
 .card i {
     margin-right: 20px;
 }
@@ -532,7 +485,6 @@ table {
     flex-direction: row;
     position: relative;
     margin-top: 30px;
-    /*z-index: 10;*/
 }
 
 .card-content h1 {
@@ -551,7 +503,7 @@ table {
 
 .card-container {
     display: flex;
-    gap: 20px; /* Space between cards */
+    gap: 20px;
     padding: 20px;
 }
 
@@ -588,7 +540,6 @@ table {
     gap: 10px;
 }
 
-
 .btn-sort {
     background: #b2c1c2;
     color: #1f4c4b;
@@ -602,6 +553,7 @@ table {
 .btn-sort:hover {
     background: #608e91;
 }
+
 /* ----------------------------------------------------------------------------------edit form*/
 .edit-form {
     display: flex;
@@ -617,6 +569,7 @@ table {
     border: none;
     transition: background-color 0.3s ease;
 }
+
 .btn-edit:hover {
     background-color: #4d9d9d;
     color: #000000;
@@ -627,7 +580,6 @@ table {
 }
 
 /*-------------------------------------------------------------------------------PROJECT STYLE*/
-
 .project-card {
     background-color: #ffffff;
     display: flex;
@@ -643,8 +595,6 @@ table {
     text-decoration: none;
 }
 
-
-
 .project-card-content {
     margin: 20px;
     width: 100%;
@@ -657,121 +607,443 @@ table {
     color: #e5e5e5;
 }
 
-
 /*-                                                      search result*/
 .search-result-item {
     cursor: pointer;
 }
 
+/* ========================================================================
+   MOBILE RESPONSIVE STYLES
+   ======================================================================== */
 
-
-
-
-
-
-
-
-/* Base styles remain the same — as you shared above */
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .container {
-        margin-left: 20px;
-        margin-top: 60px;
-        margin-right: 20px;
+/* Large tablets and small desktops */
+@media (max-width: 1200px) {
+    .container-dashboard {
+        margin-left: 280px;
     }
 
-    .parent {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        height: auto;
-        margin: 50px 10px 0 80px;
-    }
-
-    .contact,
-    .receiver-details,
-    .message {
-        grid-column: span 1;
-        grid-row: auto;
-    }
-
-    .receiver-details {
-        flex-direction: column;
-    }
-
-    .attach {
-        width: 100%;
-        margin: 10px 0 0 0;
-    }
-
-    .btn-left {
-        width: 100%;
+    .header-section h1 {
+        font-size: 50px;
     }
 }
 
-@media (max-width: 768px) {
+/* Tablets */
+@media (max-width: 1024px) {
+    .container,
+    .container-dashboard,
+    .container-profile {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .content-card {
+        padding: 30px 20px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .header-section {
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .header-section h1 {
+        font-size: 40px;
+    }
+
+    .header-section h2 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .salary {
+        margin: 20px auto 0;
+        width: 80%;
+        position: static;
+    }
+
+    .check {
+        position: static;
+        margin: 20px auto 0;
+        text-align: center;
+        width: fit-content;
+    }
+
+    .card-container {
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .card {
+        flex: 1 1 calc(50% - 15px);
+        min-width: 200px;
+        height: 150px;
+        padding: 15px;
+    }
+
+    .card h1 {
+        font-size: 20px;
+    }
+
+    .card-content h1 {
+        font-size: 50px;
+    }
+
+    .card-content .label {
+        margin-top: 30px;
+        font-size: 14px;
+    }
+
+    .email {
+        flex-direction: column;
+        height: auto;
+        margin-left: 0;
+    }
+
+    .messages,
+    .compose {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
     .profile {
         flex-direction: column;
         align-items: center;
     }
 
-    .profile .img {
-        margin: 20px 0;
+    .profile-img .img {
+        margin: 20px auto;
         width: 150px;
-    }
-
-    .profile .img img {
         height: 150px;
     }
 
     .profile-name {
         margin: 10px 0;
         text-align: center;
+        width: 100%;
     }
 
     .profile-details {
-        margin: 10px;
+        margin: 20px 0;
+        height: auto;
     }
 
     .details {
         margin: 10px 0;
         padding: 15px;
     }
+}
 
-    .message-form input[type=text] {
-        width: 100%;
+/* Mobile phones */
+@media (max-width: 768px) {
+    .container,
+    .container-dashboard,
+    .container-profile {
+        margin: 10px;
+        padding: 10px;
     }
 
-    .attach, .btn-left {
-        width: 100%;
+    .inner {
+        gap: 15px;
     }
 
-    .selection {
+    .content-card {
+        padding: 20px 15px;
+        min-height: 300px;
+    }
+
+    .header-section h1 {
+        font-size: 32px;
+    }
+
+    .header-section h2 {
+        font-size: 16px;
+    }
+
+    .header-section h3 {
+        font-size: 12px;
+    }
+
+    .salary {
+        width: 100%;
+        margin-top: 30px;
+        height: auto;
+        padding: 20px;
+    }
+
+    .sal-details {
+        gap: 10px;
+    }
+
+    .sal-details h1 {
+        font-size: 24px;
+    }
+
+    .card-container {
         flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .card {
+        flex: none;
+        width: 100%;
+        height: 120px;
+        padding: 15px;
+    }
+
+    .card h1 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .card i {
+        margin-right: 10px;
+    }
+
+    .card-content {
+        margin-top: 15px;
+        align-items: center;
+    }
+
+    .card-content h1 {
+        font-size: 36px;
+    }
+
+    .card-content .label {
+        margin-top: 20px;
+        margin-left: 10px;
+        font-size: 12px;
+    }
+
+    .card-chart {
+        height: 300px;
+        padding: 15px;
+    }
+
+    /* Chart responsive sizing */
+    #myChart {
+        width: 100% !important;
+        height: 250px !important;
+    }
+
+    .project-card,
+    .project-card-dashboard {
+        flex-direction: column;
+        height: auto;
         margin: 0;
     }
 
-    .sel button {
+    .project-card-content,
+    .project-card-content-dashboard {
+        margin: 15px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    table th,
+    table td {
+        padding: 8px 4px;
+    }
+
+    .notif-content {
+        padding: 15px;
+        height: auto;
+        max-height: 400px;
+    }
+
+    .notif {
+        padding: 12px 15px;
         width: 100%;
-        margin: 10px 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        height: 20vh;
+        box-sizing: border-box;
     }
 
-    textarea {
-        min-height: 150px;
+    .btn-delete {
+        width: 60px;
+        height: 35px;
+        font-size: 12px;
     }
 
-    .message-form label {
+    .btn-edit {
+        width: 40%;
+        height: 35px;
         font-size: 14px;
     }
 
-    .content h1 {
-        font-size: 1.5rem;
+    .btn-project {
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .sort-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .btn-sort {
+        width: 70px;
+        height: 35px;
+        font-size: 12px;
     }
 }
 
+/* Small mobile phones */
+@media (max-width: 480px) {
+    .container,
+    .container-dashboard,
+    .container-profile {
+        margin: 5px;
+        padding: 8px;
+    }
+
+    .content-card {
+        padding: 15px 10px;
+        min-height: 250px;
+    }
+
+    .header-section h1 {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .header-section h2 {
+        font-size: 14px;
+    }
+
+    .salary {
+        padding: 15px;
+    }
+
+    .sal-details h1 {
+        font-size: 20px;
+    }
+
+    .sal-details p,
+    .sal-details h3 {
+        font-size: 12px;
+    }
+
+    .card {
+        height: 100px;
+        padding: 12px;
+    }
+
+    .card h1 {
+        font-size: 14px;
+    }
+
+    .card-content h1 {
+        font-size: 28px;
+    }
+
+    .card-content .label {
+        font-size: 10px;
+        margin-top: 15px;
+    }
+
+    .card-chart {
+        height: 250px;
+        padding: 10px;
+    }
+
+    #myChart {
+        height: 200px !important;
+    }
+
+    .check a {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    table th,
+    table td {
+        padding: 6px 2px;
+    }
+
+    .title {
+        padding: 15px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .title h1 {
+        font-size: 24px;
+    }
+
+    .profile-img .img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .btn-edit,
+    .btn-project,
+    .btn-delete {
+        font-size: 12px;
+        height: 32px;
+    }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .container-dashboard {
+        margin-top: 10px;
+    }
+
+    .inner {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .content-card {
+        min-height: 200px;
+    }
+
+    .card-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        flex: 1 1 calc(50% - 10px);
+        height: 100px;
+    }
+}
+
+/* Accessibility improvements for mobile touch targets */
+@media (max-width: 768px) {
+    .card,
+    .btn-project,
+    .btn-edit,
+    .btn-delete,
+    .check a {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+
+    .card-redirect {
+        display: block;
+    }
+
+    /* Improve text readability on small screens */
+    .card-content .label,
+    .sal-details p,
+    .notif p {
+        line-height: 1.4;
+    }
+}
