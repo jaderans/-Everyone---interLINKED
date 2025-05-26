@@ -1,0 +1,247 @@
+<?php
+header('Content-Type: application/json');
+
+$universitiesByCountry = [
+    "Philippines" => [
+        "University of the Philippines",
+        "Ateneo de Manila University",
+        "De La Salle University",
+        "University of Santo Tomas",
+        "Mapúa University",
+        "Far Eastern University",
+        "University of San Carlos",
+        "Silliman University",
+        "Adamson University",
+        "West Visayas State University"
+    ],
+    "United States" => [
+        "Harvard University",
+        "Stanford University",
+        "Massachusetts Institute of Technology (MIT)",
+        "University of California, Berkeley",
+        "California Institute of Technology (Caltech)",
+        "Princeton University",
+        "Yale University",
+        "Columbia University",
+        "University of Chicago",
+        "University of Pennsylvania"
+    ],
+    "United Kingdom" => [
+        "University of Oxford",
+        "University of Cambridge",
+        "Imperial College London",
+        "University College London (UCL)",
+        "University of Edinburgh",
+        "University of Manchester",
+        "King's College London",
+        "University of Bristol",
+        "University of Glasgow",
+        "University of Birmingham"
+    ],
+    "Canada" => [
+        "University of Toronto",
+        "University of British Columbia",
+        "McGill University",
+        "University of Alberta",
+        "University of Montreal",
+        "McMaster University",
+        "University of Waterloo",
+        "Western University",
+        "University of Calgary",
+        "Queen's University"
+    ],
+    "Australia" => [
+        "University of Melbourne",
+        "University of Sydney",
+        "Australian National University",
+        "University of Queensland",
+        "University of New South Wales",
+        "Monash University",
+        "University of Western Australia",
+        "University of Adelaide",
+        "University of Technology Sydney",
+        "Macquarie University"
+    ],
+    "Germany" => [
+        "Ludwig Maximilian University of Munich",
+        "Technical University of Munich",
+        "Heidelberg University",
+        "Humboldt University of Berlin",
+        "University of Freiburg",
+        "University of Tübingen",
+        "University of Bonn",
+        "University of Göttingen",
+        "University of Hamburg",
+        "RWTH Aachen University"
+    ],
+    "India" => [
+        "Indian Institute of Technology Bombay",
+        "Indian Institute of Technology Delhi",
+        "Indian Institute of Science",
+        "Indian Institute of Technology Madras",
+        "University of Delhi",
+        "Jawaharlal Nehru University",
+        "Indian Institute of Technology Kanpur",
+        "Indian Institute of Technology Kharagpur",
+        "Banaras Hindu University",
+        "University of Calcutta"
+    ],
+    "China" => [
+        "Tsinghua University",
+        "Peking University",
+        "Fudan University",
+        "Shanghai Jiao Tong University",
+        "Zhejiang University",
+        "Nanjing University",
+        "University of Science and Technology of China",
+        "Beijing Normal University",
+        "Sun Yat-sen University",
+        "Wuhan University"
+    ],
+    "Japan" => [
+        "University of Tokyo",
+        "Kyoto University",
+        "Osaka University",
+        "Tohoku University",
+        "Nagoya University",
+        "Hokkaido University",
+        "Tokyo Institute of Technology",
+        "Kyushu University",
+        "Keio University",
+        "Waseda University"
+    ],
+    "South Korea" => [
+        "Seoul National University",
+        "Korea Advanced Institute of Science and Technology (KAIST)",
+        "Pohang University of Science and Technology (POSTECH)",
+        "Yonsei University",
+        "Korea University",
+        "Hanyang University",
+        "Sungkyunkwan University",
+        "Ewha Womans University",
+        "Kyung Hee University",
+        "Chung-Ang University"
+    ],
+    "France" => [
+        "Paris Sciences et Lettres University",
+        "Sorbonne University",
+        "École Polytechnique",
+        "University of Paris-Saclay",
+        "École Normale Supérieure",
+        "University of Strasbourg",
+        "University of Grenoble Alpes",
+        "University of Bordeaux",
+        "University of Montpellier",
+        "University of Lille"
+    ],
+    "Italy" => [
+        "University of Bologna",
+        "Sapienza University of Rome",
+        "University of Padua",
+        "University of Milan",
+        "University of Pisa",
+        "University of Turin",
+        "University of Florence",
+        "University of Naples Federico II",
+        "University of Trento",
+        "University of Siena"
+    ],
+    "Spain" => [
+        "University of Barcelona",
+        "Autonomous University of Madrid",
+        "Complutense University of Madrid",
+        "University of Valencia",
+        "University of Granada",
+        "University of Seville",
+        "University of Zaragoza",
+        "Polytechnic University of Catalonia",
+        "University of the Basque Country",
+        "University of Salamanca"
+    ],
+    "Brazil" => [
+        "University of São Paulo",
+        "State University of Campinas",
+        "Federal University of Rio de Janeiro",
+        "Federal University of Minas Gerais",
+        "Federal University of Rio Grande do Sul",
+        "Federal University of São Paulo",
+        "Federal University of Paraná",
+        "Federal University of Santa Catarina",
+        "Federal University of Pernambuco",
+        "University of Brasília"
+    ],
+    "Mexico" => [
+        "National Autonomous University of Mexico",
+        "Monterrey Institute of Technology and Higher Education",
+        "Metropolitan Autonomous University",
+        "University of Guadalajara",
+        "Autonomous University of Nuevo León",
+        "Autonomous University of the State of Mexico",
+        "University of the Americas Puebla",
+        "Autonomous University of San Luis Potosí",
+        "Autonomous University of Puebla",
+        "Autonomous University of Baja California"
+    ],
+    "Russia" => [
+        "Lomonosov Moscow State University",
+        "Saint Petersburg State University",
+        "Novosibirsk State University",
+        "Tomsk State University",
+        "Moscow Institute of Physics and Technology",
+        "Higher School of Economics",
+        "Kazan Federal University",
+        "Bauman Moscow State Technical University",
+        "Ural Federal University",
+        "Peter the Great St. Petersburg Polytechnic University"
+    ],
+    "South Africa" => [
+        "University of Cape Town",
+        "University of the Witwatersrand",
+        "Stellenbosch University",
+        "University of Pretoria",
+        "University of KwaZulu-Natal",
+        "University of Johannesburg",
+        "University of the Western Cape",
+        "Rhodes University",
+        "Nelson Mandela University",
+        "North-West University"
+    ],
+    "Nigeria" => [
+        "University of Ibadan",
+        "University of Lagos",
+        "Obafemi Awolowo University",
+        "Ahmadu Bello University",
+        "University of Nigeria, Nsukka",
+        "University of Ilorin",
+        "Covenant University",
+        "Federal University of Technology Akure",
+        "University of Benin",
+        "Lagos State University"
+    ],
+    "Egypt" => [
+        "Cairo University",
+        "Ain Shams University",
+        "Alexandria University",
+        "Mansoura University",
+        "Zagazig University",
+        "Assiut University",
+        "Al-Azhar University",
+        "Tanta University",
+        "Helwan University",
+        "Suez Canal University"
+    ],
+    "Saudi Arabia" => [
+        "King Saud University",
+        "King Abdulaziz University",
+        "King Fahd University of Petroleum and Minerals",
+        "King Khalid University",
+        "Imam Mohammad Ibn Saud Islamic University",
+        "King Saud bin Abdulaziz University for Health Sciences",
+        "Taibah University",
+        "Umm Al-Qura University",
+        "Prince Sultan University",
+        "Alfaisal University"
+    ]
+];
+
+echo json_encode($universitiesByCountry);
