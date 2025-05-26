@@ -50,8 +50,7 @@ http_response_code(404);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../imgs/inlFavicon@4x.png">
     <link rel="stylesheet" href="freelancer-nav-style.css">
@@ -62,8 +61,14 @@ http_response_code(404);
 <body>
 <div class="topvar">
     <div class="logo">
-        <img src="../imgs/inl2Logo.png" alt="">
+        <img src="../imgs/inl2Logo.png" alt="Company Logo">
     </div>
+
+    <!-- Mobile menu toggle button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
     <div class="top-right">
         <div class="profile">
             <div class="img">
@@ -77,21 +82,24 @@ http_response_code(404);
     </div>
 </div>
 
-<div class="navbar">
+<!-- Mobile menu overlay -->
+<div class="navbar-overlay" onclick="closeMobileMenu()"></div>
+
+<div class="navbar" id="navbar">
     <div class="sidebar-frame">
         <ul class="side-content">
             <li><a href="freelancer-dashboard-page.php"><i class="fa-solid fa-database"></i> Dashboard</a></li>
             <li><a href="freelancer-project-page.php"><i class="fa-solid fa-chart-simple"></i> Projects</a></li>
             <li><a href="salary.php"><i class="fa-solid fa-dollar-sign"></i> Salary</a></li>
             <li><a href="freelancer-notification-page.php">
-                        <?php if ($resNotif['count'] > 0) { ?>
-                            <i class="fa-solid fa-bell" style="color: #9d3a3a"></i>
-                        <?php } else{ ?>
-                            <i class="fa-solid fa-bell"></i>
-                        <?php  } ?>
-                                Notifications</a>
+                    <?php if ($resNotif['count'] > 0) { ?>
+                        <i class="fa-solid fa-bell" style="color: #9d3a3a"></i>
+                    <?php } else{ ?>
+                        <i class="fa-solid fa-bell"></i>
+                    <?php  } ?>
+                    Notifications</a>
             </li>
-             <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
+            <li><a href="freelancer-message-page.php"><i class="fa-solid fa-envelope"></i> Message</a></li>
             <li><a href="freelancer-profile-page.php"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
         </ul>
 
@@ -104,8 +112,6 @@ http_response_code(404);
                 <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
             </div>
         </div>
-
-
     </div>
 </div>
 
@@ -117,16 +123,50 @@ http_response_code(404);
         }
     }
 
+    // Mobile menu toggle functions
+    function toggleMobileMenu() {
+        const navbar = document.getElementById('navbar');
+        const overlay = document.querySelector('.navbar-overlay');
+
+        navbar.classList.toggle('mobile-open');
+        overlay.classList.toggle('show');
+    }
+
+    function closeMobileMenu() {
+        const navbar = document.getElementById('navbar');
+        const overlay = document.querySelector('.navbar-overlay');
+
+        navbar.classList.remove('mobile-open');
+        overlay.classList.remove('show');
+    }
+
+    // Close mobile menu when clicking on menu items
+    document.querySelectorAll('.side-content a, .btn-top').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Close mobile menu on window resize if screen becomes larger
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
+    });
+
+    // Modal functionality (existing code)
     var modalMessage = document.getElementById("message");
     var btnMessage = document.getElementById("float-message");
     var spanmsg = document.querySelector("#message .close");
 
-    btnMessage.onclick = function () {
-        modalMessage.style.display = "block";
+    if (btnMessage) {
+        btnMessage.onclick = function () {
+            modalMessage.style.display = "block";
+        }
     }
 
-    spanmsg.onclick = function () {
-        modalMessage.style.display = "none";
+    if (spanmsg) {
+        spanmsg.onclick = function () {
+            modalMessage.style.display = "none";
+        }
     }
 
     window.onclick = function (event) {

@@ -17,7 +17,11 @@
     top: 0;
     padding: 20px;
     z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .logo {
     margin-left: 50px;
     margin-bottom: 2px;
@@ -53,9 +57,8 @@
 .top-right {
     display: flex;
     flex-direction: row;
-    position: absolute;
-    top: 10px;
-    right: 100px;
+    align-items: center;
+    gap: 10px;
 }
 
 .right-btn{
@@ -67,6 +70,7 @@
     margin-left: 10px;
     width: 90px;
 }
+
 .name{
     color: #292524;
     text-align: left;
@@ -92,7 +96,16 @@
     display: block;
 }
 
-
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #105D63;
+    cursor: pointer;
+    padding: 5px;
+}
 
 /*-----------------------------------------------side nav*/
 .navbar {
@@ -105,15 +118,14 @@
     top: 0;
     padding: 20px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    z-index:  1;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
 .sidebar-frame {
     display: flex;
-    /*margin-left: 10px;*/
     flex-direction: column;
     justify-content: space-between;
-    /*margin-top: 30%;*/
     margin: 30% 20px 10px 20px;
 }
 
@@ -139,7 +151,6 @@
 .lower-content button i {
     margin-right: 10px;
 }
-
 
 .side-content li {
     margin: 15px 0;
@@ -183,7 +194,6 @@
     background-color: #1a858d;
 }
 
-
 .sidebar-frame h4 {
     margin-top: 40px;
     font-size: 16px;
@@ -219,8 +229,8 @@
 
 #myBtn:hover {
     background-color: #1a858d;
-
 }
+
 .message-form input {
     width: 100px;
 }
@@ -230,39 +240,33 @@
 }
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 100; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 100;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100vh; /* Full height */
-    /*overflow: auto; !* Enable scroll if needed *!*/
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
 }
 
-
 .modal-msg {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 100; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 100;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100vh; /* Full height */
-    /*overflow: auto; !* Enable scroll if needed *!*/
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
 }
 
 .modal-msg-content {
     color: #1f4c4b;
     background-color: #ffffff;
-    margin-top: 10%;
-    margin-left: 45%;
+    margin: 10% auto;
     padding: 50px;
     border: 1px solid #1f4c4b;
     width: 45%;
@@ -275,10 +279,10 @@
 .modal-content {
     color: #1f4c4b;
     background-color: #fefefe;
-    margin:100px 200px; /* 15% from the top and centered */
+    margin: 100px auto;
     padding: 15px;
     border: 1px solid #888;
-    width: 30%; /* Could be more or less, depending on screen size */
+    width: 30%;
     height: 80%;
     border-radius: 20px;
     overflow: auto;
@@ -347,7 +351,7 @@
     cursor: pointer;
 }
 
-/*------------------------------------------------freelancer  modal content*/
+/*------------------------------------------------freelancer modal content*/
 
 .message {
     padding: 5px 10px 10px 20px;
@@ -362,7 +366,6 @@
     gap: 10px;
     margin-top: 10px;
 }
-
 
 .receiver-details .msg-profile img {
     width: auto;
@@ -399,7 +402,6 @@ textarea {
     border: 2px solid #4a8c8a;
 }
 
-
 .message-form input[type=text] {
     width: 40%;
     padding-left: 20px;
@@ -430,22 +432,6 @@ textarea {
     border-radius: 5px;
 }
 
-.send a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: left;
-}
-
-.send i {
-    margin-right: 10px;
-}
-
-.send:hover {
-    background-color: #1a858d;
-}
-
-
 /*-------------------------------------------------------------floating message window*/
 .float-message {
     position: fixed;
@@ -474,42 +460,201 @@ textarea {
     background-color: #1f4c4b;
 }
 
+/* Overlay for mobile menu */
+.navbar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
 
-
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
+    .topvar {
+        padding: 15px 20px;
+    }
+
+    .logo {
+        margin-left: 0;
+    }
+
+    .logo img {
+        width: 150px;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .top-right {
+        gap: 15px;
+    }
+
+    .name h4 {
+        font-size: 14px;
+    }
+
+    .name p {
+        font-size: 10px;
+    }
+
     .navbar {
-        width: 70px;
-        padding: 20px 10px;
+        width: 280px;
+        transform: translateX(-100%);
+        z-index: 15;
+    }
+
+    .navbar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .navbar-overlay.show {
+        display: block;
+    }
+
+    .sidebar-frame {
+        margin: 25% 15px 10px 15px;
     }
 
     .side-content li a {
-        font-size: 0;
         width: 100%;
-        padding: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 12px;
+        font-size: 14px;
     }
 
-    .side-content li a i {
-        margin-right: 0;
-        font-size: 18px;
+    .modal-content {
+        margin: 50px 10px;
+        width: calc(100% - 20px);
+        height: 70%;
     }
 
-    .sidebar-frame h4,
-    .sidebar-frame h4 a {
-        display: none;
+    .modal-msg-content {
+        margin: 10% 5%;
+        width: 90%;
+        height: 70%;
+        padding: 30px 20px;
     }
 
-    .lower-content {
-        display: none;
+    .message-form input[type=text] {
+        width: 100%;
+    }
+
+    .info {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .info .send,
+    .info .attach {
+        width: 100%;
+    }
+
+    .float-message {
+        top: 85%;
+        left: 90%;
+        width: 45px;
+        height: 45px;
+    }
+
+    .float-message:hover {
+        transform: translate(-50%, -50%) scale(1.2);
     }
 }
 
+@media (max-width: 480px) {
+    .topvar {
+        padding: 10px 15px;
+    }
 
+    .logo img {
+        width: 120px;
+    }
 
+    .profile .img {
+        width: 25px;
+        height: 25px;
+    }
 
+    .name h4 {
+        font-size: 12px;
+    }
 
+    .name p {
+        font-size: 9px;
+    }
 
+    .navbar {
+        width: 260px;
+    }
 
+    .sidebar-frame {
+        margin: 20% 10px 10px 10px;
+    }
 
+    .side-content li a {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .btn-top {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .modal-content,
+    .modal-msg-content {
+        margin: 20px 5px;
+        width: calc(100% - 10px);
+        height: 80%;
+        padding: 20px 15px;
+    }
+
+    .float-message {
+        width: 40px;
+        height: 40px;
+        top: 82%;
+        left: 88%;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .topvar {
+        padding: 8px 10px;
+    }
+
+    .logo img {
+        width: 100px;
+    }
+
+    .top-right {
+        gap: 8px;
+    }
+
+    .profile .img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .navbar {
+        width: 240px;
+    }
+
+    .sidebar-frame {
+        margin: 18% 8px 8px 8px;
+    }
+
+    .side-content li a {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .side-content li a i {
+        margin-right: 8px;
+        font-size: 14px;
+    }
+}
