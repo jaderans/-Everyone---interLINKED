@@ -1,5 +1,4 @@
 <?php
-//include_once 'SecurityCheck.php';
 include 'freelancer-navbar-template.php';
 include_once 'interlinkedDB.php';
 $master_con = connectToDatabase(3306);
@@ -134,21 +133,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                     <p>No bank record found.</p>
                 <?php endif; ?>
 
-
-                <!-- Withdraw and Transfer Buttons -->
-                    <div class="banking-actions">
-                        <button id="withdrawBtn" class="banking-action-btn">
-                            <i class="fas fa-arrow-down"></i> Withdraw
-                        </button>
-
-                        <form action="bankDetails.php" method="post">
-                            <button class="banking-action-btn">
-                                <i class="fas fa-exchange-alt"></i> Bank Details
-                            </button>
-                        </form>
-
-                    </div>
                 </div>
+            <div class="banking-actions">
+                <button id="withdrawBtn" class="btn-withdraw">
+                    <i class="fas fa-arrow-down"></i> Withdraw
+                </button>
+
+                <form action="bankDetails.php" method="post">
+                    <button class="btn-details">
+                        <i class="fas fa-exchange-alt"></i> Bank Details
+                    </button>
+                </form>
+
+            </div>
             </div>
 
             <!-- Payments Table -->
