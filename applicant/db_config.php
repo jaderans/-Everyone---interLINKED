@@ -40,26 +40,6 @@ if (!isset($_SESSION['application_data'])) {
     ];
 }
 
-function generateUserId() {
-    global $slave_con;
-
-    // Get the last user ID from database
-    $stmt = $slave_con->prepare("SELECT USER_ID FROM user ORDER BY USER_ID DESC LIMIT 1");
-    $stmt->execute();
-    $lastUser = $stmt->fetch();
-
-    if ($lastUser) {
-        // Extract the number part and increment
-        $lastNumber = intval(substr($lastUser['USER_ID'], -5));
-        $newNumber = str_pad($lastNumber + 1, 5, '0', STR_PAD_LEFT);
-    } else {
-        $newNumber = '00001';
-    }
-
-    return '25-INTL-' . $newNumber;
-}
-
-
 // Navigation helper
 function getNextPage($current_step) {
     $pages = [

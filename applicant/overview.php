@@ -1,6 +1,16 @@
 <?php
 require_once 'db_config.php';
 
+// Make sure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Ensure session data array exists
+if (!isset($_SESSION['application_data'])) {
+    $_SESSION['application_data'] = [];
+}
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
@@ -23,7 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+// Safe access to the bio
+$userBio = $_SESSION['application_data']['user_bio'] ?? '';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="bio">Bio for your profile</label>
                 <textarea id="bio" name="bio" class="jobTitle"
                           placeholder="Write something about yourself..."
-                          maxlength="450" rows="10" required><?php echo htmlspecialchars($_SESSION['application_data']['user_bio']); ?></textarea>
+                          maxlength="450" rows="10" required><?php echo htmlspecialchars($userBio); ?></textarea>
                 <div style="font-size: 12px; color: #888; margin-top: 5px;">
                     <span id="charCount">0</span>/450 characters
                 </div>

@@ -1397,3 +1397,55 @@ input[type="checkbox"] {
         text-align: center;
     }
 }
+.status-overdue-tag {
+    background-color: #ff4444;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Sort dropdown styling */
+.sort-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-options {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    right: 0;
+    top: 100%;
+    margin-top: 5px;
+}
+
+.sort-options a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.sort-options a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Overdue row styling */
+tr.overdue {
+    background-color: #fff5f5;
+    border-left: 4px solid #ff4444;
+}
+
+.overdue {
+    color: #ff4444 !important;
+    font-weight: bold;
+}

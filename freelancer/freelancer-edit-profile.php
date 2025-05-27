@@ -142,11 +142,12 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             } elseif ($pass !== $conPass) {
                 $error[] = "Passwords do not match.<br>";
                 $hasError = true;
-            } elseif ($currentUser['USER_PASSWORD'] !== $oldPass) {
+            } elseif (!password_verify($oldPass, $currentUser['USER_PASSWORD'])) {
                 $error[] = "Old password is incorrect.<br>";
                 $hasError = true;
             }
         }
+
 
 
         if (!$hasError) {
@@ -196,8 +197,9 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         $error[] = "Old password is incorrect.<br>";
                     } else {
                         // Proceed with updating the password
+                        $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
                         $stmtPass = $master_con->prepare("UPDATE `user` SET USER_PASSWORD = :pass WHERE USER_ID = :id");
-                        $stmtPass->bindParam(':pass', $pass);
+                        $stmtPass->bindParam(':pass', $hashedPassword);
                         $stmtPass->bindParam(':id', $id);
                         $stmtPass->execute();
 
