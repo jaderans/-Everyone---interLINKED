@@ -70,19 +70,21 @@ if (!empty($_SESSION['application_data']['location_data'])) {
                             <option value="">Select Country</option>
                             <?php
                             $countries = [
-                                'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany',
-                                'France', 'Italy', 'Spain', 'Netherlands', 'Sweden', 'Norway',
-                                'Denmark', 'Finland', 'Switzerland', 'Austria', 'Belgium',
-                                'Portugal', 'Ireland', 'Poland', 'Czech Republic', 'Hungary',
-                                'Greece', 'Turkey', 'Russia', 'Ukraine', 'Romania', 'Bulgaria',
-                                'Croatia', 'Serbia', 'Slovenia', 'Slovakia', 'Lithuania',
-                                'Latvia', 'Estonia', 'Japan', 'South Korea', 'China', 'India',
-                                'Singapore', 'Malaysia', 'Thailand', 'Philippines', 'Indonesia',
-                                'Vietnam', 'Taiwan', 'Hong Kong', 'Brazil', 'Argentina',
-                                'Chile', 'Colombia', 'Mexico', 'Peru', 'Uruguay', 'Venezuela',
-                                'South Africa', 'Nigeria', 'Kenya', 'Egypt', 'Morocco',
-                                'Israel', 'UAE', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Other'
+                                'Argentina', 'Australia', 'Austria', 'Belgium', 'Brazil',
+                                'Bulgaria', 'Canada', 'Chile', 'China', 'Colombia',
+                                'Croatia', 'Czech Republic', 'Denmark', 'Egypt', 'Estonia',
+                                'Finland', 'France', 'Germany', 'Greece', 'Hong Kong',
+                                'Hungary', 'India', 'Indonesia', 'Ireland', 'Israel',
+                                'Italy', 'Japan', 'Kenya', 'Kuwait', 'Latvia',
+                                'Lithuania', 'Malaysia', 'Mexico', 'Morocco', 'Netherlands',
+                                'Nigeria', 'Norway', 'Peru', 'Philippines',
+                                'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia',
+                                'Saudi Arabia', 'Serbia', 'Singapore', 'Slovakia', 'Slovenia',
+                                'South Africa', 'South Korea', 'Spain', 'Sweden', 'Switzerland',
+                                'Taiwan', 'Thailand', 'Turkey', 'UAE', 'Ukraine',
+                                'United Kingdom', 'United States', 'Uruguay', 'Venezuela', 'Vietnam'
                             ];
+
 
                             foreach ($countries as $country) {
                                 $selected = (isset($location_data['country']) && $location_data['country'] === $country) ? 'selected' : '';

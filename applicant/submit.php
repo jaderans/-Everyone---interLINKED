@@ -2,29 +2,33 @@
 session_start();
 require_once 'db_config.php';
 
-// Generate user ID if not exists
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = generateUserId();
+$user_id = generateUserId();
+function generateUserId() {
+    global $master_con; // Use master_con instead of slave_con
+
+    $stmt = $master_con->prepare("
+        SELECT USER_ID 
+        FROM user 
+        ORDER BY CAST(SUBSTRING(USER_ID, 10) AS UNSIGNED) DESC 
+        LIMIT 1
+    ");
+    $stmt->execute();
+    $lastUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($lastUser) {
+        $lastNumber = intval(substr($lastUser['USER_ID'], -5));
+        $newNumber = str_pad($lastNumber + 1, 5, '0', STR_PAD_LEFT);
+    } else {
+        $newNumber = '00001';
+    }
+
+    return '25-INTL-' . $newNumber;
 }
-$user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'Submit') {
             try {
-                // Handle profile picture upload
-                $profileImageData = null;
-                if (!empty($_FILES['profile_picture']['tmp_name'])) {
-                    $fileExtension = strtolower(pathinfo($_FILES["profile_picture"]["name"], PATHINFO_EXTENSION));
-                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-                    if (in_array($fileExtension, $allowedExtensions)) {
-                        $profileImageData = file_get_contents($_FILES["profile_picture"]["tmp_name"]);
-                    } else {
-                        throw new Exception("Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.");
-                    }
-                }
-
                 // Collect form data with proper sanitization
                 $email = htmlspecialchars($_POST['email']);
                 $firstName = htmlspecialchars($_POST['firstName']);
@@ -100,15 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     INSERT INTO user (
                         USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, 
                         USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME, 
-                        USER_COUNTRY, USER_IMG, USER_CATEG, USER_SKILLS, USER_TITLE, 
+                        USER_COUNTRY, USER_CATEG, USER_SKILLS, USER_TITLE, 
                         USER_LANGUAGE, USER_BIO, USER_TRIES, USER_STATUS, EMP_ID, ED_ID
                     ) VALUES (
                         :user_id, :email, :type, :fname, :lname, 
                         :birthday, :contact, :password, :username, 
-                        :country, :img, :categ, :skills, :title, 
+                        :country, :categ, :skills, :title, 
                         :language, :bio, :tries, :status, :emp_id, :ed_id
                     )
                 ");
+
 
                 // Check if user already exists by USER_ID
                 $stmtCheck = $master_con->prepare("SELECT USER_TRIES FROM user WHERE USER_ID = :user_id");
@@ -137,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':password' => $password,
                     ':username' => $userName,
                     ':country' => $country,
-                    ':img' => $profileImageData,
                     ':categ' => $userCategory,
                     ':skills' => $userSkills,
                     ':title' => $userTitle,
@@ -204,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($_SESSION['application_data']);
 
                 $_SESSION['success_message'] = "Application submitted successfully! Please log in.";
-                header('Location: logIn.php');
+                header('Location: ../loginSignup/logIn.php');
                 exit;
 
             } catch (Exception $e) {
@@ -216,24 +220,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($_POST['action'] === 'Save') {
             // Handle Save Changes functionality
             try {
-                // Handle profile picture upload for saving
-                $profileImageData = null;
-                $updateProfileImage = false;
-                if (!empty($_FILES['profile_picture']['tmp_name'])) {
-                    $fileExtension = strtolower(pathinfo($_FILES["profile_picture"]["name"], PATHINFO_EXTENSION));
-                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-                    if (in_array($fileExtension, $allowedExtensions)) {
-                        $profileImageData = file_get_contents($_FILES["profile_picture"]["tmp_name"]);
-                        $updateProfileImage = true;
-
-                        // Store image temporarily in session for preview
-                        $_SESSION['temp_profile_image'] = base64_encode($profileImageData);
-                    } else {
-                        throw new Exception("Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.");
-                    }
-                }
-
                 // Update session data with new values
                 $_SESSION['application_data'] = [
                     'user_type' => $_POST['userType'],
@@ -248,7 +234,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'user_title' => $_POST['user_title'],
                     'user_language' => $_POST['user_language'],
                     'user_bio' => $_POST['user_bio'],
-                    'has_profile_image' => $updateProfileImage,
                     'location_data' => json_encode([
                         'country' => $_POST['country'],
                         'city' => $_POST['city'] ?? '',
@@ -315,15 +300,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get existing profile image
-$profileImageData = null;
-// Get existing user data including phone
 if ($user_id) {
-    $stmt = $master_con->prepare("SELECT USER_IMG, USER_CONTACT, USER_EMAIL, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY FROM user WHERE USER_ID = :user_id");
+    $stmt = $master_con->prepare("SELECT USER_CONTACT, USER_EMAIL, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY FROM user WHERE USER_ID = :user_id");
     $stmt->execute([':user_id' => $user_id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($row) {
-        $profileImageData = $row['USER_IMG'];
 
         // Set session data from database if not already set
         if (empty($_SESSION['phone']) && $row['USER_CONTACT']) {
@@ -342,14 +323,6 @@ if ($user_id) {
             $_SESSION['birthday'] = $row['USER_BIRTHDAY'];
         }
     }
-}
-
-// Check for temporary profile image from recent save
-if (isset($_SESSION['temp_profile_image'])) {
-    $tempImageData = $_SESSION['temp_profile_image'];
-    unset($_SESSION['temp_profile_image']); // Clear after use
-} else {
-    $tempImageData = null;
 }
 
 // Get session data with fallbacks
@@ -576,32 +549,6 @@ $phone = $_SESSION['phone'] ?? $user_data['phone'] ?? '';
                     <div class="info-item">
                         <label>Grade/GPA</label>
                         <div class="value" id="display_ed_grade"><?= htmlspecialchars($education_data['grade'] ?? 'Not specified') ?></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Picture Section -->
-            <div class="info-section">
-                <h3><i class="fas fa-camera"></i> Profile Picture</h3>
-                <div class="info-item">
-                    <label>Profile Image</label>
-                    <div class="value">
-                        <div id="profile_image_display">
-                            <?php if ($tempImageData): ?>
-                                <img src="data:image/jpeg;base64,<?= $tempImageData ?>" alt="Profile Image" style="max-width: 150px; border-radius: 8px; display: block; margin: 10px 0;">
-                            <?php else: ?>
-                                <div style="padding: 20px; border: 2px dashed #ddd; border-radius: 8px; text-align: center; color: #666;">
-                                    No profile picture uploaded
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="file-upload-wrapper">
-                            <input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="file-upload-input">
-                            <label for="profile_picture" class="file-upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Choose Profile Picture (JPG, PNG, GIF)</span>
-                            </label>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -847,8 +794,6 @@ $phone = $_SESSION['phone'] ?? $user_data['phone'] ?? '';
         </div>
     </div>
 </div>
-
-// Replace the entire JavaScript section with this:
 <script>
     function toggleEditForm() {
         const editForm = document.getElementById('editForm');
@@ -913,13 +858,6 @@ $phone = $_SESSION['phone'] ?? $user_data['phone'] ?? '';
         formData.append('ed_grade', document.getElementById('ed_grade').value);
         formData.append('ed_start_year', document.getElementById('ed_start_year').value);
         formData.append('ed_end_year', document.getElementById('ed_end_year').value);
-
-        // Profile picture
-        const profilePic = document.getElementById('profile_picture').files[0];
-        if (profilePic) {
-            formData.append('profile_picture', profilePic);
-        }
-
         // Send AJAX request
         fetch(window.location.href, {
             method: 'POST',
@@ -1052,28 +990,6 @@ $phone = $_SESSION['phone'] ?? $user_data['phone'] ?? '';
         document.getElementById('hidden_ed_end_year').value = getVal('ed_end_year');
         document.getElementById('hidden_ed_is_current').value = getCheck('ed_is_current');
     }
-
-    // Profile picture preview
-    document.getElementById('profile_picture').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.alt = 'Profile Image Preview';
-                img.style.maxWidth = '150px';
-                img.style.borderRadius = '8px';
-                img.style.display = 'block';
-                img.style.margin = '10px 0';
-
-                const displayDiv = document.getElementById('profile_image_display');
-                displayDiv.innerHTML = '';
-                displayDiv.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
 
     // Auto-update display when form fields change
     document.addEventListener('DOMContentLoaded', function() {

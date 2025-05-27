@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="title">Your Professional Role</label><br>
                 <input class="jobTitle" type="text" name="title" id="title"
                        placeholder="Professional Title"
-                       value="<?php echo htmlspecialchars($_SESSION['application_data']['user_title']); ?>"
+                       value="<?php echo isset($_SESSION['application_data']['user_title']) ? htmlspecialchars($_SESSION['application_data']['user_title']) : ''; ?>"
                        required>
             </div>
         </div>
