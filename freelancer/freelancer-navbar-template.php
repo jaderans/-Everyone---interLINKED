@@ -106,7 +106,7 @@ http_response_code(404);
         <div class="lower-content">
             <button class="btn-top" ><a href="https://drive.google.com/drive/folders/1Nr1mkELXDzzGG6DfkXlGW76BUxgBfa8f?usp=sharing" target="_blank"><i class="fa-solid fa-file-import"></i> Submit</a> </button>
 
-            <button class="btn-top" style="margin-top: 10px;" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            <button class="btn-top" style="margin-top: 10px;  color: white" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
 
             <!--            <div class="help" style="text-align: left; margin-top: -15px">-->
             <!--                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>-->
