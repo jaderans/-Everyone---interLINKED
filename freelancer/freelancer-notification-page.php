@@ -44,8 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notifId'])) {
     $stmt->bindParam(':notifId', $notifId);
     $stmt->execute();
 
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
 }
 
 
