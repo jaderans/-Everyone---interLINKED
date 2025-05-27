@@ -1413,7 +1413,7 @@ table td {
     }
 }
 
-@media (min-width: 1025px) and (max-width: 1400px) and (orientation: landscape) {
+@media (min-width: 1025px) and (max-width: 1200px) and (orientation: landscape) {
     /* Container adjustments */
     .container,
     .container-dashboard,
