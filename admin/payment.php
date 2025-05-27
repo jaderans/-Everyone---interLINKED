@@ -149,6 +149,332 @@ $adminStmt->execute([$userId]);
 $adminInfo = $adminStmt->fetch();
 ?>
 
+<style>
+    body {
+        background: #f5f6fa;
+        font-family: 'Poppins', Arial, sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 0;
+    }
+
+    .admin-panel {
+        display: flex;
+        gap: 40px;
+        max-width: 1200px;
+        width: 100%;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .left-pane {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 32px rgba(21,96,100,0.09);
+        padding: 38px 40px 32px 40px;
+        max-width: 650px;
+        width: 100%;
+        min-width: 350px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .payment-header h2 {
+        font-size: 1.35rem;
+        color: #156064;
+        margin-bottom: 2px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .payment-header p {
+        color: #666;
+        margin: 0 0 10px 0;
+        font-size: 1rem;
+    }
+
+    .payment-info-section {
+        margin-bottom: 14px;
+    }
+    .info-cards {
+        display: flex;
+        gap: 18px;
+    }
+    .info-card {
+        background: #f8fafd;
+        border-radius: 10px;
+        flex: 1 1 0;
+        padding: 18px 18px 12px 18px;
+        min-width: 200px;
+        box-shadow: 0 1px 4px rgba(21,96,100,0.04);
+    }
+    .info-card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #156064;
+        margin-bottom: 8px;
+    }
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        font-size: 1rem;
+    }
+    .info-label {
+        color: #444;
+        font-weight: 500;
+    }
+    .info-value {
+        color: #222;
+        font-weight: 600;
+    }
+
+    .alert {
+        padding: 13px 18px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-size: 1rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .alert-success {
+        background: #eafbe7;
+        color: #1bc47d;
+        border: 1px solid #b4e3c1;
+    }
+    .alert-danger {
+        background: #ffeaea;
+        color: #e74c3c;
+        border: 1px solid #f5bebe;
+    }
+
+    .payment-form-section {
+        margin-top: 14px;
+    }
+    .payment-form .form-header h3 {
+        color: #156064;
+        font-size: 1.08rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-row {
+        display: flex;
+        gap: 22px;
+        margin-bottom: 12px;
+    }
+    .form-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+    .input-group {
+        display: flex;
+        align-items: center;
+        border: 1px solid #dbe4ea;
+        border-radius: 7px;
+        background: #f8fafd;
+        padding: 0 10px;
+    }
+    .input-prefix {
+        color: #888;
+        font-size: 1.1rem;
+        margin-right: 3px;
+    }
+    input[type="number"], input[type="password"] {
+        border: none;
+        background: transparent;
+        font-size: 1.1rem;
+        padding: 8px 0;
+        outline: none;
+        width: 100%;
+    }
+    input[type="number"]:focus, input[type="password"]:focus {
+        background: #eaf6fa;
+    }
+    .form-section {
+        margin-top: 10px;
+    }
+    .security-note {
+        font-size: 0.98rem;
+        color: #156064;
+        margin-bottom: 7px;
+    }
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .cancel-btn, .submit-btn {
+        padding: 9px 22px;
+        border: none;
+        border-radius: 7px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: background 0.18s;
+    }
+    .cancel-btn {
+        background: #f5f6fa;
+        color: #156064;
+        border: 1px solid #dbe4ea;
+    }
+    .cancel-btn:hover {
+        background: #eaf6fa;
+    }
+    .submit-btn {
+        background: #156064;
+        color: #fff;
+        border: 1px solid #156064;
+    }
+    .submit-btn:hover {
+        background: #114c4c;
+    }
+
+    /* Right pane - Payment Summary */
+    #right-pane {
+        min-width: 320px;
+        max-width: 340px;
+        width: 100%;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 32px rgba(21,96,100,0.09);
+        padding: 32px 28px 22px 28px;
+        margin-top: 0;
+        margin-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    .payment-summary .summary-header h3 {
+        color: #156064;
+        font-size: 1.09rem;
+        margin-bottom: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .summary-section {
+        margin-bottom: 14px;
+    }
+    .summary-section h4 {
+        color: #444;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        font-size: 1rem;
+    }
+    .summary-label {
+        color: #666;
+        font-weight: 500;
+    }
+    .summary-value {
+        color: #222;
+        font-weight: 600;
+    }
+    .status-pending-tag {
+        background: #ffe066;
+        color: #444;
+        font-weight: 700;
+        border-radius: 6px;
+        padding: 1px 11px;
+        font-size: 0.95rem;
+    }
+    .total-row .summary-label {
+        font-weight: 700;
+    }
+    .total-row .summary-value {
+        color: #156064;
+        font-weight: 800;
+        font-size: 1.13rem;
+    }
+    .security-notice {
+        background: #f5f6fa;
+        border-radius: 8px;
+        padding: 13px 14px;
+        font-size: 0.97rem;
+        color: #156064;
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        margin-top: 12px;
+    }
+    .security-notice i {
+        font-size: 1.2rem;
+        margin-top: 2px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+        .admin-panel {
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+        .left-pane, #right-pane {
+            max-width: 98vw;
+            min-width: 0;
+            width: 100%;
+        }
+        .left-pane {
+            padding: 28px 8vw 22px 8vw;
+        }
+        #right-pane {
+            padding: 22px 6vw 16px 6vw;
+        }
+    }
+    @media (max-width: 700px) {
+        .main-container {
+            padding: 12px 0;
+        }
+        .admin-panel {
+            gap: 18px;
+        }
+        .left-pane, #right-pane {
+            padding: 16px 2vw 12px 2vw;
+            border-radius: 10px;
+        }
+        .info-cards {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+</style>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -268,7 +594,7 @@ $adminInfo = $adminStmt->fetch();
                                     <input type="password"
                                            name="password"
                                            id="password"
-                                           placeholder="Enter your admin password"
+                                           placeholder="Password"
                                            required>
                                 </div>
                                 <div class="form-col">
@@ -276,7 +602,7 @@ $adminInfo = $adminStmt->fetch();
                                     <input type="password"
                                            name="confirmPass"
                                            id="confirmPass"
-                                           placeholder="Confirm your admin password"
+                                           placeholder="Confirm Password"
                                            required>
                                 </div>
                             </div>
