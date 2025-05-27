@@ -6,25 +6,14 @@ include('interlinkedDB.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Function to create payment entry
-function createPaymentEntry($conn, $projectId, $userId, $endDate, $amount = 0) {
-    // Only create payment entry if there's an assigned user (freelancer)
+// Function to create payment entry with only USER_ID and PRO_ID
+function createPaymentEntry($conn, $projectId, $userId) {
     if ($userId === null) {
         return;
     }
 
-    // Check if freelancer has a bank account
-    $bankStmt = $conn->prepare("SELECT BNK_ID FROM user WHERE USER_ID = ? AND BNK_ID IS NOT NULL");
-    $bankStmt->execute([$userId]);
-    $bankResult = $bankStmt->fetch(PDO::FETCH_ASSOC);
-
-    $payStatus = $bankResult ? 'Pending' : 'No Bank';
-    $bankId = $bankResult ? $bankResult['BNK_ID'] : null;
-
-    // Insert payment entry
-    $paymentStmt = $conn->prepare("INSERT INTO payment (USER_ID, PRO_ID, BNK_ID, PAY_STATUS, PAY_AMOUNT, PAY_DATE) 
-                                   VALUES (?, ?, ?, ?, ?, ?)");
-    $paymentStmt->execute([$userId, $projectId, $bankId, $payStatus, $amount, $endDate]);
+    $paymentStmt = $conn->prepare("INSERT INTO payment (USER_ID, PRO_ID) VALUES (?, ?)");
+    $paymentStmt->execute([$userId, $projectId]);
 }
 
 try {
@@ -46,7 +35,6 @@ try {
     $priority = trim($_POST['project_priority'] ?? '');
     $commissionedBy = trim($_POST['project_commissioned_by'] ?? '');
     $assignee = isset($_POST['project_assignee']) && $_POST['project_assignee'] !== '' ? $_POST['project_assignee'] : null;
-    $projectAmount = $_POST['project_amount'] ?? 0; // Project amount
     $userId = $_SESSION['user_id'] ?? null;
 
     if (!$userId) {
@@ -112,7 +100,7 @@ try {
         $stmt->bindParam(':created_by', $userId, PDO::PARAM_STR);
     }
 
-    // Shared bindings
+    // Bind shared parameters
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':description', $description);
     $stmt->bindParam(':start_date', $startDate);
@@ -122,46 +110,38 @@ try {
     $stmt->bindParam(':priority', $priority);
     $stmt->bindParam(':commissioned_by', $commissionedBy);
 
-    // Assignee bind
+    // Bind assignee (USER_ID)
     if ($assignee === null) {
         $stmt->bindValue(':assignee', null, PDO::PARAM_NULL);
     } else {
         $stmt->bindParam(':assignee', $assignee, PDO::PARAM_STR);
     }
 
-    // Execute the project save
+    // Execute insert or update
     $stmt->execute();
 
     // Handle payment entry creation/update
     if (!$projectId) {
-        // This is a new project insertion
+        // New project inserted
         $lastProjectId = $conn->lastInsertId();
 
-        // Create payment entry if project has an assignee
         if ($assignee !== null) {
-            createPaymentEntry($conn, $lastProjectId, $assignee, $endDate, $projectAmount);
+            createPaymentEntry($conn, $lastProjectId, $assignee);
         }
     } else {
-        // This is an update - check if assignee changed and create/update payment entry
+        // Update existing project
         if ($assignee !== null) {
-            // Check if payment entry already exists
+            // Check if payment entry exists
             $checkPayment = $conn->prepare("SELECT PAY_ID FROM payment WHERE PRO_ID = ?");
             $checkPayment->execute([$projectId]);
 
             if (!$checkPayment->fetch()) {
-                // No payment entry exists, create one
-                createPaymentEntry($conn, $projectId, $assignee, $endDate, $projectAmount);
+                // No payment entry, create one
+                createPaymentEntry($conn, $projectId, $assignee);
             } else {
-                // Update existing payment entry
-                $bankStmt = $conn->prepare("SELECT BNK_ID FROM user WHERE USER_ID = ? AND BNK_ID IS NOT NULL");
-                $bankStmt->execute([$assignee]);
-                $bankResult = $bankStmt->fetch(PDO::FETCH_ASSOC);
-
-                $payStatus = $bankResult ? 'Pending' : 'No Bank';
-                $bankId = $bankResult ? $bankResult['BNK_ID'] : null;
-
-                $updatePayment = $conn->prepare("UPDATE payment SET USER_ID = ?, BNK_ID = ?, PAY_STATUS = ?, PAY_DATE = ?, PAY_AMOUNT = ? WHERE PRO_ID = ?");
-                $updatePayment->execute([$assignee, $bankId, $payStatus, $endDate, $projectAmount, $projectId]);
+                // Payment entry exists, update USER_ID only
+                $updatePayment = $conn->prepare("UPDATE payment SET USER_ID = ? WHERE PRO_ID = ?");
+                $updatePayment->execute([$assignee, $projectId]);
             }
         }
     }
