@@ -5,6 +5,7 @@ include('interlinkedDB.php');
 $nameMsg = $emailMsg = $passMsg = $userErrorMsg = "";
 $userName = $email = $pass = $userType = "";
 
+// Function to sanitize input
 function clean_text($text) {
     return htmlspecialchars(trim($text));
 }
@@ -16,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = clean_text($_POST['pass']);
 
     if (isset($_POST['action']) && $_POST['action'] == "Log In") {
+        // Validate input fields
         if (empty($userName)) $nameMsg = "Username is required <br>";
         if (empty($email)) {
             $emailMsg = "Email is required <br>";
@@ -24,30 +26,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         if (empty($password)) $passMsg = "Password is required <br>";
 
+        // If no validation errors and userType is selected
         if (empty($nameMsg) && empty($emailMsg) && empty($passMsg) && !empty($userType)) {
-            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ? AND USER_EMAIL = ? AND USER_PASSWORD = ? AND USER_TYPE = ?");
-            $stmt->bind_param("ssss", $userName, $email, $password, $userType);
+            // Fetch user by username, email, and type (not password)
+            $stmt = $conn->prepare("SELECT * FROM user WHERE USER_NAME = ? AND USER_EMAIL = ? AND USER_TYPE = ?");
+            $stmt->bind_param("sss", $userName, $email, $userType);
             $stmt->execute();
             $result = $stmt->get_result();
 
+            // If user exists
             if ($result->num_rows === 1) {
                 $user = $result->fetch_assoc();
 
-                // Set all necessary session variables
-                $_SESSION['user_id'] = $user['USER_ID'];
-                $_SESSION['userName'] = $user['USER_NAME'];
-                $_SESSION['email'] = $user['USER_EMAIL'];
-                $_SESSION['userType'] = $user['USER_TYPE'];
+                // Verify the password using password_verify
+                if (password_verify($password, $user['USER_PASSWORD'])) {
+                    // Set session variables
+                    $_SESSION['user_id'] = $user['USER_ID'];
+                    $_SESSION['userName'] = $user['USER_NAME'];
+                    $_SESSION['email'] = $user['USER_EMAIL'];
+                    $_SESSION['userType'] = $user['USER_TYPE'];
 
-                // Redirect based on user type
-                if ($userType === "Client") {
-                    header("Location: clientHome.php");
-                } elseif ($userType === "Freelancer") {
-                    header("Location: ../freelancer/freelancer-dashboard-page.php");
-                } elseif ($userType === "Admin") {
-                    header("Location: ../admin/adminDash.php");
+                    // Redirect based on user type
+                    if ($userType === "Freelancer") {
+                        header("Location: ../freelancer/freelancer-dashboard-page.php");
+                    } elseif ($userType === "Admin") {
+                        header("Location: ../admin/adminDash.php");
+                    }
+                    exit();
+                } else {
+                    $userErrorMsg = "Incorrect password.<br>";
                 }
-                exit();
             } else {
                 $userErrorMsg = "Invalid credentials or user type. Please try again.<br>";
             }
@@ -57,8 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

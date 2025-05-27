@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../applicant/db_config.php'); // includes $master_db, $slave_db, generateNewUserId()
+require('../applicant/db_config.php');
 
 function clean_text($text) {
     return htmlspecialchars(trim($text));
@@ -69,34 +69,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         } elseif (!preg_match('/^09\d{9}$/', $phone)) {
             $phoneMsg = "Enter a valid phone number starting with 09";
         }
-
         if (empty($fstNameMsg) && empty($lstNameMsg) && empty($passMsg) && empty($conpassMsg) && empty($phoneMsg) && empty($bdayMsg)) {
             try {
-                $userId = generateUserId($slave_con);
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $birthday = date("Y-m-d", strtotime($birthday));
 
-                $stmt = $master_con->prepare("INSERT INTO USER (USER_ID, USER_EMAIL, USER_TYPE, USER_FSTNAME, USER_LSTNAME, USER_BIRTHDAY, USER_CONTACT, USER_PASSWORD, USER_NAME) 
-                                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$userId, $email, $userType, $firstName, $lastName, $birthday, $phone, $hashedPassword, $userName]);
+                // Store all data in session
+                $_SESSION['application_data'] = [
+                    'user_email' => $email,
+                    'user_type' => $userType,
+                    'user_name' => $userName,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'birthday' => $birthday,
+                    'contact' => $phone,
+                    'password' => $hashedPassword
+                ];
 
-                $_SESSION['user_id'] = $userId;
-
-                if ($_SESSION['application_data']['user_type'] === "Client") {
+                // Redirect to categories
+                if ($userType === "Client") {
                     header("Location: ../client/clientHome.php");
-                } elseif ($_SESSION['application_data']['user_type'] === "Freelancer") {
+                } elseif ($userType === "Freelancer") {
                     header("Location: ../applicant/categories.php");
                 } else {
                     header("Location: FormSignUser.php");
                 }
-            } catch (PDOException $e) {
+                exit;
+            } catch (Exception $e) {
                 $userErr = "Error: " . $e->getMessage();
             }
         }
     }
 }
-
-$_SESSION['application_data']['user_id'] = $userId ?? null;
 $_SESSION['application_data']['user_email'] = $email;
 $_SESSION['application_data']['user_type'] = $userType;
 $_SESSION['application_data']['user_name'] = $userName;

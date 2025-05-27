@@ -219,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="email">
             <div class="messages">
                 <h1>Messages</h1>
+                <p><?=$id?></p>
                 <div class="message-filter">
                     <form method="get" action="">
                         <button type="submit" name="filter" value="received" class="btn-edit">Received</button>

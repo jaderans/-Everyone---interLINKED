@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once 'freelancer-navbar-template.php';
 include_once 'SecurityCheck.php';
 include_once 'interlinkedDB.php';

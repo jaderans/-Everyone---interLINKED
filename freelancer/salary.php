@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include 'freelancer-navbar-template.php';
 include_once 'interlinkedDB.php';
 $master_con = connectToDatabase(3306);
@@ -24,13 +25,16 @@ $banks = $stmt->fetch(PDO::FETCH_ASSOC);
 if (empty($banks)) {
     $error[] = "Bank Is empty. Please register first";
 }
-$stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ?");
+$stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ? ORDER BY PAY_DATE DESC");
 $stmt->execute([$id]);
 $payDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 $stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = :user_id");
 $stmt->execute([':user_id' => $id]);
 $total = $stmt->fetchColumn();
+
+
 
 //insert total
 $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
@@ -54,13 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
         $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
         $stmt->execute([$newTotal, $id]);
 
-        $total = $newTotal; // update local variable so UI reflects it
+        $total = $newTotal;
         $successMessage = "Withdraw successful.";
     }
 }
-
-
-
 
 
 ?>
@@ -149,10 +150,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
             </div>
 
             <!-- Payments Table -->
+        <div class="pay">
             <div class="payments-table">
-                <h1>Transaction History</h1>
+                <h1>PAYMENTS</h1>
                 <table>
-<!--                    TODO: MAKE THIS RESULT FOM TRIGGERS-->
+                    <!--                    TODO: MAKE THIS RESULT FOM TRIGGERS-->
                     <thead>
                     <tr>
                         <th>AMOUNT</th>
@@ -174,6 +176,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                     </tbody>
                 </table>
             </div>
+        </div>
+
 
             <!-- Transaction History Button -->
 <!--            <div class="transaction-history-section">-->
