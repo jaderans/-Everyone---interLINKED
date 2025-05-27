@@ -199,24 +199,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="admin-panel">
         <!-- Left Pane -->
         <div class="left-pane">
-<!--
-<!--            <div class="status-badges">-->
-<!--                <div class="status-badge status-working" onclick="filterProjects('Working')">-->
-<!--                    <div class="count">--><?php //=$workingCount?><!--</div>-->
-<!--                    <div class="label">Freelancer Total Earnings</div>-->
-<!--                </div>-->
-<!--                <div class="status-badge status-pending" onclick="filterProjects('Pending')">-->
-<!--                    <div class="count">--><?php //=$pendingCount?><!--</div>-->
-<!--                    <div class="label">Total Project Revenue</div>-->
-<!--                </div>-->
-<!--                <div class="status-badge status-completed" onclick="filterProjects('Completed')">-->
-<!--                    <div class="count">--><?php //=$completedCount?><!--</div>-->
-<!--                    <div class="label">Admin Income</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!---->
-
-
+            <div class="status-badges">
+                <div class="status-badge status-working" onclick="filterProjects('Working')">
+                    <div class="count"><?=$workingCount?></div>
+                    <div class="label">Freelancer Total Earnings</div>
+                </div>
+                <div class="status-badge status-pending" onclick="filterProjects('Pending')">
+                    <div class="count"><?=$pendingCount?></div>
+                    <div class="label">Total Project Revenue</div>
+                </div>
+                <div class="status-badge status-completed" onclick="filterProjects('Completed')">
+                    <div class="count"><?=$completedCount?></div>
+                    <div class="label">Admin Income</div>
+                </div>
+            </div>
             <!-- Filters -->
             <div class="filters">
                 <button class="filter-btn <?php echo $filter === 'all' ? 'active' : ''; ?>" onclick="filterProjects('all')">All</button>
@@ -285,8 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?= $row['USER_FSTNAME'] ? htmlspecialchars($row['USER_FSTNAME'] . ' ' . $row['USER_LSTNAME']) : 'Unassigned' ?></td>
                                     <td class="<?= $dueDateClass ?>"><?= date('M d, Y', strtotime($row['PRO_END_DATE'])) ?></td>
                                     <td class="actions">
-                                        <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;>
-                                        <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
+                                        <a class="action-button" href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
 
                                     </td>
                                 </tr>
@@ -484,9 +479,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
+
 <script src="projScript.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     $(document).ready(function () {
         $('.delete-btn').on('click', function () {
             if (!confirm("Are you sure you want to delete this project?")) return;
