@@ -9,7 +9,6 @@
 /*------------------------------------------top navigation bar*/
 .topvar{
     width: 100vw;
-    height: 1rem;
     background-color: #ffffff;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     color: white;
@@ -59,7 +58,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: 80px;
     gap: 10px;
 }
 
@@ -492,16 +490,9 @@ textarea {
         display: block;
     }
 
+    /* Hide user profile section on mobile */
     .top-right {
-        gap: 15px;
-    }
-
-    .name h4 {
-        font-size: 14px;
-    }
-
-    .name p {
-        font-size: 10px;
+        display: none;
     }
 
     .navbar {
@@ -576,17 +567,9 @@ textarea {
         width: 120px;
     }
 
-    .profile .img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .name h4 {
-        font-size: 12px;
-    }
-
-    .name p {
-        font-size: 9px;
+    /* Keep profile hidden on smaller screens */
+    .top-right {
+        display: none;
     }
 
     .navbar {
@@ -633,13 +616,9 @@ textarea {
         width: 100px;
     }
 
+    /* Keep profile hidden on very small screens */
     .top-right {
-        gap: 8px;
-    }
-
-    .profile .img {
-        width: 22px;
-        height: 22px;
+        display: none;
     }
 
     .navbar {
