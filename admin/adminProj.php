@@ -23,9 +23,12 @@ $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
 // Set search/filter defaults
 $search = $_GET['search'] ?? '';
 $filter = $_GET['filter'] ?? 'all';
+$sortBy = $_GET['sort'] ?? 'priority';
+
+$projectsResult = fetchProjects($slave_con, $filter, $search, $sortBy);
 
 // Fetch projects
-function fetchProjects($conn, $status = 'all', $search = '') {
+function fetchProjects($conn, $status = 'all', $search = '', $sortBy = 'priority') {
     $query = "SELECT p.*, u.USER_FSTNAME, u.USER_LSTNAME 
               FROM projects p 
               LEFT JOIN user u ON p.USER_ID = u.USER_ID";
@@ -39,7 +42,34 @@ function fetchProjects($conn, $status = 'all', $search = '') {
         $query .= " WHERE (p.PRO_TITLE LIKE :search OR p.PRO_DESCRIPTION LIKE :search)";
     }
 
-    $query .= " ORDER BY p.PRO_PRIORITY_LEVEL DESC, p.PRO_END_DATE ASC";
+    // Updated sorting logic
+    switch ($sortBy) {
+        case 'priority':
+            $query .= " ORDER BY CASE 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'High' THEN 1 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Medium' THEN 2 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Low' THEN 3 
+                        ELSE 4 END, p.PRO_END_DATE ASC";
+            break;
+        case 'project_id':
+            $query .= " ORDER BY p.PRO_ID ASC";
+            break;
+        case 'type':
+            $query .= " ORDER BY p.PRO_TYPE ASC";
+            break;
+        case 'assigned_to':
+            $query .= " ORDER BY u.USER_FSTNAME ASC, u.USER_LSTNAME ASC";
+            break;
+        case 'deadline':
+            $query .= " ORDER BY p.PRO_END_DATE ASC";
+            break;
+        default:
+            $query .= " ORDER BY CASE 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'High' THEN 1 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Medium' THEN 2 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Low' THEN 3 
+                        ELSE 4 END, p.PRO_END_DATE ASC";
+    }
 
     $stmt = $conn->prepare($query);
 
@@ -178,7 +208,16 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                 <div class="action-buttons">
                     <button class="action-button" id="addProjectBtn"><i class="fas fa-plus"></i> Add Project</button>
                     <button class="fire-button" id="bulkDeleteProjects"><i class="fas fa-trash"></i> Delete</button>
-                    <button class="sort-button"><i class="fas fa-sort"></i> Sort</button>
+                    <div class="sort-dropdown">
+                        <button class="sort-button" id="sortBtn"><i class="fas fa-sort"></i> Sort</button>
+                        <div class="sort-options" id="sortOptions">
+                            <a href="?filter=<?= $filter ?>&search=<?= $search ?>&sort=priority">Priority</a>
+                            <a href="?filter=<?= $filter ?>&search=<?= $search ?>&sort=project_id">Project ID</a>
+                            <a href="?filter=<?= $filter ?>&search=<?= $search ?>&sort=type">Type</a>
+                            <a href="?filter=<?= $filter ?>&search=<?= $search ?>&sort=assigned_to">Assigned To</a>
+                            <a href="?filter=<?= $filter ?>&search=<?= $search ?>&sort=deadline">Deadline</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -222,22 +261,31 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                                     case 'Low': $priorityClass = 'priority-low'; break;
                                 }
 
-                                // Determine status tag styling
+                                // Determine status tag styling and check for overdue
                                 $statusClass = '';
-                                switch ($row['PRO_STATUS']) {
-                                    case 'Working': $statusClass = 'status-working-tag'; break;
-                                    case 'Pending': $statusClass = 'status-pending-tag'; break;
-                                    case 'Completed': $statusClass = 'status-completed-tag'; break;
-                                    case 'Canceled': $statusClass = 'status-canceled-tag'; break;
-                                }
+                                $displayStatus = $row['PRO_STATUS'];
 
-                                // Check if deadline is approaching or overdue
+                                // Check if project is overdue
                                 $today = new DateTime();
                                 $deadline = new DateTime($row['PRO_END_DATE']);
+                                $isOverdue = ($today > $deadline && $row['PRO_STATUS'] !== 'Completed' && $row['PRO_STATUS'] !== 'Canceled');
+
+                                if ($isOverdue) {
+                                    $displayStatus = 'Overdue';
+                                    $statusClass = 'status-overdue-tag';
+                                } else {
+                                    switch ($row['PRO_STATUS']) {
+                                        case 'Working': $statusClass = 'status-working-tag'; break;
+                                        case 'Pending': $statusClass = 'status-pending-tag'; break;
+                                        case 'Completed': $statusClass = 'status-completed-tag'; break;
+                                        case 'Canceled': $statusClass = 'status-canceled-tag'; break;
+                                    }
+                                }
+
                                 $daysDiff = $today->diff($deadline)->days;
                                 $dueDateClass = '';
 
-                                if ($today > $deadline && $row['PRO_STATUS'] !== 'Completed') {
+                                if ($isOverdue) {
                                     $dueDateClass = 'overdue';
                                 } else if ($daysDiff <= 3 && $row['PRO_STATUS'] !== 'Completed') {
                                     $dueDateClass = 'deadline-close';
@@ -247,7 +295,7 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                                     <td class="checkbox-cell"><input type="checkbox" class="project-checkbox" value="<?= $row['PRO_ID'] ?>"></td>
                                     <td><?= htmlspecialchars($row['PRO_ID']) ?></td>
                                     <td><?= htmlspecialchars($row['PRO_TITLE']) ?></td>
-                                    <td><span class="status-tag <?= $statusClass ?>"><?= htmlspecialchars($row['PRO_STATUS']) ?></span></td>
+                                    <td><span class="status-tag <?= $statusClass ?>"><?= htmlspecialchars($displayStatus) ?></span></td>
                                     <td><?= htmlspecialchars($row['PRO_PRIORITY_LEVEL']) ?></td>
                                     <td><?= htmlspecialchars($row['PRO_TYPE']) ?></td>
                                     <td><?= $row['USER_FSTNAME'] ? htmlspecialchars($row['USER_FSTNAME'] . ' ' . $row['USER_LSTNAME']) : 'Unassigned' ?></td>
@@ -256,11 +304,10 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                                         <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
                                         <a href="#" onclick="editProject(<?= $row['PRO_ID'] ?>)"><i class="fas fa-edit action-icon"></i></a>
                                         <form class="delete-form" data-id="<?= $row['PRO_ID'] ?>" style="display:inline;">
-                                            <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;">
+                                            <button type="button" class="delete-btn action-icon" title="Pay" style="border:none; background:none; cursor:pointer;">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
-
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -278,15 +325,27 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                     <div class="profile-name"><?= htmlspecialchars($selectedProject['PRO_TITLE']) ?></div>
                     <?php
                     $statusClass = '';
-                    switch ($selectedProject['PRO_STATUS']) {
-                        case 'Working': $statusClass = 'status-working-tag'; break;
-                        case 'Pending': $statusClass = 'status-pending-tag'; break;
-                        case 'Completed': $statusClass = 'status-completed-tag'; break;
-                        case 'Canceled': $statusClass = 'status-canceled-tag'; break;
+                    $displayStatus = $selectedProject['PRO_STATUS'];
+
+                    // Check if project is overdue
+                    $today = new DateTime();
+                    $deadline = new DateTime($selectedProject['PRO_END_DATE']);
+                    $isOverdue = ($today > $deadline && $selectedProject['PRO_STATUS'] !== 'Completed' && $selectedProject['PRO_STATUS'] !== 'Canceled');
+
+                    if ($isOverdue) {
+                        $displayStatus = 'Overdue';
+                        $statusClass = 'status-overdue-tag';
+                    } else {
+                        switch ($selectedProject['PRO_STATUS']) {
+                            case 'Working': $statusClass = 'status-working-tag'; break;
+                            case 'Pending': $statusClass = 'status-pending-tag'; break;
+                            case 'Completed': $statusClass = 'status-completed-tag'; break;
+                            case 'Canceled': $statusClass = 'status-canceled-tag'; break;
+                        }
                     }
                     ?>
                     <div class="profile-title">
-                        <span class="status-tag <?= $statusClass ?>"><?= htmlspecialchars($selectedProject['PRO_STATUS']) ?></span>
+                        <span class="status-tag <?= $statusClass ?>"><?= htmlspecialchars($displayStatus) ?></span>
                     </div>
                     <div class="profile-location">
                         <i class="fas fa-calendar-alt"></i>
@@ -297,7 +356,6 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
 
                 <div class="profile-actions">
                     <button class="profile-action-btn update-btn" onclick="editProject(<?= $selectedProject['PRO_ID'] ?>)">Edit Project</button>
-                    <button class="profile-action-btn promote-btn" onclick="updateStatus(<?= $selectedProject['PRO_ID'] ?>)">Update Status</button>
                 </div>
 
                 <div class="profile-section">
@@ -357,47 +415,6 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                     <div class="profile-section-title">Description</div>
                     <p><?= nl2br(htmlspecialchars($selectedProject['PRO_DESCRIPTION'])) ?></p>
                 </div>
-
-                <div class="profile-section">
-                    <div class="profile-section-title">Timeline</div>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-point"></div>
-                            <div class="timeline-content">
-                                Project created
-                                <div class="timeline-date"><?= date('M d, Y', strtotime($selectedProject['PRO_START_DATE'])) ?></div>
-                            </div>
-                        </div>
-                        <?php if ($selectedProject['PRO_STATUS'] === 'Working'): ?>
-                            <div class="timeline-item">
-                                <div class="timeline-point"></div>
-                                <div class="timeline-content">
-                                    Project started
-                                    <div class="timeline-date"><?= date('M d, Y', strtotime($selectedProject['PRO_START_DATE'])) ?></div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                        <?php if ($selectedProject['PRO_STATUS'] === 'Completed'): ?>
-                            <div class="timeline-item">
-                                <div class="timeline-point"></div>
-                                <div class="timeline-content">
-                                    Project completed
-                                    <div class="timeline-date"><?= date('M d, Y') ?></div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                        <?php if ($selectedProject['PRO_STATUS'] === 'Canceled'): ?>
-                            <div class="timeline-item">
-                                <div class="timeline-point"></div>
-                                <div class="timeline-content">
-                                    Project canceled
-                                    <div class="timeline-date"><?= date('M d, Y') ?></div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
             <?php else: ?>
                 <div class="profile-header">
                     <a style="width: 100%; height: 100%;">
@@ -548,6 +565,78 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                 success: function (response) {
                     // Optional: show toast or alert here
                     location.reload(); // Reload the page to reflect changes
+                },
+                error: function () {
+                    alert("Failed to delete project.");
+                }
+            });
+        });
+    });
+    function editProject(projectId) {
+        // Fetch project data using AJAX
+        $.ajax({
+            url: 'getProject.php',
+            type: 'GET',
+            data: { id: projectId },
+            dataType: 'json',
+            success: function(project) {
+                // Populate the form with project data
+                document.getElementById('projectId').value = project.PRO_ID;
+                document.getElementById('projectTitle').value = project.PRO_TITLE;
+                document.getElementById('projectType').value = project.PRO_TYPE;
+                document.getElementById('projectPriority').value = project.PRO_PRIORITY_LEVEL;
+                document.getElementById('projectStartDate').value = project.PRO_START_DATE;
+                document.getElementById('projectEndDate').value = project.PRO_END_DATE;
+                document.getElementById('projectAssignee').value = project.USER_ID || '';
+                document.getElementById('projectCommissionedBy').value = project.PRO_COMMISSIONED_BY;
+                document.getElementById('projectDescription').value = project.PRO_DESCRIPTION;
+                document.getElementById('projectStatus').value = project.PRO_STATUS;
+
+                // Update modal title
+                document.getElementById('modalTitle').textContent = 'Edit Project';
+
+                // Show the modal
+                document.getElementById('projectModal').style.display = 'block';
+            },
+            error: function() {
+                alert('Failed to load project data');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#projectForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const isEdit = document.getElementById('projectId').value !== '';
+
+            $.ajax({
+                url: isEdit ? 'updateProject.php' : 'saveProject.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    document.getElementById('projectModal').style.display = 'none';
+                    location.reload();
+                },
+                error: function() {
+                    alert('Failed to save project');
+                }
+            });
+        });
+        $('.delete-btn').on('click', function () {
+            if (!confirm("Are you sure you want to delete this project?")) return;
+
+            const form = $(this).closest('.delete-form');
+            const projectId = form.data('id');
+
+            $.ajax({
+                url: 'deleteProject.php',
+                type: 'POST',
+                data: { project_id: projectId },
+                success: function (response) {
+                    location.reload();
                 },
                 error: function () {
                     alert("Failed to delete project.");

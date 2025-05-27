@@ -18,9 +18,10 @@ $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
 // Set search/filter defaults
 $search = $_GET['search'] ?? '';
 $filter = $_GET['filter'] ?? 'all';
+$sortBy = $_GET['sort'] ?? 'priority';
 
 // Fetch projects
-function fetchProjects($conn, $status = 'all', $search = '') {
+function fetchProjects($conn, $status = 'all', $search = '', $sortBy = 'priority') {
     $query = "SELECT p.*, u.USER_FSTNAME, u.USER_LSTNAME 
               FROM projects p 
               LEFT JOIN user u ON p.USER_ID = u.USER_ID";
@@ -34,7 +35,33 @@ function fetchProjects($conn, $status = 'all', $search = '') {
         $query .= " WHERE (p.PRO_TITLE LIKE :search OR p.PRO_DESCRIPTION LIKE :search)";
     }
 
-    $query .= " ORDER BY p.PRO_PRIORITY_LEVEL DESC, p.PRO_END_DATE ASC";
+    switch ($sortBy) {
+        case 'priority':
+            $query .= " ORDER BY CASE 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'High' THEN 1 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Medium' THEN 2 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Low' THEN 3 
+                        ELSE 4 END, p.PRO_END_DATE ASC";
+            break;
+        case 'project_id':
+            $query .= " ORDER BY p.PRO_ID ASC";
+            break;
+        case 'type':
+            $query .= " ORDER BY p.PRO_TYPE ASC";
+            break;
+        case 'assigned_to':
+            $query .= " ORDER BY u.USER_FSTNAME ASC, u.USER_LSTNAME ASC";
+            break;
+        case 'deadline':
+            $query .= " ORDER BY p.PRO_END_DATE ASC";
+            break;
+        default:
+            $query .= " ORDER BY CASE 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'High' THEN 1 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Medium' THEN 2 
+                        WHEN p.PRO_PRIORITY_LEVEL = 'Low' THEN 3 
+                        ELSE 4 END, p.PRO_END_DATE ASC";
+    }
 
     $stmt = $conn->prepare($query);
 
@@ -47,8 +74,6 @@ function fetchProjects($conn, $status = 'all', $search = '') {
 
     $stmt->execute();
     return $stmt;
-
-
 }
 
 // Fetch team members
@@ -260,7 +285,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?= $row['USER_FSTNAME'] ? htmlspecialchars($row['USER_FSTNAME'] . ' ' . $row['USER_LSTNAME']) : 'Unassigned' ?></td>
                                     <td class="<?= $dueDateClass ?>"><?= date('M d, Y', strtotime($row['PRO_END_DATE'])) ?></td>
                                     <td class="actions">
-                                        <button><a href="?id=<?= $row['PRO_ID'] ?>">₱ Pay</a></button>
+                                        <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;>
+                                        <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
 
                                     </td>
                                 </tr>
@@ -300,7 +326,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="profile-actions" >
                     <form action="payment.php" method="post">
                         <input type="hidden" name="freelancerId" value="<?= $selectedProject['USER_ID']?>">
-                        <button class="profile-action-btn promote-btn" name="projId" value="<?= $selectedProject['PRO_ID'] ?>">Pay</button>
+                        <button class="profile-action-btn promote-btn" name="projId" value="<?= $selectedProject['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i> Pay</button>
                     </form>
                 </div>
 
