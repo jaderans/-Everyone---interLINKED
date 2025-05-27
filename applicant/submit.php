@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':language' => $userLanguage,
                     ':bio' => $userBio,
                     ':tries' => $tries,
-                    ':status' => 'pending',
+                    ':status' => 'PENDING',
                     ':emp_id' => !empty($empCompany) ? $user_id . '_EMP' : null,
                     ':ed_id' => !empty($edSchool) ? $user_id . '_ED' : null
                 ]);
