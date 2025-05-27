@@ -174,23 +174,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="admin-panel">
         <!-- Left Pane -->
         <div class="left-pane">
-            <!-- Status Badges -->
-            <div class="status-badges">
-                <div class="status-badge status-working" onclick="filterProjects('Working')">
-                    <div class="count"><?=$workingCount?></div>
-                    <div class="label">Freelancer Total Earnings</div>
-                </div>
-                <div class="status-badge status-pending" onclick="filterProjects('Pending')">
-                    <div class="count"><?=$pendingCount?></div>
-                    <div class="label">Total Project Revenue</div>
-                </div>
-                <div class="status-badge status-completed" onclick="filterProjects('Completed')">
-                    <div class="count"><?=$completedCount?></div>
-                    <div class="label">Admin Income</div>
-                </div>
-            </div>
+<!--
+<!--            <div class="status-badges">-->
+<!--                <div class="status-badge status-working" onclick="filterProjects('Working')">-->
+<!--                    <div class="count">--><?php //=$workingCount?><!--</div>-->
+<!--                    <div class="label">Freelancer Total Earnings</div>-->
+<!--                </div>-->
+<!--                <div class="status-badge status-pending" onclick="filterProjects('Pending')">-->
+<!--                    <div class="count">--><?php //=$pendingCount?><!--</div>-->
+<!--                    <div class="label">Total Project Revenue</div>-->
+<!--                </div>-->
+<!--                <div class="status-badge status-completed" onclick="filterProjects('Completed')">-->
+<!--                    <div class="count">--><?php //=$completedCount?><!--</div>-->
+<!--                    <div class="label">Admin Income</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
 
-            <!-- Search & Action Bar -->
 
             <!-- Filters -->
             <div class="filters">
