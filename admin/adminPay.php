@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+include_once 'checkIfSet.php';
 $slave_con = connectToDatabase(3306);
 $master_con = connectToDatabase(3306);
 
@@ -199,7 +200,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="admin-panel">
         <!-- Left Pane -->
         <div class="left-pane">
-            <!-- Status Badges -->
             <div class="status-badges">
                 <div class="status-badge status-working" onclick="filterProjects('Working')">
                     <div class="count"><?=$workingCount?></div>
@@ -214,9 +214,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="label">Admin Income</div>
                 </div>
             </div>
-
-            <!-- Search & Action Bar -->
-
             <!-- Filters -->
             <div class="filters">
                 <button class="filter-btn <?php echo $filter === 'all' ? 'active' : ''; ?>" onclick="filterProjects('all')">All</button>
@@ -285,7 +282,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?= $row['USER_FSTNAME'] ? htmlspecialchars($row['USER_FSTNAME'] . ' ' . $row['USER_LSTNAME']) : 'Unassigned' ?></td>
                                     <td class="<?= $dueDateClass ?>"><?= date('M d, Y', strtotime($row['PRO_END_DATE'])) ?></td>
                                     <td class="actions">
-                                        <button type="button" style="border:none; background:none; cursor:pointer;"><a href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
+                                        <a class="action-button" href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
 
                                     </td>
                                 </tr>
@@ -483,9 +480,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
+
 <script src="projScript.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     $(document).ready(function () {
         $('.delete-btn').on('click', function () {
             if (!confirm("Are you sure you want to delete this project?")) return;

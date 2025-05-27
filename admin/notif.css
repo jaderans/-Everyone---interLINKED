@@ -51,7 +51,9 @@
     box-shadow: 0 0 5px rgb(124, 124, 124);
     width: 95%;
 }
-
+.sort-buttons .right {
+    background-color: #d93c3c;
+}
 
 
 .content-notif {
@@ -86,6 +88,15 @@
     margin-left: 10px;
 }
 
+.sort-buttons {
+    display: flex;
+    flex-direction: row;
+    background-color: #e8e8e8;
+    border-radius: 50px;
+    gap: 10px;
+}
+
+
 
 .sort-buttons .btn-sort {
     color: white;
@@ -98,13 +109,7 @@
     transition: background-color 0.3s ease;
 }
 
-.sort-buttons {
-    display: flex;
-    flex-direction: row;
-    background-color: #e8e8e8;
-    border-radius: 50px;
-    margin-bottom: 20px;
-}
+
 
 
 .btn-edit {

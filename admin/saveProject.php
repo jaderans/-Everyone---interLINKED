@@ -6,6 +6,16 @@ include('interlinkedDB.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+// Function to create payment entry with only USER_ID and PRO_ID
+function createPaymentEntry($conn, $projectId, $userId) {
+    if ($userId === null) {
+        return;
+    }
+
+    $paymentStmt = $conn->prepare("INSERT INTO payment (USER_ID, PRO_ID) VALUES (?, ?)");
+    $paymentStmt->execute([$userId, $projectId]);
+}
+
 try {
     $conn = connectToDatabase();
 
@@ -43,7 +53,7 @@ try {
     }
 
     if ($projectId) {
-        // Update
+        // Update existing project
         $sql = "UPDATE projects SET 
                     PRO_TITLE = :title,
                     PRO_DESCRIPTION = :description,
@@ -59,7 +69,7 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':project_id', $projectId, PDO::PARAM_INT);
     } else {
-        // Insert
+        // Insert new project
         $sql = "INSERT INTO projects (
                     PRO_TITLE,
                     PRO_DESCRIPTION,
@@ -87,10 +97,10 @@ try {
                 )";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':created_by', $userId, PDO::PARAM_STR); // now correctly binding as string
+        $stmt->bindParam(':created_by', $userId, PDO::PARAM_STR);
     }
 
-    // Shared bindings
+    // Bind shared parameters
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':description', $description);
     $stmt->bindParam(':start_date', $startDate);
@@ -100,14 +110,41 @@ try {
     $stmt->bindParam(':priority', $priority);
     $stmt->bindParam(':commissioned_by', $commissionedBy);
 
-    // Assignee bind
+    // Bind assignee (USER_ID)
     if ($assignee === null) {
         $stmt->bindValue(':assignee', null, PDO::PARAM_NULL);
     } else {
-        $stmt->bindParam(':assignee', $assignee, PDO::PARAM_STR); // also string
+        $stmt->bindParam(':assignee', $assignee, PDO::PARAM_STR);
     }
 
+    // Execute insert or update
     $stmt->execute();
+
+    // Handle payment entry creation/update
+    if (!$projectId) {
+        // New project inserted
+        $lastProjectId = $conn->lastInsertId();
+
+        if ($assignee !== null) {
+            createPaymentEntry($conn, $lastProjectId, $assignee);
+        }
+    } else {
+        // Update existing project
+        if ($assignee !== null) {
+            // Check if payment entry exists
+            $checkPayment = $conn->prepare("SELECT PAY_ID FROM payment WHERE PRO_ID = ?");
+            $checkPayment->execute([$projectId]);
+
+            if (!$checkPayment->fetch()) {
+                // No payment entry, create one
+                createPaymentEntry($conn, $projectId, $assignee);
+            } else {
+                // Payment entry exists, update USER_ID only
+                $updatePayment = $conn->prepare("UPDATE payment SET USER_ID = ? WHERE PRO_ID = ?");
+                $updatePayment->execute([$assignee, $projectId]);
+            }
+        }
+    }
 
     echo json_encode(['success' => true, 'message' => 'Project saved successfully.']);
 

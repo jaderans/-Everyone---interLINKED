@@ -44,8 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notifId'])) {
     $stmt->bindParam(':notifId', $notifId);
     $stmt->execute();
 
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
 }
 
 
@@ -107,10 +105,23 @@ $unreadNotif = $notif->fetch(PDO::FETCH_ASSOC);
                     <p><?= htmlspecialchars($row['NOTIF_DATE']) ?></p>
 
                     <!-- Delete Notification -->
-                    <form action="freelancer-delete-notif.php" method="post"
-                          onsubmit="return confirm('Are you sure you want to delete this notification?');">
-                        <button class="btn-edit" name="notif_Id" value="<?= $row['NOTIF_ID'] ?>">Delete</button>
-                    </form>
+                    <!-- Delete Notification -->
+                    <button class="btn-edit open-delete-modal" data-id="<?= $row['NOTIF_ID'] ?>">Delete</button>
+
+                    <!-- Modal Structure -->
+                    <div class="modal-overlay" id="deleteModal">
+                        <div class="modal-box">
+                            <h3>Confirm Deletion</h3>
+                            <p>Are you sure you want to delete this notification?</p>
+                            <form action="freelancer-delete-notif.php" method="post">
+                                <input type="hidden" name="notif_Id" id="modalNotifId">
+                                <div class="modal-actions">
+                                    <button type="button" class="cancel-btn">Cancel</button>
+                                    <button type="submit" class="confirm-btn">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
                     <!-- Mark As Read -->
                     <?php if ($row['NOTIF_STATUS'] !== 'Read') { ?>
@@ -123,5 +134,18 @@ $unreadNotif = $notif->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.open-delete-modal').forEach(button => {
+        button.addEventListener('click', () => {
+            const notifId = button.getAttribute('data-id');
+            document.getElementById('modalNotifId').value = notifId;
+            document.getElementById('deleteModal').style.display = 'flex';
+        });
+    });
+
+    document.querySelector('.cancel-btn').addEventListener('click', () => {
+        document.getElementById('deleteModal').style.display = 'none';
+    });
+</script>
 </body>
 </html>

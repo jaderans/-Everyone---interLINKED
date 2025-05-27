@@ -106,20 +106,82 @@ http_response_code(404);
         <div class="lower-content">
             <button class="btn-top" ><a href="https://drive.google.com/drive/folders/1Nr1mkELXDzzGG6DfkXlGW76BUxgBfa8f?usp=sharing" target="_blank"><i class="fa-solid fa-file-import"></i> Submit</a> </button>
 
-            <button class="btn-top" style="margin-top: 10px" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
+            <button class="btn-top" style="margin-top: 10px;" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
 
-            <div class="help" style="text-align: left; margin-top: -15px">
-                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
+            <!--            <div class="help" style="text-align: left; margin-top: -15px">-->
+            <!--                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal -->
+<div id="logoutModal" class="logout-modal">
+    <div class="logout-modal-content">
+        <div class="logout-modal-header">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
             </div>
+            <h3 class="logout-modal-title">Confirm Logout</h3>
+            <p class="logout-modal-text">Are you sure you want to log out? You'll need to log in again to access your account.</p>
+        </div>
+        <div class="logout-modal-actions">
+            <button class="logout-btn logout-btn-cancel" id="cancelLogout">Cancel</button>
+            <button class="logout-btn logout-btn-confirm" id="confirmLogout">Log Out</button>
         </div>
     </div>
 </div>
 
 <script>
-    function myFunction() {
-        let text = "Do you want to log-out?";
-        if (confirm(text) === true){
-            window.location.replace("../loginSignup/logIn.php");
+
+    // Logout modal functionality
+    const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const cancelLogout = document.getElementById('cancelLogout');
+    const confirmLogout = document.getElementById('confirmLogout');
+
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        logoutModal.style.display = 'block';
+    });
+
+    cancelLogout.addEventListener('click', function() {
+        logoutModal.style.display = 'none';
+    });
+
+    confirmLogout.addEventListener('click', function() {
+        window.location.replace("../loginSignup/logIn.php");
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && logoutModal.style.display === 'block') {
+            logoutModal.style.display = 'none';
+        }
+    });
+
+    // Existing message modal functionality
+    var modalMessage = document.getElementById("message");
+    var btnMessage = document.getElementById("float-message");
+    var spanmsg = document.querySelector("#message .close");
+
+    if (btnMessage) {
+        btnMessage.onclick = function () {
+            modalMessage.style.display = "block";
+        }
+    }
+
+    if (spanmsg) {
+        spanmsg.onclick = function () {
+            modalMessage.style.display = "none";
         }
     }
 
@@ -152,28 +214,6 @@ http_response_code(404);
         }
     });
 
-    // Modal functionality (existing code)
-    var modalMessage = document.getElementById("message");
-    var btnMessage = document.getElementById("float-message");
-    var spanmsg = document.querySelector("#message .close");
-
-    if (btnMessage) {
-        btnMessage.onclick = function () {
-            modalMessage.style.display = "block";
-        }
-    }
-
-    if (spanmsg) {
-        spanmsg.onclick = function () {
-            modalMessage.style.display = "none";
-        }
-    }
-
-    window.onclick = function (event) {
-        if (event.target === modalMessage) {
-            modalMessage.style.display = "none";
-        }
-    }
 </script>
 
 </body>
