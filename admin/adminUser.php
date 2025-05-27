@@ -48,8 +48,6 @@ $stmt->execute([$name]);
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +59,11 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
+<style>
+
+</style>
+
 <body>
 <!-- Sidebar -->
 <div class="sidebar">
@@ -305,76 +308,74 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             <?php endif; ?>
         </div>
-</div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('a[href^="editUser.php"]').on('click', function (e) {
-        e.preventDefault();
-        const url = $(this).attr('href');
-        $('#profileDetails').html('Loading...');
-        $.get(url, function (data) {
-            $('#profileDetails').html(data);
+    <script>
+        $('a[href^="editUser.php"]').on('click', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            $('#profileDetails').html('Loading...');
+            $.get(url, function (data) {
+                $('#profileDetails').html(data);
+            });
         });
-    });
-    document.getElementById('applicantSearchInput').addEventListener('keyup', function () {
-        const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#applicantTableBody tr');
+        document.getElementById('applicantSearchInput').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#applicantTableBody tr');
 
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(filter) ? '' : 'none';
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
-    });
 
-    document.getElementById('searchInput').addEventListener('keyup', function () {
-        const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#userTableBody tr');
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#userTableBody tr');
 
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(filter) ? '' : 'none';
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
-    });
 
 
-    function hireApplicant(userId) {
-        if (confirm('Are you sure you want to hire this applicant?')) {
-            // Make a request to a PHP script to update status
-            window.location.href = 'hireApplicant.php?id=' + userId;
+        function hireApplicant(userId) {
+            if (confirm('Are you sure you want to hire this applicant?')) {
+                // Make a request to a PHP script to update status
+                window.location.href = 'hireApplicant.php?id=' + userId;
+            }
         }
-    }
-    // Load profile into right pane
-    function loadUserProfile(userID) {
-        const rightPane = document.getElementById("right-pane");
-        fetch('getUserProfile.php?id=' + userID)
-            .then(response => response.text())
-            .then(data => {
-                rightPane.innerHTML = data;
-            })
-            .catch(error => console.error('Error loading profile:', error));
-    }
-
-    document.getElementById("searchInput").addEventListener("input", function () {
-        const searchTerm = this.value;
-        clearTimeout(debounceTimer);
-
-        debounceTimer = setTimeout(() => {
-            const tbody = document.getElementById("userTableBody");
-            tbody.innerHTML = '<tr><td colspan="8">Searching...</td></tr>';
-
-            fetch(`searchUsers.php?search=${encodeURIComponent(searchTerm)}`)
+        // Load profile into right pane
+        function loadUserProfile(userID) {
+            const rightPane = document.getElementById("right-pane");
+            fetch('getUserProfile.php?id=' + userID)
                 .then(response => response.text())
                 .then(data => {
-                    tbody.innerHTML = data;
+                    rightPane.innerHTML = data;
                 })
-                .catch(error => {
-                    console.error("Error fetching search results:", error);
-                    tbody.innerHTML = '<tr><td colspan="8">Error loading users.</td></tr>';
-                });
-        }, 300);
-    });
+                .catch(error => console.error('Error loading profile:', error));
+        }
 
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const searchTerm = this.value;
+            clearTimeout(debounceTimer);
 
-</script>
+            debounceTimer = setTimeout(() => {
+                const tbody = document.getElementById("userTableBody");
+                tbody.innerHTML = '<tr><td colspan="8">Searching...</td></tr>';
+
+                fetch(searchUsers.php?search=${encodeURIComponent(searchTerm)})
+                    .then(response => response.text())
+                    .then(data => {
+                        tbody.innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching search results:", error);
+                        tbody.innerHTML = '<tr><td colspan="8">Error loading users.</td></tr>';
+                    });
+            }, 300);
+        });
+    </script>
 </body>
 </html>
