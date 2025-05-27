@@ -1412,3 +1412,414 @@ table td {
         line-height: 1.4;
     }
 }
+
+@media (min-width: 1025px) and (max-width: 1400px) and (orientation: landscape) {
+    /* Container adjustments */
+    .container,
+    .container-dashboard,
+    .container-profile {
+        margin-left: 32vh;
+        margin-top: 12vh;
+        padding: 1vh;
+        margin-right: 0vh;
+    }
+
+    /* Dashboard cards - maintain row layout like original */
+    .inner {
+        flex-direction: row;
+        margin-left: -1vh;
+        margin-top: -3vh;
+        gap: 2vh;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2vh;
+        margin-right: 1vh;
+        justify-content: center;
+        padding: 0;
+        margin-top: 2vh;
+        margin-left: -1vh;
+    }
+
+    .card {
+        height: 24vh;
+        padding: 18px;
+        flex: 1;
+    }
+
+    .card h1 {
+        font-size: 26px;
+    }
+
+    .card-content h1,
+    .card-content .num {
+        font-size: 65px;
+    }
+
+    .card-content .label {
+        margin-top: 40px;
+        font-size: 14px;
+    }
+
+    /* Content card adjustments - maintain original layout */
+    .content-card {
+        background-size: 150%;
+        text-align: right;
+        margin-right: 1vh;
+        height: 30vh;
+    }
+
+    .header-section {
+        position: absolute; /* Keep original absolute positioning */
+        top: 40px;
+        right: 15px;
+        text-align: right;
+        margin-top: 2vh;
+        padding-right: 2vh;
+    }
+
+    .header-section h1 {
+        font-size: 6vh;
+    }
+
+    .header-section h2 {
+        font-size: 18px;
+        margin: 15px 0;
+    }
+
+    .header-section p {
+        font-size: 13px;
+    }
+
+    .check {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background-color: #1f4c4b;
+        border-radius: 90px;
+        margin-bottom: .5vh;
+        padding: 1vh;
+    }
+
+
+    /* Project card dashboard adjustments */
+    .project-card-dashboard {
+        background-color: #efefef;
+        display: flex;
+        flex-direction: row;
+        height: 45vh;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .project-card-content-dashboard {
+        margin: 18px;
+        width: 100%;
+        overflow: auto;
+    }
+
+    .project-card-content-dashboard h1 {
+        color: #1f4c4b;
+        font-size: 26px;
+        font-weight: 900;
+    }
+
+    .project-card-content-dashboard th {
+        font-weight: bolder;
+        background-color: #3D9997;
+        color: #dcdcdc;
+        padding: 12px;
+    }
+
+    .project-card-content-dashboard td {
+        padding: 10px;
+    }
+
+    /* Chart card adjustments */
+    .card-chart {
+        flex: 1;
+        border-radius: 10px;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+        background-position: center;
+        color: #0d3b3f;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    /* Title section */
+    .title {
+        background-color: #f8f8f8;
+        border-radius: 15px;
+        padding: 18px;
+        height: 10vh;
+        margin-bottom: 4vh;
+    }
+
+    .title h1 {
+        color: #1d4e5e;
+        font-weight: 800;
+        font-size: 28px;
+        margin-left: 10px;
+    }
+
+    /* Email/Messages layout */
+
+    .email {
+        flex-direction: column;
+        height: 88vh;
+        gap: 15px;
+        margin-top: -20px;
+    }
+
+    .content {
+        padding-left: 2vh;
+        margin-left: -1vh;
+    }
+
+    .messages {
+        width: 95%;
+        min-width: 90%;
+        margin-bottom: 0;
+        height: 40%;
+    }
+
+    .compose {
+        width: 95%;
+        margin-bottom: 0;
+        padding: 15px;
+        height: 50%;
+    }
+
+    .message-content {
+        height: 60%;
+        width: 100%;
+    }
+
+    .msg {
+        padding-right: 0;
+        padding-top: 1.5vh;
+        padding-bottom: 1.5vh;
+    }
+
+    .message-area {
+        height: 75%;
+    }
+
+    .message-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 4vh;
+        height: 42vh;
+    }
+
+    .message-form .info {
+        display: flex;
+        flex-direction: row;
+        gap: 1vh;
+        width: 100%;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        margin-top: -3vh;
+    }
+
+    .message-form .type {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        margin-top: -3vh;
+    }
+
+    .message-form input[type=text] {
+        width: 100%;
+        height: 35px;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
+    .message-form label {
+        font-weight: 600;
+        color: #1f4c4b;
+        margin-bottom: 5px;
+    }
+
+    textarea {
+        width: 100%;
+        height: 200px;
+        padding: 15px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+
+    .info .send {
+        color: white;
+        height: 4vh;
+        background-color: #1f4c4b;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: -3vh;
+        display: flex;
+        justify-content: flex-start;
+        align-items: baseline;
+        margin-left: -26vh;
+    }
+
+    .form-group input {
+        height: 40px;
+    }
+
+    .form-group textarea {
+        min-height: 180px;
+    }
+
+    .form-delete {
+        padding: 1px;
+        height: 5vh;
+    }
+    .btn-send,
+    .btn-draft {
+        padding: 10px 25px;
+        min-height: 44px;
+    }
+
+    /* Profile page adjustments */
+
+    .header {
+        margin-top: -6vh;
+    }
+
+    .profile-img .img {
+        margin: -200px 0 0 20px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .profile-name {
+        margin: -120px 0 0 190px;
+        width: calc(100% - 200px);
+    }
+
+    .profile-name h1 {
+        font-size: 24px;
+    }
+
+    .profile-details {
+        height: auto;
+        margin: 20px 0;
+    }
+
+    .details {
+        margin: 10px 5px 0 20px;
+        padding: 15px;
+    }
+
+    /* Table adjustments */
+    table {
+        font-size: 13px;
+        table-layout: auto;
+    }
+
+    th, td {
+        padding: 12px 8px;
+        margin-top: 5vh;
+    }
+
+    /* Project card adjustments */
+    .project-card,
+    .project-card-dashboard {
+        height: 88vh;
+        margin-top: -20px;
+    }
+
+    .project-card-content,
+    .project-card-content-dashboard {
+        margin: 15px;
+    }
+
+
+    /* Form adjustments */
+    .message-form input[type=text] {
+        width: 70%;
+        height: 35px;
+        padding: 0 15px;
+    }
+
+    textarea {
+        height: 20vh;
+        width: 100%;
+    }
+
+    .btn-edit,
+    .btn-project,
+    .btn-delete {
+        height: 44px;
+        min-height: 44px;
+    }
+
+    /* Notification adjustments */
+    .content-notif{
+        margin-left: -2vh;
+        padding: 1vh;
+        margin-right: -1vh;
+        height: 6vh;
+        margin-bottom: 5vh;
+    }
+
+    .sort-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 5px;
+        max-width: 100%;
+        box-sizing: border-box;
+        height: 6vh;
+        align-content: center;
+        align-items: center;
+    }
+
+    .sum{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 1vh;
+        height: 3vh;
+    }
+
+    .btn-sort {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        border-radius: 24px;
+    }
+
+    .notif-content {
+        height: 68vh;
+        padding: 15px;
+        margin-top: -20px;
+        margin-bottom: 3vh;
+    }
+
+    .notif {
+        width: 95%;
+        padding: 12px 15px;
+    }
+}
+
+
