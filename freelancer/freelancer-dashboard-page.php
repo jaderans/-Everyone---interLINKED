@@ -141,8 +141,12 @@ $cancelled = $statuses['Cancelled'];
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
+    let chart;
+    let data;
+    let options;
+
     function drawChart() {
-        const data = google.visualization.arrayToDataTable([
+        data = google.visualization.arrayToDataTable([
             ['Commission', 'Mhl'],
             ['Submitted', <?= $submitted ?>],
             ['Ongoing', <?= $ongoing ?>],
@@ -151,28 +155,68 @@ $cancelled = $statuses['Cancelled'];
             ['Cancelled', <?= $cancelled ?>]
         ]);
 
-        const options = {
+        // Get container dimensions
+        const container = document.getElementById('myChart');
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+
+        options = {
             title: 'Tasks',
-            width: 370,    // Control chart size here
-            height: 370,
+            width: containerWidth,
+            height: containerHeight,
             legend: {
-                position: 'bottom',   // Move labels to bottom
+                position: containerWidth < 400 ? 'bottom' : 'right',
                 alignment: 'center',
-                textStyle: { fontSize: 14 }
+                textStyle: {
+                    fontSize: containerWidth < 400 ? 10 : 12
+                }
             },
             chartArea: {
-                left: 20,
-                top: 40,
-                width: '90%',
-                height: '70%'
+                left: containerWidth < 400 ? 10 : 20,
+                top: containerWidth < 400 ? 30 : 40,
+                width: containerWidth < 400 ? '85%' : '70%',
+                height: containerWidth < 400 ? '60%' : '70%'
             },
-            colors: ['#81b7e5', '#cb8a76', '#60b981'],
-            pieHole: 1,   // Optional: set to 0.4 if you want a donut chart
+            colors: ['#81b7e5', '#cb8a76', '#60b981', '#f4a460', '#ff6b6b'],
+            pieHole: 0,
+            titleTextStyle: {
+                fontSize: containerWidth < 400 ? 14 : 16
+            },
+            // Make chart responsive
+            responsive: true
         };
 
-        const chart = new google.visualization.PieChart(document.getElementById('myChart'));
+        chart = new google.visualization.PieChart(container);
         chart.draw(data, options);
     }
+
+    // Redraw chart on window resize
+    function resizeChart() {
+        if (chart && data && options) {
+            drawChart();
+        }
+    }
+
+    // Debounce function to limit resize calls
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Add event listeners for resize
+    window.addEventListener('resize', debounce(resizeChart, 250));
+
+    // Optional: Also listen for orientation change on mobile
+    window.addEventListener('orientationchange', function() {
+        setTimeout(resizeChart, 500);
+    });
 </script>
 
 </body>
