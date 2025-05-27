@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
         // Begin transaction
         $master_con->beginTransaction();
 
-        // Update user type to Freelancer and status to HIRED
-        $stmt = $master_con->prepare("UPDATE user SET USER_TYPE = 'Freelancer', USER_STATUS = 'ACTIVE' WHERE USER_ID = ? AND USER_TYPE = 'Applicant'");
+        // Update status to REJECTED
+        $stmt = $master_con->prepare("UPDATE user SET USER_STATUS = 'REJECTED' WHERE USER_ID = ? AND USER_TYPE = 'Applicant'");
         $result = $stmt->execute([$userId]);
 
         if ($stmt->rowCount() > 0) {
             $master_con->commit();
-            echo json_encode(['success' => true, 'message' => 'Applicant hired successfully']);
+            echo json_encode(['success' => true, 'message' => 'Applicant rejected successfully']);
         } else {
             $master_con->rollback();
             echo json_encode(['success' => false, 'message' => 'No applicant found with that ID']);
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
         if (isset($master_con)) {
             $master_con->rollback();
         }
-        error_log("Hire error: " . $e->getMessage());
+        error_log("Reject error: " . $e->getMessage());
         echo json_encode(['success' => false, 'message' => 'Database error occurred']);
     }
 } else {
