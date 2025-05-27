@@ -1,5 +1,4 @@
 <?php
-//include_once 'SecurityCheck.php';
 include 'freelancer-navbar-template.php';
 include_once 'interlinkedDB.php';
 $master_con = connectToDatabase(3306);
@@ -27,7 +26,7 @@ if (empty($banks)) {
 }
 $stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ?");
 $stmt->execute([$id]);
-$payDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+$payDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = :user_id");
 $stmt->execute([':user_id' => $id]);
@@ -134,21 +133,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                     <p>No bank record found.</p>
                 <?php endif; ?>
 
-
-                <!-- Withdraw and Transfer Buttons -->
-                    <div class="banking-actions">
-                        <button id="withdrawBtn" class="banking-action-btn">
-                            <i class="fas fa-arrow-down"></i> Withdraw
-                        </button>
-
-                        <form action="bankDetails.php" method="post">
-                            <button class="banking-action-btn">
-                                <i class="fas fa-exchange-alt"></i> Bank Details
-                            </button>
-                        </form>
-
-                    </div>
                 </div>
+            <div class="banking-actions">
+                <button id="withdrawBtn" class="btn-withdraw">
+                    <i class="fas fa-arrow-down"></i> Withdraw
+                </button>
+
+                <form action="bankDetails.php" method="post">
+                    <button class="btn-details">
+                        <i class="fas fa-exchange-alt"></i> Bank Details
+                    </button>
+                </form>
+
+            </div>
             </div>
 
             <!-- Payments Table -->
@@ -158,37 +155,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
 <!--                    TODO: MAKE THIS RESULT FOM TRIGGERS-->
                     <thead>
                     <tr>
-                        <th>PROJECT NAME</th>
                         <th>AMOUNT</th>
                         <th>PAYMENT DATE</th>
                         <th>PAYMENT STATUS</th>
+                        <th>PAYMENT ID</th>
                     </tr>
                     </thead>
                     <tbody id="paymentsTableBody">
-                    <tr>
-                        <td>Cafe Logo</td>
-                        <td>$299.00</td>
-                        <td>16-05-2025</td>
-                        <td><span class="status success">Success</span></td>
-                    </tr>
-                    <tr>
-                        <td>Interior Design</td>
-                        <td>$299.00</td>
-                        <td>16-05-2025</td>
-                        <td><span class="status failed">Failed</span></td>
-                    </tr>
-                    <tr>
-                        <td>Character Illustration</td>
-                        <td>$299.00</td>
-                        <td>16-05-2025</td>
-                        <td><span class="status pending">Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>Custom Shirt Design</td>
-                        <td>$299.00</td>
-                        <td>16-05-2025</td>
-                        <td><span class="status success">Success</span></td>
-                    </tr>
+                    <?php foreach ($payDetails as $pay) {?>
+                        <tr>
+                            <td>₱ <?=$pay['PAY_AMOUNT']?></td>
+                            <td><?=$pay['PAY_DATE']?></td>
+                            <td><?=$pay['PAY_STATUS']?></td>
+                            <td><?=$pay['PAY_ID']?></td>
+                        </tr>
+                    <?php }?>
+
                     </tbody>
                 </table>
             </div>
@@ -208,8 +190,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
             <h2>Withdraw</h2>
             <form method="POST" action="">
                 <input type="number" name="withdraw_amount" placeholder="Amount" required>
-                <input type="password" name="withdraw_password" placeholder="Password" required>
-                <input type="password" name="withdraw_confirm" placeholder="Confirm Password" required>
+                <input type="password" name="withdraw_password" placeholder="Pin" required>
+                <input type="password" name="withdraw_confirm" placeholder="Confirm Pin" required>
                 <div class="modal-actions">
                     <button type="submit" name="withdraw_btn" class="submit">Withdraw</button>
                     <button type="button" class="cancel" id="cancelWithdraw">Cancel</button>

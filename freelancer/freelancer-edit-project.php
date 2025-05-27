@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     foreach ($readonlyFields as $field => $expected) {
         if (!isset($_POST[$field]) || trim($_POST[$field]) !== trim($expected)) {
-            $error[] = "Invalid or modified data detected in field: $field.";
+            $error[] = "Invalid or modified data detected.";
         }
     }
 
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <div class="form-group">
                     <div>
                         <label for="email">Commissioned By</label>
-                        <input type="email" id="commissioned" name="commissionedBy" value="<?=$result['PRO_COMMISSIONED_BY']?>" readonly>
+                        <input type="text" id="commissioned" name="commissionedBy" value="<?=$result['PRO_COMMISSIONED_BY']?>" readonly>
                     </div>
                     <div>
                         <label for="email">Type</label>
@@ -138,11 +138,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <div class="form-group">
                     <div>
                         <label for="date">Date Start</label>
-                        <input type="text" id="text" name="date-start" value="<?=$result['PRO_START_DATE']?>" readonly>
+                        <input type="date" id="text" name="date-start" value="<?=$result['PRO_START_DATE']?>" readonly>
                     </div>
                     <div>
                         <label for="due">Due Date</label>
-                        <input type="text" id="text" name="due" value="<?=$result['PRO_END_DATE']?>" readonly>
+                        <input type="date" id="text" name="due" value="<?=$result['PRO_END_DATE']?>" readonly>
                     </div>
                 </div>
 

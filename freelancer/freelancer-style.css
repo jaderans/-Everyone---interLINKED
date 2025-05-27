@@ -1,22 +1,17 @@
-/* Import Inter font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-* {
+*{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: "Inter", sans-serif;
+    font-family: "Inter",sans-serif;
     font-weight: 500;
     font-style: normal;
 }
 
-html, body {
+html, body{
     background-color: #dadada;
     overflow-x: hidden;
-    min-height: 100vh;
+    height: 100vh;
 }
 
-/* Priority Badges */
 .priority-badge {
     display: inline-block;
     padding: 4px 15px;
@@ -40,7 +35,7 @@ html, body {
     background-color: #56d256;
 }
 
-/* Main Content Container */
+/*------------------------------------------------content*/
 .container {
     margin-left: 320px;
     margin-top: 100px;
@@ -56,260 +51,7 @@ html, body {
     font-weight: 900;
 }
 
-/* Dashboard Specific Styles */
-.container-dashboard {
-    margin-left: 320px;
-    margin-top: 55px;
-    margin-right: 10px;
-    padding: 20px;
-}
-
-.inner {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    align-items: flex-start;
-}
-
-/* Content Card */
-.content-card {
-    position: relative;
-    color: #1f4c4b;
-    background-image: url("../imgs/natbg.png");
-    background-size: 130%;
-    background-position: 100% center;
-    background-repeat: no-repeat;
-    padding: 40px;
-    width: 100%;
-    text-align: right;
-    line-height: 1.2;
-    border-radius: 15px;
-    min-height: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header-section {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    text-align: right;
-}
-
-.header-section h1 {
-    font-size: 60px;
-    font-weight: 900;
-    margin: 0;
-    line-height: 1;
-}
-
-.header-section h2 {
-    font-weight: 600;
-    margin: 20px 0 0 0;
-    font-size: 20px;
-}
-
-.header-section h3 {
-    margin: 5px 0 0 0;
-    font-size: 14px;
-    font-weight: 400;
-    opacity: 0.8;
-}
-
-/* Salary Section */
-.salary {
-    position: absolute;
-    bottom: 80px;
-    right: 40px;
-    background-color: #1b5640;
-    height: auto;
-    min-height: 100px;
-    padding: 20px;
-    width: 280px;
-    border-radius: 10px;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease;
-}
-
-.salary:hover {
-    transform: translateY(-2px);
-}
-
-.sal-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: #e5e5e5;
-    text-align: left;
-}
-
-.sal-details p {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    opacity: 0.9;
-}
-
-.sal-details h1 {
-    font-size: 28px;
-    font-weight: 700;
-    color: #fff;
-    margin: 5px 0;
-}
-
-.sal-details h3 {
-    font-size: 14px;
-    font-weight: 400;
-    opacity: 0.8;
-}
-
-/* Check Button */
-.check {
-    position: absolute;
-    bottom: 20px;
-    right: 40px;
-    background-color: #1f4c4b;
-    border-radius: 25px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.check:hover {
-    background-color: #2a6366;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.check a {
-    display: inline-block;
-    color: white;
-    padding: 12px 24px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-/* Cards Container */
-.card-container {
-    display: flex;
-    gap: 20px;
-    padding: 20px 0;
-    flex-wrap: wrap;
-}
-
-.card {
-    border-left: 5px solid #436a6d;
-    flex: 1;
-    min-width: 200px;
-    border-radius: 15px;
-    background-color: #ffffff;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 180px;
-    color: #0d3b3f;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(67, 106, 109, 0.05) 0%, rgba(67, 106, 109, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    background-color: #f8f9fa;
-}
-
-.card:hover::before {
-    opacity: 1;
-}
-
-.card h1 {
-    color: #1f4c4b;
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-.card i {
-    margin-right: 12px;
-    font-size: 20px;
-}
-
-.card-content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: auto;
-    position: relative;
-    z-index: 1;
-}
-
-.card-content h1 {
-    font-size: 48px;
-    font-weight: 800;
-    color: #1f4c4b;
-    line-height: 1;
-    margin: 0;
-}
-
-.card-content .label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
-    margin-left: 10px;
-    margin-bottom: 8px;
-}
-
-/* Chart Card */
-.card-chart {
-    flex: 1;
-    min-width: 350px;
-    border-radius: 15px;
-    background-color: #ffffff;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.card-chart:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Redirect Links */
-.card-redirect {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Email/Messages Section */
+/*------------------------------------------------freelancer  message */
 .email {
     margin-top: -40px;
     margin-left: -20px;
@@ -324,7 +66,7 @@ html, body {
     width: 50%;
     padding: 15px;
     border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .message-content {
@@ -338,7 +80,7 @@ html, body {
     width: 50%;
     padding: 10px;
     border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .msg {
@@ -348,8 +90,9 @@ html, body {
     margin: 10px 0;
     border-radius: 6px;
     font-family: Arial, sans-serif;
-    box-shadow: 0 2px 8px rgba(108, 108, 108, 0.2);
+    box-shadow: 0 0 5px rgba(108, 108, 108, 0.66);
     width: 90%;
+    overflow: auto;
 }
 
 .msg h3 {
@@ -372,7 +115,26 @@ html, body {
     border-radius: 20px;
 }
 
-/* Profile Section */
+.btn-delete {
+    background: #b2c1c2;
+    color: white;
+    width: 10%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  1s ease;
+}
+
+.btn-delete:hover {
+    background: #608e91;
+    color: white;
+}
+
+.form-delete {
+    padding: 1px;
+}
+
+/*------------------------------------------------freelancer Profile page*/
 .header {
     width: 100vw;
     height: 30vh;
@@ -401,12 +163,12 @@ html, body {
     height: 200px;
     background-color: #eeeeee;
     border-radius: 50%;
-    box-shadow: 0 0 20px rgba(67, 106, 109, 0.3);
+    box-shadow: 0 0 20px #436a6d;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 3px solid #436a6d;
+    border: 2px solid #436a6d;
 }
 
 .profile-img .img img {
@@ -423,6 +185,26 @@ html, body {
     margin: -150px 0 0 250px;
 }
 
+.edit .btn {
+    width: 70px;
+    margin: 40px 0 10px 0;
+}
+
+.btn-project {
+    background: #357b80;
+    color: white;
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  0.1s ease;
+}
+
+.btn-project:hover {
+    background-color: #274d50;
+    color: #eaeaea;
+}
+
 .profile-details {
     display: flex;
     flex-direction: column;
@@ -436,46 +218,38 @@ html, body {
     margin: 10px 10px 0 40px;
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(67, 106, 109, 0.15);
+    box-shadow: 0 0  20px rgba(67, 106, 109, 0.24);
 }
 
-/* Table Styles */
+/*--------------------------------------------------------table design*/
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 table thead {
-    background-color: #3D9997;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #a2a2a2;
 }
 
 table th {
-    padding: 15px;
-    text-align: left;
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: #555;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
     font-size: 14px;
     color: #333;
 }
 
-table tbody tr:hover {
-    background-color: #f8f9fa;
-}
-
-/* Notification Styles */
 .notif-content {
     margin-top: -30px;
     background-color: #eeeeee;
@@ -491,8 +265,14 @@ table tbody tr:hover {
     padding: 15px 20px;
     margin: 10px 0;
     border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(124, 124, 124, 0.2);
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 5px rgb(124, 124, 124);
     width: 95%;
+}
+
+.content-notif {
+    margin-top: -30px;
+    border-radius: 10px;
 }
 
 .notif h3 {
@@ -507,89 +287,27 @@ table tbody tr:hover {
     font-size: 14px;
 }
 
-/* Button Styles */
-.btn-delete {
-    background: #dc3545;
-    color: white;
-    width: 80px;
-    height: 40px;
-    border-radius: 8px;
-    border: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.btn-delete:hover {
-    background: #c82333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
-}
-
-.btn-edit {
-    color: white;
+.sum{
     background-color: #357e7e;
-    width: 120px;
-    height: 40px;
-    border-radius: 8px;
-    border: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.btn-edit:hover {
-    background-color: #2a6366;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(53, 126, 126, 0.3);
-}
-
-.btn-project {
-    background: #357b80;
+    text-align: center;
+    align-items: center;
+    height: 19px;
+    padding: 1px;
+    font-size: 13px;
     color: white;
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    border: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-weight: 500;
+    margin-top: 20px;
+    border-radius: 10px;
+    width: 100px;
+    margin-left: 25px;
 }
 
-.btn-project:hover {
-    background-color: #2a6366;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(53, 123, 128, 0.3);
-}
-
-.btn-sort {
-    background: #436a6d;
-    color: white;
-    width: 80px;
-    height: 35px;
-    border-radius: 8px;
-    border: none;
-    margin: 5px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 12px;
-}
-
-.btn-sort:hover {
-    background: #2a6366;
-    transform: translateY(-2px);
-}
-
-/* Utility Classes */
 .title {
     background-color: #f8f8f8;
     border-radius: 15px;
     padding: 20px;
-    height: auto;
-    min-height: 80px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 12vh;
+    margin-bottom: 50px;
+    z-index: 10;
 }
 
 .title h1 {
@@ -598,58 +316,204 @@ table tbody tr:hover {
     margin-left: 10px;
 }
 
+.sort-buttons .btn-sort {
+    color: white;
+    background-color: #357e7e;
+    width: 90px;
+    height: 20px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 5px;
+    transition: background-color 0.3s ease;
+}
+
 .sort-buttons {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     background-color: #e8e8e8;
-    border-radius: 25px;
-    padding: 10px;
+    border-radius: 50px;
     margin-bottom: 20px;
-    gap: 5px;
 }
 
-.sum {
-    background-color: #357e7e;
-    text-align: center;
-    height: auto;
-    padding: 8px 12px;
-    font-size: 13px;
-    color: white;
-    margin-top: 20px;
+/*----------------------------------------------------------------------------------------------dashboard*/
+.card {
+    border-left: 5px solid #436a6d;
+    flex: 1;
     border-radius: 15px;
-    width: auto;
-    min-width: 100px;
-    margin-left: 25px;
-    font-weight: 500;
+    background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    background-position: center;
+    color: #0d3b3f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+    transition: 0.3s;
+    cursor: pointer;
 }
 
-/* Project Cards */
-.project-card {
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.card-chart {
+    flex: 1;
+    border-radius: 10px;
     background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    background-position: center;
+    color: #0d3b3f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.container-dashboard {
+    margin-left: 320px;
+    margin-top: 55px;
+    margin-right: 10px;
+    padding: 20px;
+}
+
+.inner {
     display: flex;
     flex-direction: row;
-    height: 85vh;
-    border-radius: 15px;
-    margin-top: -30px;
-    margin-left: -10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    gap: 30px;
 }
 
-.project-card-content {
-    margin: 20px;
+.content-card {
+    position: relative;
+    color: #1f4c4b;
+    background-image: url("../imgs/natbg.png");
+    background-size: 130%;
+    background-position: 100% center;
+    padding: 40px;
     width: 100%;
-    overflow: auto;
+    text-align: right;
+    line-height: 100%;
+    border-radius: 15px;
+}
+
+.salary {
+    margin-top: 200px;
+    background-color: #1b5640;
+    height: 100px;
+    padding: 15px;
+    width: 47%;
+    border-radius: 10px;
+    color: white;
+    z-index: 200;
+}
+
+.sal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 5px;
+    color: #e5e5e5;
+    text-align: left;
+}
+
+.header-section {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    text-align: right;
+}
+
+.header-section h1 {
+    font-size: 60px;
+    font-weight: bolder;
+    margin: 0;
+}
+
+.header-section h2 {
+    font-weight: bold;
+    margin: 20px 0 0 0;
+    font-size: 20px;
+}
+
+.header-section h3 {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.check{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1f4c4b;
+    border-radius: 90px;
+}
+
+.check a {
+    display: inline-block;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.check:hover {
+    background-color: #589494;
+}
+
+.card:hover {
+    background-color: #cbcbcb;
+}
+
+.card h1 {
+    color: #1f4c4b;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.card i {
+    margin-right: 20px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: 30px;
+}
+
+.card-content h1 {
+    font-size: 80px;
+}
+
+.card-content .num {
+    font-size: 80px;
+}
+
+.card-content .label {
+    margin-top: 50px;
+    margin-left: 10px;
+    font-weight: bolder;
+}
+
+.card-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
 }
 
 .project-card-dashboard {
-    background-color: #ffffff;
+    background-color: #efefef;
     display: flex;
     flex-direction: row;
     height: 50vh;
     width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .project-card-content-dashboard {
@@ -658,40 +522,177 @@ table tbody tr:hover {
     overflow: auto;
 }
 
+.project-card-content-dashboard th {
+    font-weight: bolder;
+    background-color: #3D9997;
+    color: #dcdcdc;
+}
+
 .project-card-content-dashboard h1 {
     color: #1f4c4b;
     font-size: 30px;
     font-weight: 900;
 }
 
-/* Search Results */
-.search-result-item {
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
+.label {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }
 
-.search-result-item:hover {
-    background-color: #f8f9fa;
+.btn-sort {
+    background: #b2c1c2;
+    color: #1f4c4b;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color  1s ease;
 }
 
-/* Forms */
+.btn-sort:hover {
+    background: #608e91;
+}
+
+/* ----------------------------------------------------------------------------------edit form*/
 .edit-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+}
+
+.btn-edit {
+    color: white;
+    background-color: #357e7e;
+    width: 20%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: #4d9d9d;
+    color: #000000;
 }
 
 .profile-name form {
     margin-left: -15px;
 }
 
-.form-delete {
-    padding: 1px;
+/*-------------------------------------------------------------------------------PROJECT STYLE*/
+.project-card {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    height: 85vh;
+    border-radius: 10px;
+    margin-top: -30px;
+    margin-left: -10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.14);
 }
 
-/* RESPONSIVE DESIGN */
+.card-redirect {
+    text-decoration: none;
+}
+
+.project-card-content {
+    margin: 20px;
+    width: 100%;
+    overflow: auto;
+}
+
+.project-card-content th {
+    font-weight: bolder;
+    background-color: #3D9997;
+    color: #e5e5e5;
+}
+
+/*-                                                      search result*/
+.search-result-item {
+    cursor: pointer;
+    width: 100%;
+}
+
+
+/*---------------------------------------BANK DETAILS*/
+.bnkContent {
+    background-color: #f6f6f6;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+}
+
+.bnkContent h2{
+    font-weight: bolder;
+    color: #1a1a1a;
+}
+
+.input{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.bnkContent  input[type='text']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='password']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='date']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='submit']{
+    color: white;
+    border: none;
+    background-color: #0d4c52;
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+
+.bnkContent label {
+    color: #424242;
+}
+
+
+
+
+
+
+
+/* ========================================================================
+   MOBILE RESPONSIVE STYLES
+   ======================================================================== */
+
 /* Large tablets and small desktops */
 @media (max-width: 1200px) {
     .container-dashboard {
@@ -700,10 +701,6 @@ table tbody tr:hover {
 
     .header-section h1 {
         font-size: 50px;
-    }
-
-    .card-chart {
-        min-width: 300px;
     }
 }
 
@@ -727,7 +724,6 @@ table tbody tr:hover {
         padding: 30px 20px;
         background-size: cover;
         background-position: center;
-        min-height: 350px;
     }
 
     .header-section {
@@ -746,10 +742,9 @@ table tbody tr:hover {
     }
 
     .salary {
-        position: static;
         margin: 20px auto 0;
-        width: 100%;
-        max-width: 300px;
+        width: 80%;
+        position: static;
     }
 
     .check {
@@ -762,7 +757,7 @@ table tbody tr:hover {
     .card-container {
         flex-wrap: wrap;
         gap: 15px;
-        padding: 15px 0;
+        padding: 15px;
     }
 
     .card {
@@ -773,102 +768,16 @@ table tbody tr:hover {
     }
 
     .card h1 {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .card-content h1 {
-        font-size: 36px;
+        font-size: 50px;
     }
 
     .card-content .label {
-        font-size: 12px;
-    }
-
-    .card-chart {
-        min-width: 100%;
-        height: 350px;
-    }
-}
-
-/* Mobile phones */
-@media (max-width: 768px) {
-    .container,
-    .container-dashboard,
-    .container-profile {
-        margin: 10px;
-        padding: 10px;
-    }
-
-    .inner {
-        gap: 15px;
-    }
-
-    .content-card {
-        padding: 20px 15px;
-        min-height: 300px;
-    }
-
-    .header-section h1 {
-        font-size: 32px;
-    }
-
-    .header-section h2 {
-        font-size: 16px;
-    }
-
-    .header-section h3 {
-        font-size: 12px;
-    }
-
-    .salary {
-        width: 100%;
-        margin-top: 20px;
-        padding: 15px;
-    }
-
-    .sal-details h1 {
-        font-size: 24px;
-    }
-
-    .card-container {
-        flex-direction: column;
-        gap: 15px;
-        padding: 10px 0;
-    }
-
-    .card {
-        width: 100%;
-        height: 120px;
-        padding: 15px;
-    }
-
-    .card h1 {
+        margin-top: 30px;
         font-size: 14px;
-        margin-bottom: 10px;
-    }
-
-    .card i {
-        margin-right: 8px;
-        font-size: 16px;
-    }
-
-    .card-content {
-        margin-top: 15px;
-        align-items: center;
-    }
-
-    .card-content h1 {
-        font-size: 28px;
-    }
-
-    .card-content .label {
-        font-size: 10px;
-        margin-left: 8px;
-    }
-
-    .card-chart {
-        height: 300px;
-        padding: 15px;
     }
 
     .email {
@@ -909,6 +818,112 @@ table tbody tr:hover {
         margin: 10px 0;
         padding: 15px;
     }
+}
+
+/* Mobile phones */
+@media (max-width: 768px) {
+    .container,
+    .container-dashboard,
+    .container-profile {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .inner {
+        gap: 15px;
+    }
+
+    .content-card {
+        padding: 20px 15px;
+        min-height: 300px;
+    }
+
+    .header-section h1 {
+        font-size: 32px;
+    }
+
+    .header-section h2 {
+        font-size: 16px;
+    }
+
+    .header-section h3 {
+        font-size: 12px;
+    }
+
+    .salary {
+        width: 100%;
+        margin-top: 30px;
+        height: auto;
+        padding: 20px;
+    }
+
+    .sal-details {
+        gap: 10px;
+    }
+
+    .sal-details h1 {
+        font-size: 24px;
+    }
+
+    .card-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .card {
+        flex: none;
+        width: 100%;
+        height: 120px;
+        padding: 15px;
+    }
+
+    .card h1 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .card i {
+        margin-right: 10px;
+    }
+
+    .card-content {
+        margin-top: 15px;
+        align-items: center;
+    }
+
+    .card-content h1 {
+        font-size: 36px;
+    }
+
+    .card-content .label {
+        margin-top: 20px;
+        margin-left: 10px;
+        font-size: 12px;
+    }
+
+    .card-chart {
+        height: 300px;
+        padding: 15px;
+    }
+
+    /* Chart responsive sizing */
+    #myChart {
+        width: 100% !important;
+        height: 250px !important;
+    }
+
+    .project-card,
+    .project-card-dashboard {
+        flex-direction: column;
+        height: auto;
+        margin: 0;
+    }
+
+    .project-card-content,
+    .project-card-content-dashboard {
+        margin: 15px;
+    }
 
     table {
         font-size: 12px;
@@ -919,19 +934,45 @@ table tbody tr:hover {
         padding: 8px 4px;
     }
 
-    .btn-delete,
-    .btn-edit,
-    .btn-project {
+    .notif-content {
+        padding: 15px;
+        height: auto;
+        max-height: 400px;
+    }
+
+    .notif {
+        padding: 12px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .btn-delete {
+        width: 60px;
         height: 35px;
         font-size: 12px;
     }
 
     .btn-edit {
-        width: 80px;
+        width: 40%;
+        height: 35px;
+        font-size: 14px;
     }
 
-    .btn-delete {
-        width: 60px;
+    .btn-project {
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .sort-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .btn-sort {
+        width: 70px;
+        height: 35px;
+        font-size: 12px;
     }
 }
 
@@ -959,7 +1000,7 @@ table tbody tr:hover {
     }
 
     .salary {
-        padding: 12px;
+        padding: 15px;
     }
 
     .sal-details h1 {
@@ -968,7 +1009,7 @@ table tbody tr:hover {
 
     .sal-details p,
     .sal-details h3 {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .card {
@@ -977,15 +1018,15 @@ table tbody tr:hover {
     }
 
     .card h1 {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .card-content h1 {
-        font-size: 24px;
+        font-size: 28px;
     }
 
     .card-content .label {
-        font-size: 9px;
+        font-size: 10px;
         margin-top: 15px;
     }
 
@@ -994,13 +1035,27 @@ table tbody tr:hover {
         padding: 10px;
     }
 
+    #myChart {
+        height: 200px !important;
+    }
+
     .check a {
         padding: 8px 15px;
         font-size: 12px;
     }
 
+    table {
+        font-size: 10px;
+    }
+
+    table th,
+    table td {
+        padding: 6px 2px;
+    }
+
     .title {
         padding: 15px;
+        height: auto;
         margin-bottom: 20px;
     }
 
@@ -1016,7 +1071,7 @@ table tbody tr:hover {
     .btn-edit,
     .btn-project,
     .btn-delete {
-        font-size: 11px;
+        font-size: 12px;
         height: 32px;
     }
 }
@@ -1047,7 +1102,7 @@ table tbody tr:hover {
     }
 }
 
-/* Accessibility improvements */
+/* Accessibility improvements for mobile touch targets */
 @media (max-width: 768px) {
     .card,
     .btn-project,
@@ -1062,24 +1117,10 @@ table tbody tr:hover {
         display: block;
     }
 
+    /* Improve text readability on small screens */
     .card-content .label,
     .sal-details p,
     .notif p {
         line-height: 1.4;
     }
-}
-
-/* Focus states for accessibility */
-.card:focus,
-.btn-project:focus,
-.btn-edit:focus,
-.btn-delete:focus,
-.check a:focus {
-    outline: 2px solid #357b80;
-    outline-offset: 2px;
-}
-
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
 }
