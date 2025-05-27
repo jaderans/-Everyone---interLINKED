@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+include_once 'checkIfSet.php';
 $conn = connectToDatabase();
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
@@ -128,7 +129,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="action-buttons">
                     <button class="fire-button" onclick="bulkFireUsers()"><i class="fas fa-fire"></i> Fire</button>
-                    <button class="sort-button"><i class="fas fa-sort"></i> Sort</button>
                 </div>
             </div>
 
@@ -213,7 +213,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="action-buttons">
                     <button class="fire-button" onclick="bulkRejectApplicants()"><i class="fas fa-user-times"></i> Reject</button>
-                    <button class="sort-button"><i class="fas fa-sort"></i> Sort</button>
                 </div>
             </div>
             <div class="content">
