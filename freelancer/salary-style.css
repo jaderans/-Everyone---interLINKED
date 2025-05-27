@@ -515,19 +515,15 @@ table {
     }
 
     /* Responsive Adjustments */
-    @media (max-width: 1024px) {
+    @media (max-width: 1200px) {
         .container {
             margin-left: 0;
             padding: 10px;
         }
 
         .cards-container {
-            flex-direction: row;
-            margin-left: 12vh;
-        }
-
-        .banking-actions {
-            margin-left: 12vh;
+            flex-direction: column;
+            margin-left: 0;
         }
 
         .income-outcome, .banking-info {
@@ -535,7 +531,7 @@ table {
         }
 
         .payments-table {
-            margin-left: 12vh;
+            margin-left: 0;
         }
 
         .transaction-history-modal-content {
@@ -543,5 +539,3 @@ table {
             margin: 0 auto;
         }
     }
-
-
