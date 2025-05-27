@@ -14,25 +14,26 @@ html, body {
 .container h1,p {
     font-size: 25px;
     line-height:0;
-
 }
 
 .container2{
     margin-top: 80px;
 }
 
-
 .form-container {
     background: white;
     padding: 20px;
     border-radius: 8px;
     width: 500px;
+    max-width: 100%;
 }
+
 .form-group {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
 }
+
 .form-group label {
     display: block;
     margin-bottom: 5px;
@@ -55,16 +56,18 @@ html, body {
 }
 
 .form-group input {
-    width: 120%;
+    width: 105%;
     margin-bottom: 5px;
     padding: 9px;
     border: 2px solid #4a8c8a;
     border-radius: 10px;
     box-sizing: border-box;
 }
+
 .form-group div {
     width: 40%;
 }
+
 .submit-btn {
     width: 100%;
     padding: 10px;
@@ -74,10 +77,10 @@ html, body {
     border-radius: 5px;
     cursor: pointer;
 }
+
 .submit-btn:hover {
     background-color: #0056b3;
 }
-
 
 .form label{
     font-size: 10px;
@@ -90,7 +93,7 @@ html, body {
 }
 
 button[value="update"]{
-    width: 108%;
+    width: 102%;
     height: 50%;
     border: none;
     padding: 10px;
@@ -132,7 +135,7 @@ button[value="next"]{
 }
 
 button[value="goBack"]{
-    width: 108%;
+    width: 102%;
     height: 50%;
     border: none;
     padding: 10px;
@@ -160,14 +163,15 @@ button[value="goBack"]{
     height: 500px;
     width: 100px;
 }
+
 .imageHeader{
     max-width: 30%;
     height: auto;
     display: block;
     margin-left: 550px;
     margin-bottom: 500px;
-
 }
+
 .rectangle {
     position: fixed;
     top: 0;
@@ -185,7 +189,6 @@ button[value="goBack"]{
     top: 0;
     left: 0;
     width: 100%;
-
     height: 100%;
     background: white;
     z-index: -1;
@@ -195,7 +198,7 @@ button[value="goBack"]{
     position: fixed;
     top: 0;
     right: 0;
-    width: 40%;
+    width: 34%;
     min-width: 300px;
     max-width: 565px;
     height: 100vh;
@@ -214,6 +217,7 @@ button[value="goBack"]{
     padding: 20px;
     z-index: 2;
 }
+
 .logo {
     margin-left: 50px;
     margin-bottom: 2px;
@@ -223,12 +227,12 @@ button[value="goBack"]{
     width: auto;
     height: 25px;
 }
+
 .spanWarning{
     color:red;
     font-size: 10px;
     line-height:0;
 }
-
 
 /*----------------------------------------------select*/
 .cus-select {
@@ -241,25 +245,6 @@ button[value="goBack"]{
     font-weight: 600;
     color: #333;
 }
-
-/*.cus-select select {*/
-/*    width: 235px;*/
-/*    padding: 10px 14px;*/
-/*    border: 2px solid #1f4c4b;*/
-/*    border-radius: 6px;*/
-/*    font-size: 16px;*/
-/*    background-color: #fff;*/
-/*    color: #333;*/
-/*    cursor: pointer;*/
-/*    appearance: none;         !* Remove default styling *!*/
-/*    -webkit-appearance: none; !* Safari *!*/
-/*    -moz-appearance: none;    !* Firefox *!*/
-/*    background-image: url("data:image/svg+xml;utf8,<svg fill='%234CAF50' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");*/
-/*    background-repeat: no-repeat;*/
-/*    background-position: right 12px center;*/
-/*    background-size: 16px;*/
-/*    transition: border-color 0.3s ease;*/
-/*}*/
 
 .cus-select select {
     width: 120%;
@@ -274,4 +259,161 @@ button[value="goBack"]{
     outline: none;
     border-color: #1f4c4b;
     box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+/* MOBILE RESPONSIVE STYLES */
+@media screen and (max-width: 768px) {
+    html, body {
+        padding: 15px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .container2 {
+        margin-top: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .form-container {
+        width: 100%;
+        padding: 15px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .container h1 {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .credentials {
+        font-size: 14px;
+        text-align: center;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    /* Stack form fields vertically on mobile */
+    .form-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group div {
+        width: 100%;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .cus-select select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .form-group textarea {
+        height: 80px;
+        resize: vertical;
+    }
+
+    .form-group label {
+        font-size: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    /* Button styling for mobile */
+    button[value="update"],
+    button[value="reg"],
+    button[value="next"],
+    button[value="goBack"] {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        min-height: 50px;
+    }
+
+    .form-buttons {
+        margin-top: 20px;
+    }
+
+    /* Hide background rectangles on mobile */
+    .rectangle,
+    .rectangle3 {
+        display: none;
+    }
+
+    .rectangle2 {
+        background: #f8f9fa;
+    }
+
+    /* Adjust top navigation for mobile */
+    .topvar {
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .logo img {
+        height: 30px;
+    }
+
+    /* Error and success message styling */
+    .spanWarning {
+        font-size: 14px;
+        line-height: 1.4;
+        display: block;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    html, body {
+        padding: 10px;
+    }
+
+    .container2 {
+        margin-top: 90px;
+    }
+
+    .form-container {
+        padding: 12px;
+    }
+
+    .container h1 {
+        font-size: 18px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .cus-select select {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    button[value="update"],
+    button[value="reg"],
+    button[value="next"],
+    button[value="goBack"] {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .topvar {
+        padding: 12px;
+    }
+
+    .logo img {
+        height: 25px;
+    }
 }
