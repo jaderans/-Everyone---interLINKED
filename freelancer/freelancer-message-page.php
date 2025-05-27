@@ -144,10 +144,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p>Message: <?=$res['EM_COMP']?></p>
                             <p><?=$res['EM_DATE']?></p>
 
-                            <form action="freelancer-delete-message.php" method="post" class="form-delete"
-                                  onsubmit="return confirm('Are you sure you want to delete this notification?');">
-                                <button class="btn-delete" name="message-id" value="<?= $res['EM_ID'] ?>"><i class="fa-solid fa-trash fa-1.5xl" <i class="fa-solid fa-trash" style="color: #9f3535;"></i></i></button>
-                            </form>
+                            <!-- Trigger Button -->
+                            <button class="btn-delete open-message-modal" data-id="<?= $res['EM_ID'] ?>">
+                                <i class="fa-solid fa-trash" style="color: #9f3535;"></i>
+                            </button>
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal-overlay" id="messageDeleteModal">
+                                <div class="modal-box">
+                                    <h3>Delete Message</h3>
+                                    <p>Are you sure you want to delete this message?</p>
+                                    <form action="freelancer-delete-message.php" method="post">
+                                        <input type="hidden" name="message-id" id="modalMessageId">
+                                        <div class="modal-actions">
+                                            <button type="button" class="cancel-btn">Cancel</button>
+                                            <button type="submit" class="confirm-btn">
+                                                <i class="fa-solid fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     <?php }?>
 
@@ -218,13 +235,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         xhr.send();
     }
 
-
     function selectUser(userName) {
         document.querySelector('input[name="keyword"]').value = userName;
         document.getElementById("search-results").innerHTML = "";
         document.getElementById("search-results").style.display = "none";
     }
+
+    // Open modal and set ID
+    document.querySelectorAll('.open-message-modal').forEach(button => {
+        button.addEventListener('click', () => {
+            const messageId = button.getAttribute('data-id');
+            document.getElementById('modalMessageId').value = messageId;
+            document.getElementById('messageDeleteModal').style.display = 'flex';
+        });
+    });
+
+    // Close modal on cancel
+    document.querySelector('.cancel-btn').addEventListener('click', () => {
+        document.getElementById('messageDeleteModal').style.display = 'none';
+    });
 </script>
+
+
 </body>
 </html>
 
