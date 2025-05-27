@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+include_once "checkIfSet.php";
 $conn = connectToDatabase();
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);

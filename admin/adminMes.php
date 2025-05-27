@@ -2,8 +2,10 @@
 session_start();
 include('interlinkedDB.php');
 $conn = connectToDatabase();
+include_once 'checkIfSet.php';
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
+
 
 // Default search
 $search = $_GET['search'] ?? '';
