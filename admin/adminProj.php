@@ -304,7 +304,7 @@ $canceledCount = $statusCounts['Canceled'] ?? 0;
                                         <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
                                         <a href="#" onclick="editProject(<?= $row['PRO_ID'] ?>)"><i class="fas fa-edit action-icon"></i></a>
                                         <form class="delete-form" data-id="<?= $row['PRO_ID'] ?>" style="display:inline;">
-                                            <button type="button" class="delete-btn action-icon" title="Pay" style="border:none; background:none; cursor:pointer;">
+                                            <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

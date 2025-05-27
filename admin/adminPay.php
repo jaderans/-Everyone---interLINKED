@@ -285,8 +285,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?= $row['USER_FSTNAME'] ? htmlspecialchars($row['USER_FSTNAME'] . ' ' . $row['USER_LSTNAME']) : 'Unassigned' ?></td>
                                     <td class="<?= $dueDateClass ?>"><?= date('M d, Y', strtotime($row['PRO_END_DATE'])) ?></td>
                                     <td class="actions">
-                                        <button type="button" class="delete-btn action-icon" title="Delete Project" style="border:none; background:none; cursor:pointer;>
-                                        <a href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
+                                        <button type="button" style="border:none; background:none; cursor:pointer;"><a href="?id=<?= $row['PRO_ID'] ?>"><i class="fa-solid fa-sack-dollar"></i></a></button>
 
                                     </td>
                                 </tr>
