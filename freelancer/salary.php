@@ -29,9 +29,6 @@ $stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ? ORDER BY PA
 $stmt->execute([$id]);
 $payDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $slave_con->prepare("SELECT * FROM withdraw WHERE USER_ID = ? ORDER BY WITH_DATE DESC");
-$stmt->execute([$id]);
-$with = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = :user_id");
 $stmt->execute([':user_id' => $id]);
