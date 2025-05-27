@@ -148,7 +148,7 @@ $banks = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="balance-card">
                     <div class="balance-info">
                         <p>Total Balance</p>
-                        <p><?=$id?></p>
+<!--                        <p>--><?php //=$id?><!--</p>-->
                         <h2 id="totalBalanceDisplay">₱ <?=$currentBalance?></h2>
                     </div>
                 </div>
