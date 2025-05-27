@@ -9,6 +9,7 @@
 /*------------------------------------------top navigation bar*/
 .topvar{
     width: 100vw;
+    height: 1rem;
     background-color: #ffffff;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     color: white;
@@ -56,6 +57,7 @@
 
 .top-right {
     display: flex;
+    margin-right: 100px;
     flex-direction: row;
     align-items: center;
     gap: 10px;

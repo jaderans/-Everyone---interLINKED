@@ -1,6 +1,7 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+
 /* Container Styles */
 .container {
     margin-top: 50px;
@@ -221,13 +222,23 @@ header h1 {
 
 
 /* Payments Table */
+.pay {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .payments-table {
     background-color: #fff;
     border-radius: 12px;
-    overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
     margin-left: 50px;
+    /*height: 90vh;*/
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
 }
 
 .payments-table h1 {

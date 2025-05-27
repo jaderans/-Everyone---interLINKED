@@ -108,9 +108,9 @@ http_response_code(404);
 
             <button class="btn-top" style="margin-top: 10px" onclick="myFunction()"><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></button>
 
-            <div class="help" style="text-align: left; margin-top: -15px">
-                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>
-            </div>
+<!--            <div class="help" style="text-align: left; margin-top: -15px">-->
+<!--                <h4><a href="#"><i class="fa-solid fa-circle-info"></i> Help & Support</a></h4>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
