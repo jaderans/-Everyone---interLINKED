@@ -29,8 +29,6 @@ $pro = $slave_con->prepare("
 $pro->execute([$id]);
 $results = $pro->fetchAll(PDO::FETCH_ASSOC);
 
-
-// Initialize all statuses to 0
 $statuses = [
     'Pending' => 0,
     'Submitted' => 0,
@@ -66,8 +64,6 @@ $cancelled = $statuses['Cancelled'];
 </head>
 <body>
 
-
-
 <div class="container-dashboard">
     <div class="inner">
         <a href="freelancer-project-page.php" class="card-redirect">
@@ -77,22 +73,22 @@ $cancelled = $statuses['Cancelled'];
         <div class="content-card">
             <div class="header-section">
                 <h1 style="color: #1f4c4b">DASHBOARD</h1>
-<!--                <h2>--><?php //=$user?><!--</h2>-->
-<!--                <h2>--><?php //=$id?><!--</h2>-->
+                <h2><?php //=$user?></h2>
+                <h2><?php //=$id?></h2>
                 <h2>My Commissions</h2>
                 <h3 style="margin-top: 5px"><?= date("d/m/y H:i") ?></h3>
             </div>
-<!--            <a href="salary.php" class="card-redirect">-->
-<!--                <div class="salary">-->
-<!--                    <div class="sal-details">-->
-<!--                        <p>SALARY DETAILS</p>-->
-<!--                        <h1>₱ 100,000.09</h1>-->
-<!--                        <h3>Available Earnings</h3>-->
-<!--                    </div>-->
-<!---->
-<!--                </div>-->
-<!---->
-<!--            </a>-->
+            <a href="salary.php" class="card-redirect">
+                <div class="salary">
+                    <div class="sal-details">
+                        <p>SALARY DETAILS</p>
+                        <h1>₱ 100,000.09</h1>
+                        <h3>Available Earnings</h3>
+                    </div>
+
+                </div>
+
+            </a>
 
             <div class="check">
                 <a href="freelancer-project-page.php">Check project</a>
@@ -104,7 +100,7 @@ $cancelled = $statuses['Cancelled'];
 
     <a href="freelancer-project-page.php" class="card-redirect">
         <div class="card-container">
-            <div class="card" ">
+            <div class="card">
                 <h1><i class="fa-solid fa-pencil"></i> SUBMITTED</h1>
                 <div class="card-content">
                     <h1><?=$submitted?></h1>
@@ -138,66 +134,166 @@ $cancelled = $statuses['Cancelled'];
 
 
 <script>
+    const projectData = {
+        submitted: <?= $submitted ?>,
+        pending: <?= $pending ?>,
+        ongoing: <?= $ongoing ?>,
+        completed: <?= $completed ?>,
+        cancelled: <?= $cancelled ?>
+    };
+
+    // Update current date/time
+    function updateDateTime() {
+        const now = new Date();
+        const formatted = now.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        document.getElementById('currentDateTime').textContent = formatted;
+    }
+
+    // Update card counts
+    function updateCardCounts() {
+        document.getElementById('submittedCount').textContent = projectData.submitted;
+        document.getElementById('pendingCount').textContent = projectData.pending;
+        document.getElementById('ongoingCount').textContent = projectData.ongoing;
+        document.getElementById('completedCount').textContent = projectData.completed;
+        document.getElementById('cancelledCount').textContent = projectData.cancelled;
+    }
+
+    // Google Charts
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
     let chart;
-    let data;
-    let options;
+    let chartData;
+    let chartOptions;
+    let isChartDrawn = false;
 
     function drawChart() {
-        data = google.visualization.arrayToDataTable([
-            ['Commission', 'Mhl'],
-            ['Submitted', <?= $submitted ?>],
-            ['Ongoing', <?= $ongoing ?>],
-            ['Pending', <?= $pending ?>],
-            ['Completed', <?= $completed ?>],
-            ['Cancelled', <?= $cancelled ?>]
-        ]);
+        try {
+            const container = document.getElementById('myChart');
+            const loadingDiv = document.getElementById('chartLoading');
 
-        // Get container dimensions
-        const container = document.getElementById('myChart');
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
+            if (!container) {
+                console.error('Chart container not found');
+                return;
+            }
 
-        options = {
-            title: 'Tasks',
-            width: containerWidth,
-            height: containerHeight,
-            legend: {
-                position: containerWidth < 400 ? 'bottom' : 'right',
-                alignment: 'center',
-                textStyle: {
-                    fontSize: containerWidth < 400 ? 10 : 12
+            // Check if we have any data
+            const totalTasks = projectData.submitted + projectData.pending +
+                projectData.ongoing + projectData.completed + projectData.cancelled;
+
+            if (totalTasks === 0) {
+                loadingDiv.style.display = 'none';
+                container.innerHTML = '<div class="no-data-message">No project data available</div>';
+                container.style.display = 'flex';
+                container.style.alignItems = 'center';
+                container.style.justifyContent = 'center';
+                return;
+            }
+
+            // Prepare chart data
+            chartData = google.visualization.arrayToDataTable([
+                ['Status', 'Count'],
+                ['Submitted', projectData.submitted],
+                ['Pending', projectData.pending],
+                ['Ongoing', projectData.ongoing],
+                ['Completed', projectData.completed],
+                ['Cancelled', projectData.cancelled]
+            ]);
+
+            // Calculate container dimensions
+            const containerRect = container.parentElement.getBoundingClientRect();
+            const containerWidth = Math.max(containerRect.width - 40, 300);
+            const containerHeight = Math.max(containerRect.height - 40, 300);
+
+            // Chart options
+            chartOptions = {
+                title: 'Project Status Overview',
+                titleTextStyle: {
+                    color: '#1f4c4b',
+                    fontSize: 18,
+                    bold: true
+                },
+                width: containerWidth,
+                height: containerHeight,
+                backgroundColor: 'transparent',
+                colors: ['#81b7e5', '#cb8a76', '#60b981', '#f4a460', '#ff6b6b'],
+                pieHole: 0, // Make it a donut chart
+                pieSliceTextStyle: {
+                    color: 'white',
+                    fontSize: 12,
+                    bold: true
+                },
+                legend: {
+                    position: containerWidth < 500 ? 'bottom' : 'right',
+                    alignment: 'center',
+                    textStyle: {
+                        color: '#1f4c4b',
+                        fontSize: containerWidth < 500 ? 11 : 13
+                    }
+                },
+                chartArea: {
+                    left: containerWidth < 500 ? 20 : 40,
+                    top: containerWidth < 500 ? 40 : 50,
+                    width: containerWidth < 500 ? '90%' : '75%',
+                    height: containerWidth < 500 ? '70%' : '75%'
+                },
+                tooltip: {
+                    textStyle: {
+                        color: '#1f4c4b',
+                        fontSize: 13
+                    },
+                    showColorCode: true
+                },
+                pieSliceText: 'value',
+                sliceVisibilityThreshold: 0 // Show all slices even if value is 0
+            };
+
+            // Create and draw chart
+            chart = new google.visualization.PieChart(container);
+
+            // Add event listener for chart selection
+            google.visualization.events.addListener(chart, 'select', function() {
+                const selection = chart.getSelection();
+                if (selection.length > 0) {
+                    const row = selection[0].row;
+                    const status = chartData.getValue(row, 0);
+                    console.log('Selected status:', status);
+                    // You can add navigation logic here
                 }
-            },
-            chartArea: {
-                left: containerWidth < 400 ? 10 : 20,
-                top: containerWidth < 400 ? 30 : 40,
-                width: containerWidth < 400 ? '85%' : '70%',
-                height: containerWidth < 400 ? '60%' : '70%'
-            },
-            colors: ['#81b7e5', '#cb8a76', '#60b981', '#f4a460', '#ff6b6b'],
-            pieHole: 0,
-            titleTextStyle: {
-                fontSize: containerWidth < 400 ? 14 : 16
-            },
-            // Make chart responsive
-            responsive: true
-        };
+            });
 
-        chart = new google.visualization.PieChart(container);
-        chart.draw(data, options);
-    }
+            chart.draw(chartData, chartOptions);
 
-    // Redraw chart on window resize
-    function resizeChart() {
-        if (chart && data && options) {
-            drawChart();
+            // Hide loading and show chart
+            loadingDiv.style.display = 'none';
+            container.style.display = 'block';
+            isChartDrawn = true;
+
+        } catch (error) {
+            console.error('Error drawing chart:', error);
+            document.getElementById('chartLoading').innerHTML =
+                '<div style="color: #e74c3c;"><i class="fa-solid fa-exclamation-triangle"></i> Chart loading failed</div>';
         }
     }
 
-    // Debounce function to limit resize calls
+    // Responsive chart redraw
+    function resizeChart() {
+        if (isChartDrawn && chart && chartData && chartOptions) {
+            const container = document.getElementById('myChart');
+            if (container && container.style.display !== 'none') {
+                drawChart();
+            }
+        }
+    }
+
+    // Debounce function for resize events
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -210,12 +306,27 @@ $cancelled = $statuses['Cancelled'];
         };
     }
 
-    // Add event listeners for resize
-    window.addEventListener('resize', debounce(resizeChart, 250));
+    // Initialize everything
+    function init() {
+        updateDateTime();
+        updateCardCounts();
 
-    // Optional: Also listen for orientation change on mobile
+        // Update date/time every minute
+        setInterval(updateDateTime, 60000);
+    }
+
+    // Event listeners
+    window.addEventListener('load', init);
+    window.addEventListener('resize', debounce(resizeChart, 300));
     window.addEventListener('orientationchange', function() {
         setTimeout(resizeChart, 500);
+    });
+
+    // Handle visibility change (when tab becomes active again)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && isChartDrawn) {
+            setTimeout(resizeChart, 100);
+        }
     });
 </script>
 
