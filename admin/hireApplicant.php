@@ -2,37 +2,29 @@
 session_start();
 include('interlinkedDB.php');
 
+// Connect to master DB for write operations
+$master_con = connectToDatabase(3306);
+
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
-    $userId = $_POST['user_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['userId'])) {
+    $userId = $_POST['userId'];
 
-    try {
-        $master_con = connectToDatabase(3306); // Master for writes
+    // Validate userId format if necessary (e.g., length, pattern)
 
-        // Begin transaction
-        $master_con->beginTransaction();
+    // Prepare update statement to change USER_TYPE and USER_STATUS
+    $query = "UPDATE user SET USER_TYPE = 'Freelancer', USER_STATUS = 'ACTIVE' 
+              WHERE USER_ID = :userId AND USER_TYPE = 'Applicant' AND (USER_STATUS = 'PENDING' OR USER_STATUS IS NULL)";
 
-        // Update user type to Freelancer and status to HIRED
-        $stmt = $master_con->prepare("UPDATE user SET USER_TYPE = 'Freelancer', USER_STATUS = 'ACTIVE' WHERE USER_ID = ? AND USER_TYPE = 'Applicant'");
-        $result = $stmt->execute([$userId]);
+    $stmt = $master_con->prepare($query);
+    $stmt->execute(['userId' => $userId]);
 
-        if ($stmt->rowCount() > 0) {
-            $master_con->commit();
-            echo json_encode(['success' => true, 'message' => 'Applicant hired successfully']);
-        } else {
-            $master_con->rollback();
-            echo json_encode(['success' => false, 'message' => 'No applicant found with that ID']);
-        }
-
-    } catch (Exception $e) {
-        if (isset($master_con)) {
-            $master_con->rollback();
-        }
-        error_log("Hire error: " . $e->getMessage());
-        echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Applicant hired successfully.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to hire applicant. User may not exist or is not eligible.']);
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method or missing user ID']);
+    echo json_encode(['success' => false, 'message' => 'Invalid request.']);
 }
 ?>

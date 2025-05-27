@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('interlinkedDB.php');
-include_once "checkIfSet.php";
 $conn = connectToDatabase();
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
@@ -266,13 +265,13 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             case 'REJECTED': $statusClass = 'status-rejected'; break;
                                             case 'ACTIVE': $statusClass = 'status-active'; break;
                                             case 'PENDING': $statusClass = 'status-pending'; break;
-                                            default: $statusClass = 'status-pending';
                                         }
                                         ?>
                                         <span class="<?= $statusClass ?> status-tag"><?= htmlspecialchars($status) ?></span>
                                     </td>
                                     <td class="actions">
-                                        <button class="hire-button" onclick="hireApplicant(<?= $row['USER_ID'] ?>)">Hire</button>
+                                        <a href="?id=<?= $row['USER_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
+                                        <button class="hire-button" onclick="hireApplicant('<?= $row['USER_ID'] ?>')">Hire</button>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -336,8 +335,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="profile-info-value"><?= htmlspecialchars($selectedUser['USER_BIRTHDAY'] ?? 'Not set') ?></div>
                     </div>
                 </div>
-
-                <button class="portfolio-btn"><i class="fas fa-folder-open"></i> View Portfolio</button>
             <?php else: ?>
                 <div class="profile-header">
                     <a style="width: 100%; height: 100%;">
@@ -352,14 +349,25 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script>
         let debounceTimer;
 
-        $('a[href^="editUser.php"]').on('click', function (e) {
-            e.preventDefault();
-            const url = $(this).attr('href');
-            $('#profileDetails').html('Loading...');
-            $.get(url, function (data) {
-                $('#profileDetails').html(data);
+        function hireApplicant(userId) {
+            if (!userId) return;
+
+            $.ajax({
+                url: 'hireApplicant.php',
+                method: 'POST',
+                data: { userId: userId },
+                success: function(response) {
+                    alert(response.message);
+                    if (response.success) {
+                        location.reload(); // Reload the page to reflect changes
+                    }
+                },
+                error: function() {
+                    alert('Error hiring applicant.');
+                }
             });
-        });
+        }
+
         document.getElementById('applicantSearchInput').addEventListener('keyup', function () {
             const filter = this.value.toLowerCase();
             const rows = document.querySelectorAll('#applicantTableBody tr');
@@ -435,19 +443,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
 
-        document.getElementById('hireApplicant').addEventListener('click', function() {
-            const selectedApplicants = Array.from(document.querySelectorAll('.applicant-checkbox:checked')).map(cb => cb.value);
-
-            if (selectedApplicants.length === 0) {
-                alert('Please select applicants to hire.');
-                return;
-            }
-
-            if (confirm(`Are you sure you want to reject ${selectedApplicants.length} selected applicant(s)?`)) {
-                hireApplicant(selectedApplicants);
-            }
-        });
-
         // Select all checkboxes functionality
         document.querySelector('#userTableBody').closest('.table-container').querySelector('thead input[type="checkbox"]').addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('.user-checkbox');
@@ -520,32 +515,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     .catch(error => {
                         console.error('Error:', error);
                         alert('Error rejecting applicants');
-                    });
-            }
-        }
-
-        function hireApplicant(userId) {
-            console.log("Attempting to hire user with ID:", userId);
-            if (confirm('Are you sure you want to hire this applicant?')) {
-                fetch('hireApplicant.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'user_id=' + userId
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Server response:", data);
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            alert('Error: ' + (data.message || 'Failed to hire applicant'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error hiring applicant');
                     });
             }
         }
