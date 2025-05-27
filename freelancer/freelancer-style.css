@@ -400,6 +400,26 @@ table td {
     border-radius: 15px;
 }
 
+.salary {
+    margin-top: 200px;
+    background-color: #1b5640;
+    height: 100px;
+    padding: 15px;
+    width: 47%;
+    border-radius: 10px;
+    color: white;
+    z-index: 200;
+}
+
+.sal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 5px;
+    color: #e5e5e5;
+    text-align: left;
+}
+
 .header-section {
     position: absolute;
     top: 50px;
@@ -760,408 +780,120 @@ table td {
 }
 
 /* Tablets */
-/* Tablet Portrait Mode (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    /* Container adjustments */
+@media (max-width: 1024px) {
     .container,
     .container-dashboard,
     .container-profile {
-        margin-left: 13vh;
-        margin-top: 12vh;
-        padding: 1vh;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 20px;
+        padding: 15px;
     }
 
-    /* Dashboard cards - maintain row layout like original */
     .inner {
-        flex-direction: row;
-        margin-left: -1vh;
-        margin-top: -3vh;
-        gap: 2vh;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2vh;
-        margin-right: 1vh;
-        justify-content: center;
-        padding: 0;
-        margin-top: 2vh;
-        margin-left: -1vh;
-    }
-
-    .card {
-        height: 24vh;
-        padding: 18px;
-        flex: 1;
-    }
-
-    .card h1 {
-        font-size: 26px;
-    }
-
-    .card-content h1,
-    .card-content .num {
-        font-size: 65px;
-    }
-
-    .card-content .label {
-        margin-top: 40px;
-        font-size: 14px;
-    }
-
-    /* Content card adjustments - maintain original layout */
     .content-card {
-        background-size: 150%;
-        text-align: right;
-        margin-right: 1vh;
-        height: 30vh;
+        padding: 30px 20px;
+        background-size: cover;
+        background-position: center;
     }
 
     .header-section {
-        position: absolute; /* Keep original absolute positioning */
-        top: 40px;
-        right: 15px;
-        text-align: right;
-        margin-top: 2vh;
-        padding-right: 2vh;
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     .header-section h1 {
-        font-size: 6vh;
+        font-size: 40px;
     }
 
     .header-section h2 {
         font-size: 18px;
-        margin: 15px 0;
+        margin: 10px 0;
     }
 
-    .header-section p {
-        font-size: 13px;
+    .salary {
+        margin: 20px auto 0;
+        width: 80%;
+        position: static;
     }
 
     .check {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        background-color: #1f4c4b;
-        border-radius: 90px;
-        margin-bottom: .5vh;
-        padding: 1vh;
+        position: static;
+        margin: 20px auto 0;
+        text-align: center;
+        width: fit-content;
     }
 
-
-    /* Project card dashboard adjustments */
-    .project-card-dashboard {
-        background-color: #efefef;
-        display: flex;
-        flex-direction: row;
-        height: 45vh;
-        width: 100%;
-        border-radius: 10px;
+    .card-container {
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 15px;
     }
 
-    .project-card-content-dashboard {
-        margin: 18px;
-        width: 100%;
-        overflow: auto;
+    .card {
+        flex: 1 1 calc(50% - 15px);
+        min-width: 200px;
+        height: 150px;
+        padding: 15px;
     }
 
-    .project-card-content-dashboard h1 {
-        color: #1f4c4b;
-        font-size: 26px;
-        font-weight: 900;
+    .card h1 {
+        font-size: 20px;
     }
 
-    .project-card-content-dashboard th {
-        font-weight: bolder;
-        background-color: #3D9997;
-        color: #dcdcdc;
-        padding: 12px;
+    .card-content h1 {
+        font-size: 50px;
     }
 
-    .project-card-content-dashboard td {
-        padding: 10px;
+    .card-content .label {
+        margin-top: 30px;
+        font-size: 14px;
     }
-
-    /* Chart card adjustments */
-    .card-chart {
-        flex: 1;
-        border-radius: 10px;
-        background-color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 160px;
-        background-position: center;
-        color: #0d3b3f;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    /* Title section */
-    .title {
-        background-color: #f8f8f8;
-        border-radius: 15px;
-        padding: 18px;
-        height: 10vh;
-        margin-bottom: 4vh;
-    }
-
-    .title h1 {
-        color: #1d4e5e;
-        font-weight: 800;
-        font-size: 28px;
-        margin-left: 10px;
-    }
-
-    /* Email/Messages layout */
 
     .email {
-        flex-direction: row;
-        height: 88vh;
-        gap: 15px;
-        margin-top: -20px;
+        flex-direction: column;
+        height: auto;
+        margin-left: 0;
     }
 
-    .content {
-        padding-left: 2vh;
-        margin-left: -1vh;
-    }
-
-    .messages {
-        width: 40%;
-        min-width: 40%;
-        margin-bottom: 0;
-    }
-
+    .messages,
     .compose {
-        width: 60%;
-        margin-bottom: 0;
-        padding: 15px;
-    }
-
-    .message-content {
-        height: 80%;
         width: 100%;
+        margin-bottom: 20px;
     }
 
-    .msg {
-        padding-right: 0;
-        padding-top: 1.5vh;
-        padding-bottom: 1.5vh;
-    }
-
-    .message-area {
-        height: 70vh;
-    }
-
-    .message-form {
-        display: flex;
+    .profile {
         flex-direction: column;
-        gap: 15px;
-        padding-top: 4vh;
-    }
-
-    .message-form .info {
-        display: flex;
-        flex-direction: column;
-        gap: .5vh;
-        width: 100%;
-        flex-wrap: nowrap;
-        align-content: center;
-        justify-content: space-evenly;
-        align-items: flex-start;
-        margin-top: -3vh;
-    }
-
-    .message-form .type {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        margin-top: -3vh;
-    }
-
-    .message-form input[type=text] {
-        width: 100%;
-        height: 35px;
-        padding: 0 15px;
-        box-sizing: border-box;
-    }
-
-    .message-form label {
-        font-weight: 600;
-        color: #1f4c4b;
-        margin-bottom: 5px;
-    }
-
-    textarea {
-        width: 100%;
-        height: 200px;
-        padding: 15px;
-        box-sizing: border-box;
-        resize: vertical;
-    }
-
-    .info .send {
-        color: white;
-        height: 50px;
-        background-color: #1f4c4b;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: -3vh;
-    }
-
-    .form-group input {
-        height: 40px;
-    }
-
-    .form-group textarea {
-        min-height: 180px;
-    }
-
-    .form-delete {
-        padding: 1px;
-        height: 5vh;
-    }
-    .btn-send,
-    .btn-draft {
-        padding: 10px 25px;
-        min-height: 44px;
-    }
-
-    /* Profile page adjustments */
-
-    .header {
-        margin-top: -6vh;
+        align-items: center;
     }
 
     .profile-img .img {
-        margin: -200px 0 0 20px;
+        margin: 20px auto;
         width: 150px;
         height: 150px;
     }
 
     .profile-name {
-        margin: -120px 0 0 190px;
-        width: calc(100% - 200px);
-    }
-
-    .profile-name h1 {
-        font-size: 24px;
+        margin: 10px 0;
+        text-align: center;
+        width: 100%;
     }
 
     .profile-details {
-        height: auto;
         margin: 20px 0;
+        height: auto;
     }
 
     .details {
-        margin: 10px 5px 0 20px;
+        margin: 10px 0;
         padding: 15px;
-    }
-
-    /* Table adjustments */
-    table {
-        font-size: 13px;
-        table-layout: auto;
-    }
-
-    th, td {
-        padding: 12px 8px;
-        margin-top: 5vh;
-    }
-
-    /* Project card adjustments */
-    .project-card,
-    .project-card-dashboard {
-        height: 88vh;
-        margin-top: -20px;
-    }
-
-    .project-card-content,
-    .project-card-content-dashboard {
-        margin: 15px;
-    }
-
-
-    /* Form adjustments */
-    .message-form input[type=text] {
-        width: 70%;
-        height: 35px;
-        padding: 0 15px;
-    }
-
-    textarea {
-        height: 200px;
-        padding: 15px;
-    }
-
-    .btn-edit,
-    .btn-project,
-    .btn-delete {
-        height: 44px;
-        min-height: 44px;
-    }
-
-    /* Notification adjustments */
-    .content-notif{
-        margin-left: -2vh;
-        padding: 1vh;
-        margin-right: -1vh;
-        height: 6vh;
-        margin-bottom: 5vh;
-    }
-
-    .sort-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 5px;
-        max-width: 100%;
-        box-sizing: border-box;
-        height: 6vh;
-        align-content: center;
-        align-items: center;
-    }
-
-    .sum{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin: 1vh;
-        height: 3vh;
-    }
-
-    .btn-sort {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        border-radius: 24px;
-    }
-
-    .notif-content {
-        height: 68vh;
-        padding: 15px;
-        margin-top: -20px;
-        margin-bottom: 3vh;
-    }
-
-    .notif {
-        width: 95%;
-        padding: 12px 15px;
     }
 }
-
 
 /* Mobile phones */
 @media (max-width: 768px) {
@@ -1191,6 +923,21 @@ table td {
 
     .header-section h3 {
         font-size: 12px;
+    }
+
+    .salary {
+        width: 100%;
+        margin-top: 30px;
+        height: auto;
+        padding: 20px;
+    }
+
+    .sal-details {
+        gap: 10px;
+    }
+
+    .sal-details h1 {
+        font-size: 24px;
     }
 
     .card-container {
@@ -1327,6 +1074,19 @@ table td {
         font-size: 14px;
     }
 
+    .salary {
+        padding: 15px;
+    }
+
+    .sal-details h1 {
+        font-size: 20px;
+    }
+
+    .sal-details p,
+    .sal-details h3 {
+        font-size: 12px;
+    }
+
     .card {
         height: 100px;
         padding: 12px;
@@ -1391,6 +1151,32 @@ table td {
     }
 }
 
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .container-dashboard {
+        margin-top: 10px;
+    }
+
+    .inner {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .content-card {
+        min-height: 200px;
+    }
+
+    .card-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        flex: 1 1 calc(50% - 10px);
+        height: 100px;
+    }
+}
+
 /* Accessibility improvements for mobile touch targets */
 @media (max-width: 768px) {
     .card,
@@ -1408,6 +1194,7 @@ table td {
 
     /* Improve text readability on small screens */
     .card-content .label,
+    .sal-details p,
     .notif p {
         line-height: 1.4;
     }

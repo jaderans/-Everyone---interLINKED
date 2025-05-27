@@ -78,6 +78,17 @@ $cancelled = $statuses['Cancelled'];
                 <h2>My Commissions</h2>
                 <h3 style="margin-top: 5px"><?= date("d/m/y H:i") ?></h3>
             </div>
+            <a href="salary.php" class="card-redirect">
+                <div class="salary">
+                    <div class="sal-details">
+                        <p>SALARY DETAILS</p>
+                        <h1>₱ 100,000.09</h1>
+                        <h3>Available Earnings</h3>
+                    </div>
+
+                </div>
+
+            </a>
 
             <div class="check">
                 <a href="freelancer-project-page.php">Check project</a>
