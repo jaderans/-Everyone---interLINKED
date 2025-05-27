@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
-include_once "checkIfSet.php";
+include_once 'checkIfSet.php';
 $conn = connectToDatabase();
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
@@ -12,12 +12,19 @@ function fetchUsers($conn, $type, $search = '') {
     // Determine if we want applicants or non-applicants
     $typeCondition = $type === 'Applicant' ? "USER_TYPE = 'Applicant'" : "USER_TYPE != 'Applicant'";
 
-    // Start building the query
-    $query = "SELECT * FROM user WHERE $typeCondition";
+    // Start building the query - ADD USER_STATUS to SELECT and ORDER BY to put fired/rejected at bottom
+    $query = "SELECT *, COALESCE(USER_STATUS, 'PENDING') as USER_STATUS FROM user WHERE $typeCondition";
 
     // Add search filter if provided
     if (!empty($search)) {
         $query .= " AND (USER_FSTNAME LIKE :search OR USER_LSTNAME LIKE :search OR USER_EMAIL LIKE :search)";
+    }
+
+    // Order by status to put FIRED/REJECTED at bottom
+    if ($type === 'Applicant') {
+        $query .= " ORDER BY CASE WHEN USER_STATUS = 'REJECTED' THEN 1 ELSE 0 END, USER_ID";
+    } else {
+        $query .= " ORDER BY CASE WHEN USER_STATUS = 'FIRED' THEN 1 ELSE 0 END, USER_ID";
     }
 
     $stmt = $conn->prepare($query);
@@ -121,9 +128,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <input type="text" id="searchInput" placeholder="Search users...">
                 </div>
                 <div class="action-buttons">
-                    <button class="action-button"><i class="fas fa-plus"></i> Add User</button>
-                    <button class="fire-button"><i class="fas fa-fire"></i> Fire</button>
-                    <button class="sort-button"><i class="fas fa-sort"></i> Sort</button>
+                    <button class="fire-button" onclick="bulkFireUsers()"><i class="fas fa-fire"></i> Fire</button>
                 </div>
             </div>
 
@@ -140,6 +145,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Email</th>
                             <th>User Type</th>
                             <th>Contact</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -153,7 +159,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 $imageSrc = $imageData ? 'data:image/jpeg;base64,' . base64_encode($imageData) : 'default.jpg';
                                 ?>
                                 <tr>
-                                    <td class="checkbox-cell"><input type="checkbox"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="user-checkbox" value="<?= $row['USER_ID'] ?>"></td>
                                     <td>
                                         <div class="user-row">
                                             <img src="<?= $imageSrc ?>" class="user-avatar" alt="User Avatar">
@@ -175,9 +181,21 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <span class="<?= $tagClass ?> user-type"><?= htmlspecialchars($row['USER_TYPE']) ?></span>
                                     </td>
                                     <td><?= htmlspecialchars($row['USER_CONTACT']) ?></td>
+                                    <td>
+                                        <?php
+                                        $status = $row['USER_STATUS'] ?? 'PENDING';
+                                        $statusClass = '';
+                                        switch ($status) {
+                                            case 'FIRED': $statusClass = 'status-fired'; break;
+                                            case 'ACTIVE': $statusClass = 'status-active'; break;
+                                            case 'PENDING': $statusClass = 'status-pending'; break;
+                                            default: $statusClass = 'status-pending';
+                                        }
+                                        ?>
+                                        <span class="<?= $statusClass ?> status-tag"><?= htmlspecialchars($status) ?></span>
+                                    </td>
                                     <td class="actions">
                                         <a href="?id=<?= $row['USER_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
-                                        <i onclick="if(confirm('Are you sure?')) location.href='deleteUser.php?id=<?= $row['USER_ID'] ?>'" class="fas fa-trash action-icon"></i>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -194,8 +212,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <input type="text" id="applicantSearchInput" placeholder="Search applicants...">
                 </div>
                 <div class="action-buttons">
-                    <button class="fire-button"><i class="fas fa-eraser"></i> Reject</button>
-                    <button class="sort-button"><i class="fas fa-sort"></i> Sort</button>
+                    <button class="fire-button" onclick="bulkRejectApplicants()"><i class="fas fa-user-times"></i> Reject</button>
                 </div>
             </div>
             <div class="content">
@@ -212,6 +229,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Email</th>
                             <th>User Type</th>
                             <th>Contact</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -225,7 +243,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 $imageSrc = $imageData ? 'data:image/jpeg;base64,' . base64_encode($imageData) : 'default.jpg';
                                 ?>
                                 <tr>
-                                    <td class="checkbox-cell"><input type="checkbox"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="applicant-checkbox" value="<?= $row['USER_ID'] ?>"></td>
                                     <td>
                                         <div class="user-row">
                                             <img src="<?= $imageSrc ?>" class="user-avatar" alt="Applicant Avatar">
@@ -238,8 +256,21 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <span class="applicant-tag user-type"><?= htmlspecialchars($row['USER_TYPE']) ?></span>
                                     </td>
                                     <td><?= htmlspecialchars($row['USER_CONTACT']) ?></td>
+                                    <td>
+                                        <?php
+                                        $status = $row['USER_STATUS'] ?? 'PENDING';
+                                        $statusClass = '';
+                                        switch ($status) {
+                                            case 'REJECTED': $statusClass = 'status-rejected'; break;
+                                            case 'ACTIVE': $statusClass = 'status-active'; break;
+                                            case 'PENDING': $statusClass = 'status-pending'; break;
+                                        }
+                                        ?>
+                                        <span class="<?= $statusClass ?> status-tag"><?= htmlspecialchars($status) ?></span>
+                                    </td>
                                     <td class="actions">
-                                        <button class="hire-button" onclick="hireApplicant(<?= $row['USER_ID'] ?>)">Hire</button>
+                                        <a href="?id=<?= $row['USER_ID'] ?>"><i class="fas fa-eye action-icon"></i></a>
+                                        <button class="hire-button" onclick="hireApplicant('<?= $row['USER_ID'] ?>')">Hire</button>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -274,6 +305,11 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="profile-section-title">User Details</div>
 
                     <div class="profile-info-row">
+                        <div class="profile-info-label">Status:</div>
+                        <div class="profile-info-value"><?= htmlspecialchars($selectedUser['USER_STATUS']) ?></div>
+                    </div>
+
+                    <div class="profile-info-row">
                         <div class="profile-info-label">User ID:</div>
                         <div class="profile-info-value"><?= htmlspecialchars($selectedUser['USER_ID']) ?></div>
                     </div>
@@ -298,8 +334,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="profile-info-value"><?= htmlspecialchars($selectedUser['USER_BIRTHDAY'] ?? 'Not set') ?></div>
                     </div>
                 </div>
-
-                <button class="portfolio-btn"><i class="fas fa-folder-open"></i> View Portfolio</button>
             <?php else: ?>
                 <div class="profile-header">
                     <a style="width: 100%; height: 100%;">
@@ -312,14 +346,27 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('a[href^="editUser.php"]').on('click', function (e) {
-            e.preventDefault();
-            const url = $(this).attr('href');
-            $('#profileDetails').html('Loading...');
-            $.get(url, function (data) {
-                $('#profileDetails').html(data);
+        let debounceTimer;
+
+        function hireApplicant(userId) {
+            if (!userId) return;
+
+            $.ajax({
+                url: 'hireApplicant.php',
+                method: 'POST',
+                data: { userId: userId },
+                success: function(response) {
+                    alert(response.message);
+                    if (response.success) {
+                        location.reload(); // Reload the page to reflect changes
+                    }
+                },
+                error: function() {
+                    alert('Error hiring applicant.');
+                }
             });
-        });
+        }
+
         document.getElementById('applicantSearchInput').addEventListener('keyup', function () {
             const filter = this.value.toLowerCase();
             const rows = document.querySelectorAll('#applicantTableBody tr');
@@ -339,14 +386,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 row.style.display = text.includes(filter) ? '' : 'none';
             });
         });
-
-
-        function hireApplicant(userId) {
-            if (confirm('Are you sure you want to hire this applicant?')) {
-                // Make a request to a PHP script to update status
-                window.location.href = 'hireApplicant.php?id=' + userId;
-            }
-        }
         // Load profile into right pane
         function loadUserProfile(userID) {
             const rightPane = document.getElementById("right-pane");
@@ -366,7 +405,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 const tbody = document.getElementById("userTableBody");
                 tbody.innerHTML = '<tr><td colspan="8">Searching...</td></tr>';
 
-                fetch(searchUsers.php?search=${encodeURIComponent(searchTerm)})
+                fetch(`searchUsers.php?search=${encodeURIComponent(searchTerm)}`)
                     .then(response => response.text())
                     .then(data => {
                         tbody.innerHTML = data;
@@ -377,6 +416,132 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     });
             }, 300);
         });
+        document.getElementById('bulkFireBtn').addEventListener('click', function() {
+            const selectedUsers = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedUsers.length === 0) {
+                alert('Please select users to fire.');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to fire ${selectedUsers.length} selected user(s)?`)) {
+                bulkFireUsers(selectedUsers);
+            }
+        });
+
+        document.getElementById('bulkRejectBtn').addEventListener('click', function() {
+            const selectedApplicants = Array.from(document.querySelectorAll('.applicant-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedApplicants.length === 0) {
+                alert('Please select applicants to reject.');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to reject ${selectedApplicants.length} selected applicant(s)?`)) {
+                bulkRejectApplicants(selectedApplicants);
+            }
+        });
+
+        // Select all checkboxes functionality
+        document.querySelector('#userTableBody').closest('.table-container').querySelector('thead input[type="checkbox"]').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.user-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        document.querySelector('#applicantTableBody').closest('.table-container').querySelector('thead input[type="checkbox"]').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.applicant-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        function bulkFireUsers() {
+            const selectedUsers = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedUsers.length === 0) {
+                alert('Please select users to fire.');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to fire ${selectedUsers.length} selected user(s)?`)) {
+                // Call the existing bulkFireUsers function with the selected IDs
+                fetch('bulkFireUsers.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({user_ids: selectedUsers})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Successfully fired ${data.count} user(s)`);
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (data.message || 'Failed to fire users'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error firing users');
+                    });
+            }
+        }
+
+        function bulkRejectApplicants() {
+            const selectedApplicants = Array.from(document.querySelectorAll('.applicant-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedApplicants.length === 0) {
+                alert('Please select applicants to reject.');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to reject ${selectedApplicants.length} selected applicant(s)?`)) {
+                fetch('bulkRejectApplicants.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({user_ids: selectedApplicants})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Successfully rejected ${data.count} applicant(s)`);
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (data.message || 'Failed to reject applicants'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error rejecting applicants');
+                    });
+            }
+        }
+
+
+        function rejectApplicant(userId) {
+            if (confirm('Are you sure you want to reject this applicant?')) {
+                fetch('rejectApplicant.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'user_id=' + userId
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (data.message || 'Failed to reject applicant'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error rejecting applicant');
+                    });
+            }
+        }
     </script>
 </body>
 </html>
