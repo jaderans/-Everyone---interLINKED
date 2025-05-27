@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="clientType">Are you a...</label> <br>
             <select name="type" id="clientType">
-                <option value="Client" <?= $userType == "Client" ? 'selected' : '' ?>>Client</option>
+<!--                <option value="Client" --><?php //= $userType == "Client" ? 'selected' : '' ?><!-->Client</option>-->
                 <option value="Freelancer" <?= $userType == "Freelancer" ? 'selected' : '' ?>>Freelancer</option>
                 <option value="Admin" <?= $userType == "Admin" ? 'selected' : '' ?>>Admin</option>
             </select><br>

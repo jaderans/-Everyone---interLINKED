@@ -2,8 +2,10 @@
 session_start();
 include('interlinkedDB.php');
 $conn = connectToDatabase();
+include_once 'checkIfSet.php';
 $master_con = connectToDatabase(3306);
 $slave_con = connectToDatabase(3307);
+
 
 // Default search
 $search = $_GET['search'] ?? '';
@@ -219,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="email">
             <div class="messages">
                 <h1>Messages</h1>
-                <p><?=$id?></p>
+<!--                <p>--><?php //=$id?><!--</p>-->
                 <div class="message-filter">
                     <form method="get" action="">
                         <button type="submit" name="filter" value="received" class="btn-edit">Received</button>

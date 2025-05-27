@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                 // Redirect to categories
                 if ($userType === "Client") {
                     header("Location: ../client/clientHome.php");
-                } elseif ($userType === "Freelancer") {
+                } elseif ($userType === "Applicant") {
                     header("Location: ../applicant/categories.php");
                 } else {
                     header("Location: FormSignUser.php");

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('interlinkedDB.php');
+include_once 'checkIfSet.php';
 
 if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(403);

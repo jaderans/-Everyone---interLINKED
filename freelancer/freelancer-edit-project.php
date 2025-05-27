@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 
     // Validate Status - must be one of these
-    $validStatuses = ['Submitted', 'Pending', 'Completed', 'Cancelled'];
+    $validStatuses = ['Working', 'Pending', 'Completed', 'Cancelled'];
     $status = $_POST['status'] ?? '';
     if (!in_array($status, $validStatuses)) {
         $error[] = "Invalid status selected.";
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <div class="cus-select">
                         <label for="status">Status</label>
                         <select name="status" id="status">
-                            <option value="Submitted" <?= ($result['PRO_STATUS'] === 'Submitted') ? 'selected' : '' ?>>Submitted</option>
+                            <option value="Working" <?= ($result['PRO_STATUS'] === 'Working') ? 'selected' : '' ?>>Working</option>
                             <option value="Pending" <?= ($result['PRO_STATUS'] === 'Pending') ? 'selected' : '' ?>>Pending</option>
                             <option value="Completed" <?= ($result['PRO_STATUS'] === 'Completed') ? 'selected' : '' ?>>Completed</option>
                             <option value="Cancelled" <?= ($result['PRO_STATUS'] === 'Cancelled') ? 'selected' : '' ?>>Cancelled</option>

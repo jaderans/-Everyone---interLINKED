@@ -1,5 +1,6 @@
 <?php
 ob_start();
+//session_start();
 include 'freelancer-navbar-template.php';
 include_once 'interlinkedDB.php';
 $master_con = connectToDatabase(3306);
@@ -17,7 +18,9 @@ foreach ($result as $res) {
 
 $id = $_SESSION['USER_ID'];
 $error = [];
+$successMessage = '';
 
+// Fetch bank details
 $stmt = $slave_con->prepare("SELECT * FROM bank WHERE USER_ID = ?");
 $stmt->execute([$id]);
 $banks = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,21 +28,32 @@ $banks = $stmt->fetch(PDO::FETCH_ASSOC);
 if (empty($banks)) {
     $error[] = "Bank Is empty. Please register first";
 }
+
+// Fetch payment details
 $stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ? ORDER BY PAY_DATE DESC");
 $stmt->execute([$id]);
 $payDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Calculate total from payments - this should always be the source of truth for available balance
+$stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = ? AND PAY_STATUS = 'COMPLETED'");
+$stmt->execute([$id]);
+$totalFromPayments = $stmt->fetchColumn() ?? 0;
 
-$stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = :user_id");
-$stmt->execute([':user_id' => $id]);
-$total = $stmt->fetchColumn();
+// Calculate total withdrawn amount (if you track withdrawals separately)
+$stmt = $slave_con->prepare("SELECT SUM(WITHDRAW_AMOUNT) AS total_withdrawn FROM withdrawals WHERE USER_ID = ?");
+$stmt->execute([$id]);
+$totalWithdrawn = $stmt->fetchColumn() ?? 0;
 
+// Current available balance = total payments - total withdrawn
+$currentBalance = $totalFromPayments - $totalWithdrawn;
 
+// Always update the bank balance to reflect current state
+if (!empty($banks)) {
+    $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
+    $stmt->execute([$currentBalance, $id]);
+}
 
-//insert total
-$stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
-$stmt->execute([$total, $id]);
-
+// Handle withdrawal
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
     $withdrawAmount = floatval($_POST['withdraw_amount']);
     $withdrawPassword = $_POST['withdraw_password'];
@@ -49,22 +63,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
         $error[] = "Password confirmation doesn't match.";
     } elseif ($withdrawAmount <= 0) {
         $error[] = "Invalid withdrawal amount.";
-    } elseif ($withdrawAmount > $total) {
-        $error[] = "Insufficient funds.";
+    } elseif ($withdrawAmount > $currentBalance) {
+        $error[] = "Insufficient funds. Available balance: ₱" . number_format($currentBalance, 2);
     } else {
-        // Deduct amount from total and update in DB
-        $newTotal = $total - $withdrawAmount;
+        // Calculate new balance
+        $newBalance = $currentBalance - $withdrawAmount;
 
-        $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
-        $stmt->execute([$newTotal, $id]);
+        // Record the withdrawal in withdrawals table (create this table if it doesn't exist)
+        $stmt = $master_con->prepare("INSERT INTO withdrawals (USER_ID, WITHDRAW_AMOUNT, WITHDRAW_DATE, WITHDRAW_STATUS) VALUES (?, ?, NOW(), 'COMPLETED')");
+        $withdrawalRecorded = $stmt->execute([$id, $withdrawAmount]);
 
-        $total = $newTotal;
-        $successMessage = "Withdraw successful.";
+        if ($withdrawalRecorded) {
+            // Update bank balance in database
+            $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
+            $updateResult = $stmt->execute([$newBalance, $id]);
+
+            if ($updateResult) {
+                $currentBalance = $newBalance; // Update current balance for display
+                $successMessage = "Withdrawal of ₱" . number_format($withdrawAmount, 2) . " successful.";
+
+                // Clear POST data to prevent resubmission
+                header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+                exit();
+            } else {
+                $error[] = "Failed to update bank balance. Please try again.";
+            }
+        } else {
+            $error[] = "Withdrawal failed. Please try again.";
+        }
     }
 }
 
+// Handle success message from redirect
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $successMessage = "Withdrawal completed successfully.";
+
+    // Recalculate balance after redirect
+    $stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = ? AND PAY_STATUS = 'COMPLETED'");
+    $stmt->execute([$id]);
+    $totalFromPayments = $stmt->fetchColumn() ?? 0;
+
+    $stmt = $slave_con->prepare("SELECT SUM(WITHDRAW_AMOUNT) AS total_withdrawn FROM withdrawals WHERE USER_ID = ?");
+    $stmt->execute([$id]);
+    $totalWithdrawn = $stmt->fetchColumn() ?? 0;
+
+    $currentBalance = $totalFromPayments - $totalWithdrawn;
+}
+
+// Re-fetch bank details after any updates to ensure we have current data
+$stmt = $slave_con->prepare("SELECT * FROM bank WHERE USER_ID = ?");
+$stmt->execute([$id]);
+$banks = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -96,8 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                 <div class="balance-card">
                     <div class="balance-info">
                         <p>Total Balance</p>
-                        <h2 id="totalBalanceDisplay">₱ <?=$total?></h2>
-                        <p class="balance-subtitle">Available Earnings</p>
+                        <p><?=$id?></p>
+                        <h2 id="totalBalanceDisplay">₱ <?=$currentBalance?></h2>
                     </div>
                 </div>
 
