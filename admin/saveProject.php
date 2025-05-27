@@ -13,18 +13,18 @@ function createPaymentEntry($conn, $projectId, $userId, $endDate, $amount = 0) {
         return;
     }
 
-    // Check if freelancer has a bank account
-    $bankStmt = $conn->prepare("SELECT BNK_ID FROM user WHERE USER_ID = ? AND BNK_ID IS NOT NULL");
-    $bankStmt->execute([$userId]);
-    $bankResult = $bankStmt->fetch(PDO::FETCH_ASSOC);
-
-    $payStatus = $bankResult ? 'Pending' : 'No Bank';
-    $bankId = $bankResult ? $bankResult['BNK_ID'] : null;
+//    // Check if freelancer has a bank account
+//    $bankStmt = $conn->prepare("SELECT BNK_ID FROM user WHERE USER_ID = ? AND BNK_ID IS NOT NULL");
+//    $bankStmt->execute([$userId]);
+//    $bankResult = $bankStmt->fetch(PDO::FETCH_ASSOC);
+//
+//    $payStatus = $bankResult ? 'Pending' : 'No Bank';
+//    $bankId = $bankResult ? $bankResult['BNK_ID'] : null;
 
     // Insert payment entry
-    $paymentStmt = $conn->prepare("INSERT INTO payment (USER_ID, PRO_ID, BNK_ID, PAY_STATUS, PAY_AMOUNT, PAY_DATE) 
-                                   VALUES (?, ?, ?, ?, ?, ?)");
-    $paymentStmt->execute([$userId, $projectId, $bankId, $payStatus, $amount, $endDate]);
+    $paymentStmt = $conn->prepare("INSERT INTO payment (USER_ID, PRO_ID) 
+                                   VALUES (?, ?)");
+    $paymentStmt->execute([$userId, $projectId]);
 }
 
 try {

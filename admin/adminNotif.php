@@ -168,13 +168,13 @@ $unreadNotif = $notif->fetch(PDO::FETCH_ASSOC);
                 <button type="submit" class="btn-sort">Newest</button>
             </form>
 
-            <div class="counter">
-                <p>Unread <?=$resNotif['count']?></p>
-            </div>
+            <form action="">
+                <button type="text" class="btn-sort">Read <?=$unreadNotif['countUnread']?></button>
+            </form>
 
-            <div class="sum">
-                <p>Read <?=$unreadNotif['countUnread']?></p>
-            </div>
+            <form action="">
+                <button type="text" class="btn-sort">Unread <?=$resNotif['count']?></button>
+            </form>
         </div>
     </div>
 
