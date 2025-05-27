@@ -1421,7 +1421,7 @@ table td {
         margin-left: 32vh;
         margin-top: 12vh;
         padding: 1vh;
-        margin-right: 0vh;
+        margin-right: 0;
     }
 
     /* Dashboard cards - maintain row layout like original */
