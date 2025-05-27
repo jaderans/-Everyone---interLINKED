@@ -17,7 +17,9 @@ foreach ($result as $res) {
 
 $id = $_SESSION['USER_ID'];
 $error = [];
+$successMessage = '';
 
+// Fetch bank details
 $stmt = $slave_con->prepare("SELECT * FROM bank WHERE USER_ID = ?");
 $stmt->execute([$id]);
 $banks = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,21 +27,29 @@ $banks = $stmt->fetch(PDO::FETCH_ASSOC);
 if (empty($banks)) {
     $error[] = "Bank Is empty. Please register first";
 }
+
+// Fetch payment details
 $stmt = $slave_con->prepare("SELECT * FROM payment WHERE USER_ID = ? ORDER BY PAY_DATE DESC");
 $stmt->execute([$id]);
 $payDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+// Calculate total from payments
 $stmt = $slave_con->prepare("SELECT SUM(PAY_AMOUNT) AS total_amount FROM payment WHERE USER_ID = :user_id");
 $stmt->execute([':user_id' => $id]);
-$total = $stmt->fetchColumn();
+$totalFromPayments = $stmt->fetchColumn() ?? 0;
 
+// IMPORTANT: Get current bank balance, don't overwrite it with payment total
+// Only update if bank amount is null/zero (first time setup)
+if (empty($banks) || $banks['BNK_AMOUNT'] == 0) {
+    $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
+    $stmt->execute([$totalFromPayments, $id]);
+    $currentBalance = $totalFromPayments;
+} else {
+    // Use the current bank balance from database
+    $currentBalance = floatval($banks['BNK_AMOUNT']);
+}
 
-
-//insert total
-$stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
-$stmt->execute([$total, $id]);
-
+// Handle withdrawal
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
     $withdrawAmount = floatval($_POST['withdraw_amount']);
     $withdrawPassword = $_POST['withdraw_password'];
@@ -49,22 +59,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
         $error[] = "Password confirmation doesn't match.";
     } elseif ($withdrawAmount <= 0) {
         $error[] = "Invalid withdrawal amount.";
-    } elseif ($withdrawAmount > $total) {
-        $error[] = "Insufficient funds.";
+    } elseif ($withdrawAmount > $currentBalance) {
+        $error[] = "Insufficient funds. Available balance: ₱" . number_format($currentBalance, 2);
     } else {
-        // Deduct amount from total and update in DB
-        $newTotal = $total - $withdrawAmount;
+        // Calculate new balance
+        $newBalance = $currentBalance - $withdrawAmount;
 
+        // Update bank balance in database
         $stmt = $master_con->prepare("UPDATE bank SET BNK_AMOUNT = ? WHERE USER_ID = ?");
-        $stmt->execute([$newTotal, $id]);
+        $updateResult = $stmt->execute([$newBalance, $id]);
 
-        $total = $newTotal;
-        $successMessage = "Withdraw successful.";
+        if ($updateResult) {
+            // Optional: Record the withdrawal in a transactions table
+            // $stmt = $master_con->prepare("INSERT INTO transactions (USER_ID, TRANSACTION_TYPE, AMOUNT, TRANSACTION_DATE) VALUES (?, 'WITHDRAWAL', ?, NOW())");
+            // $stmt->execute([$id, $withdrawAmount]);
+
+            $currentBalance = $newBalance; // Update current balance for display
+            $successMessage = "Withdrawal of ₱" . number_format($withdrawAmount, 2) . " successful.";
+
+            // Clear POST data to prevent resubmission
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+            exit();
+        } else {
+            $error[] = "Withdrawal failed. Please try again.";
+        }
     }
 }
 
+// Handle success message from redirect
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $successMessage = "Withdrawal completed successfully.";
+}
+
+// Re-fetch bank details after any updates to ensure we have current data
+$stmt = $slave_con->prepare("SELECT * FROM bank WHERE USER_ID = ?");
+$stmt->execute([$id]);
+$banks = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!empty($banks)) {
+    $currentBalance = floatval($banks['BNK_AMOUNT']);
+}
 
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -97,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                     <div class="balance-info">
                         <p>Total Balance</p>
                         <p><?=$id?></p>
-                        <h2 id="totalBalanceDisplay">₱ <?=$total?></h2>
+                        <h2 id="totalBalanceDisplay">₱ <?=$currentBalance?></h2>
                         <p class="balance-subtitle">Available Earnings</p>
                     </div>
                 </div>
