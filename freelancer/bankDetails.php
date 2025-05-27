@@ -41,6 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$errors) {
             $errors[] = "All fields are required.";
         }
 
+        if (strlen($bnkPassword) !== 4 || !ctype_digit($bnkPassword)) {
+            $errors[] = "Bank PIN must be exactly 4 digits";
+        }
+
         $today = date('Y-m-d');
         if ($bnkExpDate < $today) {
             $errors[] = "Make sure to enter a valid card expiration date.";
@@ -91,52 +95,61 @@ if ($userId) {
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Add Bank Info</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="freelancer-style.css">
+    <title>Bank Details</title>
 </head>
 <body>
-<h2>Bank Information Form</h2>
+<div class="bnkContent">
+    <h2>Bank Information Form</h2>
 
-<?php if (!empty($errors)): ?>
-    <div style="color:red;">
-        <?php foreach ($errors as $e) echo htmlspecialchars($e) . "<br>"; ?>
+    <?php if (!empty($errors)): ?>
+        <div style="color:red;">
+            <?php foreach ($errors as $e) echo htmlspecialchars($e) . "<br>"; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($success): ?>
+        <div style="color:green;"><?= htmlspecialchars($success) ?></div>
+    <?php endif; ?>
+
+    <?php if ($disableForm): ?>
+        <p>You already have a bank account registered. You cannot add another.</p>
+    <?php else: ?>
+    <div class="input">
+        <form method="post" action="">
+            <label>Bank Name:</label><br>
+            <input type="text" name="bnk_name" value="<?= htmlspecialchars($bnkName) ?>"><br>
+
+            <label>Bank Account Number:</label><br>
+            <input type="text" name="bnk_acc_num" value="<?= htmlspecialchars($bnkAccNum) ?>"><br>
+
+            <label>Bank User Name:</label><br>
+            <input type="text" name="bnk_user_name" value="<?= htmlspecialchars($bnkUserName) ?>"><br>
+
+            <label>Pin:</label><br>
+            <input type="password" name="bnk_password" value="<?= htmlspecialchars($bnkPassword) ?>"><br>
+
+            <label>CVV:</label><br>
+            <input type="text" name="bnk_cvv" value="<?= htmlspecialchars($bnkCVV) ?>"><br>
+
+            <label>Expiration Date (YYYY-MM-DD):</label><br>
+            <input type="date" name="bnk_exp_date" value="<?= htmlspecialchars($bnkExpDate) ?>"><br><br>
+            <input type="submit" value="Submit">
+        </form>
+
     </div>
-<?php endif; ?>
-
-<?php if ($success): ?>
-    <div style="color:green;"><?= htmlspecialchars($success) ?></div>
-<?php endif; ?>
-
-<?php if ($disableForm): ?>
-    <p>You already have a bank account registered. You cannot add another.</p>
-<?php else: ?>
-    <form method="post" action="">
-        <label>Bank Name:</label><br>
-        <input type="text" name="bnk_name" value="<?= htmlspecialchars($bnkName) ?>"><br>
-
-        <label>Bank Account Number:</label><br>
-        <input type="text" name="bnk_acc_num" value="<?= htmlspecialchars($bnkAccNum) ?>"><br>
-
-        <label>Bank User Name:</label><br>
-        <input type="text" name="bnk_user_name" value="<?= htmlspecialchars($bnkUserName) ?>"><br>
-
-        <label>Bank Password:</label><br>
-        <input type="password" name="bnk_password" value="<?= htmlspecialchars($bnkPassword) ?>"><br>
-
-        <label>CVV:</label><br>
-        <input type="text" name="bnk_cvv" value="<?= htmlspecialchars($bnkCVV) ?>"><br>
-
-        <label>Expiration Date (YYYY-MM-DD):</label><br>
-        <input type="date" name="bnk_exp_date" value="<?= htmlspecialchars($bnkExpDate) ?>"><br><br>
-
-        <input type="submit" value="Submit">
-
+    <?php endif; ?>
+    <form action="salary.php">
+        <input type="submit" value="Back">
     </form>
-<?php endif; ?>
-<button><a href="salary.php">Back</a></button>
 
+</div>
 </body>
 </html>

@@ -22,6 +22,7 @@ ob_start();
 foreach ($result as $data) {
     $name = $data['USER_NAME'];
     $type = $data['USER_TYPE'];
+    $fullName = $data['USER_FSTNAME'] . " " . $data['USER_LSTNAME'];
     include 'result.php';
     echo ob_get_clean();
 }

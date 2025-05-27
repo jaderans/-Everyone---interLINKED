@@ -610,7 +610,84 @@ table td {
 /*-                                                      search result*/
 .search-result-item {
     cursor: pointer;
+    width: 100%;
 }
+
+
+/*---------------------------------------BANK DETAILS*/
+.bnkContent {
+    background-color: #f6f6f6;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.46);
+}
+
+.bnkContent h2{
+    font-weight: bolder;
+    color: #1a1a1a;
+}
+
+.input{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.bnkContent  input[type='text']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='password']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='date']{
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    box-shadow: #0d4c52 0 0 0 1px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bnkContent  input[type='submit']{
+    color: white;
+    border: none;
+    background-color: #0d4c52;
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+
+.bnkContent label {
+    color: #424242;
+}
+
+
+
+
+
+
 
 /* ========================================================================
    MOBILE RESPONSIVE STYLES

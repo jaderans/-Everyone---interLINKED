@@ -13,8 +13,8 @@
     <title>Document</title>
 </head>
 <body>
-<div class="search-result-item" onclick="selectUser('<?= htmlspecialchars($name) ?>')">
-    <?= htmlspecialchars($name) ?> (<?= htmlspecialchars($type) ?>)
+<div class="search-result-item" onclick="selectUser('<?= htmlspecialchars($name) ?>')" style="font-size: 13px">
+<?= htmlspecialchars($name) ?> (<?= htmlspecialchars($type) ?>  <?= htmlspecialchars($fullName) ?>)
 </div>
 </body>
 </html>

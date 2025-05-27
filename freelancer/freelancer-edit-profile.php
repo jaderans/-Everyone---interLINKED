@@ -253,18 +253,12 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <div>
-                        <label for="file">Update Profile</label>
-                        <input class="attach" type="file" id="img" name="img" accept="image/jpeg, image/png, image/gif">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
                         <label for="userName">User Name</label>
                         <input type="text" id="userName" name="userName" value="<?= $result['USER_NAME'] ?>">
                     </div>
                     <div>
-                        <label for="type">Type</label>
-                        <input type="text" id="type" name="type" value="<?= $result['USER_TYPE']?>" readonly>
+                        <label for="file">Update Profile</label>
+                        <input class="attach" type="file" id="img" name="img" accept="image/jpeg, image/png, image/gif">
                     </div>
                 </div>
 
