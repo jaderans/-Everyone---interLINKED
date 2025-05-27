@@ -96,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['withdraw_btn'])) {
                 <div class="balance-card">
                     <div class="balance-info">
                         <p>Total Balance</p>
+                        <p><?=$id?></p>
                         <h2 id="totalBalanceDisplay">₱ <?=$total?></h2>
                         <p class="balance-subtitle">Available Earnings</p>
                     </div>

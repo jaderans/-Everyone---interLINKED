@@ -23,7 +23,7 @@ $pro = $slave_con->prepare("
         COUNT(*) AS count 
     FROM projects 
     WHERE USER_ID = ? 
-      AND PRO_STATUS IN ('Pending', 'Submitted', 'Ongoing', 'Completed', 'Cancelled') 
+      AND PRO_STATUS IN ('Pending', 'Working', 'Ongoing', 'Completed', 'Cancelled') 
     GROUP BY PRO_STATUS
 ");
 $pro->execute([$id]);
@@ -31,7 +31,7 @@ $results = $pro->fetchAll(PDO::FETCH_ASSOC);
 
 $statuses = [
     'Pending' => 0,
-    'Submitted' => 0,
+    'Working' => 0,
     'Ongoing' => 0,
     'Completed' => 0,
     'Cancelled' => 0
@@ -44,7 +44,7 @@ foreach ($results as $row) {
 
 // Now you can use:
 $pending = $statuses['Pending'];
-$submitted = $statuses['Submitted'];
+$working = $statuses['Working'];
 $ongoing = $statuses['Ongoing'];
 $completed = $statuses['Completed'];
 $cancelled = $statuses['Cancelled'];
@@ -101,9 +101,9 @@ $cancelled = $statuses['Cancelled'];
     <a href="freelancer-project-page.php" class="card-redirect">
         <div class="card-container">
             <div class="card">
-                <h1><i class="fa-solid fa-pencil"></i> SUBMITTED</h1>
+                <h1><i class="fa-solid fa-pencil"></i> Working</h1>
                 <div class="card-content">
-                    <h1><?=$submitted?></h1>
+                    <h1><?=$working?></h1>
                     <h2 class="label">Tasks</h2>
                 </div>
             </div>
@@ -135,7 +135,7 @@ $cancelled = $statuses['Cancelled'];
 
 <script>
     const projectData = {
-        submitted: <?= $submitted ?>,
+        working: <?= $working ?>,
         pending: <?= $pending ?>,
         ongoing: <?= $ongoing ?>,
         completed: <?= $completed ?>,
@@ -158,7 +158,7 @@ $cancelled = $statuses['Cancelled'];
 
     // Update card counts
     function updateCardCounts() {
-        document.getElementById('submittedCount').textContent = projectData.submitted;
+        document.getElementById('submittedCount').textContent = projectData.working;
         document.getElementById('pendingCount').textContent = projectData.pending;
         document.getElementById('ongoingCount').textContent = projectData.ongoing;
         document.getElementById('completedCount').textContent = projectData.completed;
@@ -185,7 +185,7 @@ $cancelled = $statuses['Cancelled'];
             }
 
             // Check if we have any data
-            const totalTasks = projectData.submitted + projectData.pending +
+            const totalTasks = projectData.working + projectData.pending +
                 projectData.ongoing + projectData.completed + projectData.cancelled;
 
             if (totalTasks === 0) {
@@ -200,7 +200,7 @@ $cancelled = $statuses['Cancelled'];
             // Prepare chart data
             chartData = google.visualization.arrayToDataTable([
                 ['Status', 'Count'],
-                ['Submitted', projectData.submitted],
+                ['Working', projectData.working],
                 ['Pending', projectData.pending],
                 ['Ongoing', projectData.ongoing],
                 ['Completed', projectData.completed],
