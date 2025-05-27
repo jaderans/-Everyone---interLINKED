@@ -20,6 +20,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
 }
 
 .logo {
@@ -59,6 +60,7 @@
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    margin-right: 8vh;
 }
 
 .right-btn{
