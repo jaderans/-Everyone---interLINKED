@@ -33,7 +33,8 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
         $email = clean_text($_POST["email"] ?? '');
         $bday = clean_text($_POST["bDay"] ?? '');
         $phone = clean_text($_POST["phone"] ?? '');
-        $type = clean_text($_POST["type"] ?? '');
+//        $type = clean_text($_POST["type"] ?? '');
+        $type = "Freelancer";
         $pass = trim($_POST["pass"] ?? '');
         $conPass = trim($_POST["conPass"] ?? '');
         $oldPass = trim($_POST["oldPass"] ?? '');
@@ -188,12 +189,32 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
 
 
             // Password update if requested
+//            if (!empty($pass) && !empty($oldPass)) {
+//                if ($pass !== $conPass) {
+//                    $error[] = "Passwords do not match.<br>";
+//                } else {
+//                    // Check if old password is correct
+//                    if ($currentUser && $currentUser['USER_PASSWORD'] !== $oldPass) {
+//                        $error[] = "Old password is incorrect.<br>";
+//                    } else {
+//                        // Proceed with updating the password
+//                        $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
+//                        $stmtPass = $master_con->prepare("UPDATE `user` SET USER_PASSWORD = :pass WHERE USER_ID = :id");
+//                        $stmtPass->bindParam(':pass', $hashedPassword);
+//                        $stmtPass->bindParam(':id', $id);
+//                        $stmtPass->execute();
+//
+//                        $redirectToLogin = true;
+//                    }
+//                }
+//            }
+
             if (!empty($pass) && !empty($oldPass)) {
                 if ($pass !== $conPass) {
                     $error[] = "Passwords do not match.<br>";
                 } else {
-                    // Check if old password is correct
-                    if ($currentUser && $currentUser['USER_PASSWORD'] !== $oldPass) {
+                    // Verify old password using password_verify
+                    if ($currentUser && !password_verify($oldPass, $currentUser['USER_PASSWORD'])) {
                         $error[] = "Old password is incorrect.<br>";
                     } else {
                         // Proceed with updating the password
@@ -201,12 +222,16 @@ if (isset($_POST['user_id']) && !isset($_POST['action'])) {
                         $stmtPass = $master_con->prepare("UPDATE `user` SET USER_PASSWORD = :pass WHERE USER_ID = :id");
                         $stmtPass->bindParam(':pass', $hashedPassword);
                         $stmtPass->bindParam(':id', $id);
-                        $stmtPass->execute();
 
-                        $redirectToLogin = true;
+                        if ($stmtPass->execute()) {
+                            $redirectToLogin = true;
+                        } else {
+                            $error[] = "Password update failed. Please try again.<br>";
+                        }
                     }
                 }
             }
+
 
             if (empty($error)) {
                 if ($redirectToLogin) {
